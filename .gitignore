@@ -1,0 +1,36 @@
+# Environment variables — NEVER commit
+.env
+.env.local
+.env.production
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+.expo/
+android/
+ios/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+postgres_data/
+redis_data/
+
+# IDE
+.vscode/
+.idea/
+
+# Firebase service account keys
+*-service-account.json
+firebase-adminsdk*.json
+google-credentials*.json

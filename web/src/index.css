@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-main: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #0F172A;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --border-main: #F1F5F9;
+    --accent: #3B82F6;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark {
+    --bg-main: #020617;
+    --bg-card: #0F172A;
+    --bg-sidebar: #020617;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-main: #1E293B;
+    --accent: #60A5FA;
+    --glass-bg: rgba(15, 23, 42, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .glass-dark {
+    @apply bg-slate-900/40 backdrop-blur-lg border border-white/10;
+  }
+
+  .premium-shadow {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  }
+
+  .accent-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
