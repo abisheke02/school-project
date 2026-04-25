@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../services/authStore';
 import { supabase } from '../../services/supabase';
+import { trackLogin, trackDemoLogin } from '../../services/analytics';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, setDemoAuth, demoLogin } = useAuthStore();
-  const [portalTab, setPortalTab] = useState('teacher'); // 'teacher' | 'admin'
+  const [portalTab, setPortalTab] = useState('teacher'); // 'teacher' | 'admin' | 'parent'
   const [authMethod, setAuthMethod] = useState('phone'); // 'phone' | 'email'
   const [step, setStep] = useState('input'); // 'input' | 'otp'
   const [identifier, setIdentifier] = useState(''); // phone or email
@@ -32,6 +33,7 @@ const LoginPage = () => {
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.error || 'Login failed');
       setDemoAuth(data.user, data.token);
+      trackLogin('credentials', 'admin');
       toast.success('Welcome, Admin!');
       navigate('/admin');
     } catch (err) {
@@ -92,13 +94,15 @@ const LoginPage = () => {
       if (error) throw error;
 
       const user = await login(data.session.access_token, 'supabase');
-      
-      if (!['teacher', 'admin'].includes(user.role)) {
-        toast.error('This portal is for teachers only.');
+
+      const allowedRoles = portalTab === 'parent' ? ['parent'] : ['teacher', 'admin'];
+      if (!allowedRoles.includes(user.role)) {
+        toast.error(portalTab === 'parent' ? 'This portal is for parents only.' : 'This portal is for teachers only.');
         await supabase.auth.signOut();
         return;
       }
-      navigate('/dashboard');
+      trackLogin(authMethod, user.role);
+      navigate(user.role === 'parent' ? '/parent' : '/dashboard');
     } catch (err) {
       console.error('Supabase Verify Error:', err);
       toast.error(err.message || 'Wrong OTP. Please try again.');
@@ -120,16 +124,23 @@ const LoginPage = () => {
           <button
             type="button"
             onClick={() => { setPortalTab('teacher'); setStep('input'); }}
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all ${portalTab === 'teacher' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`flex-1 py-2 px-2 rounded-lg text-xs font-bold transition-all ${portalTab === 'teacher' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
-            🏫 Teacher Portal
+            🏫 Teacher
+          </button>
+          <button
+            type="button"
+            onClick={() => { setPortalTab('parent'); setStep('input'); }}
+            className={`flex-1 py-2 px-2 rounded-lg text-xs font-bold transition-all ${portalTab === 'parent' ? 'bg-white text-green-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            👨‍👩‍👧 Parent
           </button>
           <button
             type="button"
             onClick={() => setPortalTab('admin')}
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all ${portalTab === 'admin' ? 'bg-white text-purple-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`flex-1 py-2 px-2 rounded-lg text-xs font-bold transition-all ${portalTab === 'admin' ? 'bg-white text-purple-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
-            🔑 Admin Portal
+            🔑 Admin
           </button>
         </div>
 
@@ -168,7 +179,7 @@ const LoginPage = () => {
           </form>
         )}
 
-        {portalTab === 'teacher' && step === 'input' ? (
+        {['teacher', 'parent'].includes(portalTab) && step === 'input' ? (
           <form onSubmit={handleSendOTP} className="space-y-6">
             <div className="flex bg-slate-100 p-1 rounded-xl">
               <button
@@ -210,7 +221,7 @@ const LoginPage = () => {
               ) : (
                 <input
                   type="email"
-                  placeholder="teacher@school.com"
+                  placeholder={portalTab === 'parent' ? 'parent@email.com' : 'teacher@school.com'}
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full border-2 border-slate-100 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-blue-500 transition-colors"
@@ -232,42 +243,65 @@ const LoginPage = () => {
               <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-slate-400">Or for testing</span></div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {portalTab === 'teacher' ? (
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      await demoLogin('teacher');
+                      trackDemoLogin('teacher');
+                      toast.success('Demo Teacher — entering dashboard');
+                      navigate('/dashboard');
+                    } catch (err) {
+                      toast.error(err?.message || 'Demo login failed');
+                    } finally { setLoading(false); }
+                  }}
+                  disabled={loading}
+                  className="border-2 border-slate-100 hover:border-blue-200 hover:bg-blue-50 text-blue-700 font-bold py-3 rounded-xl transition-all text-sm"
+                >
+                  🏫 Demo Teacher
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      await demoLogin('student');
+                      trackDemoLogin('student');
+                      toast.success('Demo Student — entering dashboard');
+                      navigate('/student');
+                    } catch (err) {
+                      toast.error(err?.message || 'Demo login failed');
+                    } finally { setLoading(false); }
+                  }}
+                  disabled={loading}
+                  className="border-2 border-slate-100 hover:border-purple-200 hover:bg-purple-50 text-purple-700 font-bold py-3 rounded-xl transition-all text-sm"
+                >
+                  🎒 Demo Student
+                </button>
+              </div>
+            ) : (
               <button
                 type="button"
                 onClick={async () => {
                   setLoading(true);
                   try {
-                    await demoLogin('teacher');
-                    toast.success('Demo Teacher — entering dashboard');
-                    navigate('/dashboard');
+                    await demoLogin('parent');
+                    trackDemoLogin('parent');
+                    toast.success('Demo Parent — viewing scorecard');
+                    navigate('/parent');
                   } catch (err) {
                     toast.error(err?.message || 'Demo login failed');
                   } finally { setLoading(false); }
                 }}
                 disabled={loading}
-                className="border-2 border-slate-100 hover:border-blue-200 hover:bg-blue-50 text-blue-700 font-bold py-3 rounded-xl transition-all text-sm"
+                className="w-full border-2 border-slate-100 hover:border-green-200 hover:bg-green-50 text-green-700 font-bold py-3 rounded-xl transition-all text-sm"
               >
-                🏫 Demo Teacher
+                👨‍👩‍👧 Demo Parent
               </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await demoLogin('student');
-                    toast.success('Demo Student — entering dashboard');
-                    navigate('/student');
-                  } catch (err) {
-                    toast.error(err?.message || 'Demo login failed');
-                  } finally { setLoading(false); }
-                }}
-                disabled={loading}
-                className="border-2 border-slate-100 hover:border-purple-200 hover:bg-purple-50 text-purple-700 font-bold py-3 rounded-xl transition-all text-sm"
-              >
-                🎒 Demo Student
-              </button>
-            </div>
+            )}
             
             {authMethod === 'phone' && (
               <p className="text-center text-xs text-slate-400 mt-4">
@@ -275,7 +309,7 @@ const LoginPage = () => {
               </p>
             )}
           </form>
-        ) : portalTab === 'teacher' ? (
+        ) : ['teacher', 'parent'].includes(portalTab) ? (
           <form onSubmit={handleVerifyOTP} className="space-y-6">
             <div className="text-center">
               <p className="text-slate-600 text-sm">OTP sent to</p>

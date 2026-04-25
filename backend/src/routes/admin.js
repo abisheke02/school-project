@@ -170,4 +170,183 @@ router.get('/subscriptions', requireAuth, requireRole('admin'), async (req, res,
   } catch (err) { next(err); }
 });
 
+// ─── GET /api/admin/exercises ─────────────────────────────────────────────────
+router.get('/exercises', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const { type, page = 1, limit = 20 } = req.query;
+    const offset = (page - 1) * limit;
+    const params = [limit, offset];
+    const where = type ? `WHERE exercise_type = $3` : '';
+    if (type) params.push(type);
+    const result = await query(
+      `SELECT id, exercise_type, ld_target, level, title, instruction,
+              current_difficulty, created_at
+       FROM exercises ${where}
+       ORDER BY created_at DESC
+       LIMIT $1 OFFSET $2`,
+      params
+    );
+    const count = await query(
+      `SELECT COUNT(*) FROM exercises ${where}`,
+      type ? [type] : []
+    );
+    res.json({ exercises: result.rows, total: Number(count.rows[0].count) });
+  } catch (err) { next(err); }
+});
+
+// ─── POST /api/admin/exercises ────────────────────────────────────────────────
+router.post('/exercises', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      exerciseType: Joi.string().valid('phonics', 'reading', 'writing', 'math', 'speaking').required(),
+      ldTarget: Joi.string().valid('dyslexia', 'dysgraphia', 'dyscalculia', 'mixed').required(),
+      level: Joi.number().integer().min(1).max(5).required(),
+      title: Joi.string().min(3).max(200).required(),
+      instruction: Joi.string().min(5).max(500).required(),
+      content: Joi.object().required(),
+    });
+    const { error, value } = schema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
+    const result = await query(
+      `INSERT INTO exercises (id, exercise_type, ld_target, level, title, instruction, content, current_difficulty, created_at)
+       VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, 1, NOW())
+       RETURNING *`,
+      [value.exerciseType, value.ldTarget, value.level, value.title, value.instruction, JSON.stringify(value.content)]
+    );
+    res.status(201).json({ exercise: result.rows[0] });
+  } catch (err) { next(err); }
+});
+
+// ─── PATCH /api/admin/exercises/:id ──────────────────────────────────────────
+router.patch('/exercises/:id', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      title: Joi.string().min(3).max(200),
+      instruction: Joi.string().min(5).max(500),
+      content: Joi.object(),
+      level: Joi.number().integer().min(1).max(5),
+      ldTarget: Joi.string().valid('dyslexia', 'dysgraphia', 'dyscalculia', 'mixed'),
+    });
+    const { error, value } = schema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
+    const sets = [], params = [];
+    let i = 1;
+    if (value.title) { sets.push(`title = $${i++}`); params.push(value.title); }
+    if (value.instruction) { sets.push(`instruction = $${i++}`); params.push(value.instruction); }
+    if (value.content) { sets.push(`content = $${i++}`); params.push(JSON.stringify(value.content)); }
+    if (value.level) { sets.push(`level = $${i++}`); params.push(value.level); }
+    if (value.ldTarget) { sets.push(`ld_target = $${i++}`); params.push(value.ldTarget); }
+    if (!sets.length) return res.status(400).json({ error: 'Nothing to update' });
+
+    params.push(req.params.id);
+    const result = await query(
+      `UPDATE exercises SET ${sets.join(', ')} WHERE id = $${i} RETURNING *`,
+      params
+    );
+    if (!result.rows.length) return res.status(404).json({ error: 'Exercise not found' });
+    res.json({ exercise: result.rows[0] });
+  } catch (err) { next(err); }
+});
+
+// ─── DELETE /api/admin/exercises/:id ─────────────────────────────────────────
+router.delete('/exercises/:id', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const result = await query(`DELETE FROM exercises WHERE id = $1 RETURNING id`, [req.params.id]);
+    if (!result.rows.length) return res.status(404).json({ error: 'Exercise not found' });
+    res.json({ deleted: true });
+  } catch (err) { next(err); }
+});
+
+// ─── GET /api/admin/questions ─────────────────────────────────────────────────
+router.get('/questions', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const { level, page = 1, limit = 20 } = req.query;
+    const offset = (page - 1) * limit;
+    const params = [limit, offset];
+    const where = level ? `WHERE level = $3` : '';
+    if (level) params.push(level);
+    const result = await query(
+      `SELECT id, level, question_type, category, question_text,
+              options, correct_answer, created_at
+       FROM test_questions ${where}
+       ORDER BY created_at DESC
+       LIMIT $1 OFFSET $2`,
+      params
+    );
+    const count = await query(
+      `SELECT COUNT(*) FROM test_questions ${where}`,
+      level ? [level] : []
+    );
+    res.json({ questions: result.rows, total: Number(count.rows[0].count) });
+  } catch (err) { next(err); }
+});
+
+// ─── POST /api/admin/questions ────────────────────────────────────────────────
+router.post('/questions', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      level: Joi.number().integer().min(1).max(5).required(),
+      questionType: Joi.string().valid('mcq', 'speaking', 'fill_blank').default('mcq'),
+      category: Joi.string().valid('phonics', 'reading', 'writing', 'math').required(),
+      questionText: Joi.string().min(5).max(1000).required(),
+      options: Joi.array().items(Joi.string()).min(2).max(6).required(),
+      correctAnswer: Joi.string().required(),
+    });
+    const { error, value } = schema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
+    const result = await query(
+      `INSERT INTO test_questions (id, level, question_type, category, question_text, options, correct_answer, created_at)
+       VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, NOW())
+       RETURNING *`,
+      [value.level, value.questionType, value.category, value.questionText,
+       JSON.stringify(value.options), value.correctAnswer]
+    );
+    res.status(201).json({ question: result.rows[0] });
+  } catch (err) { next(err); }
+});
+
+// ─── PATCH /api/admin/questions/:id ──────────────────────────────────────────
+router.patch('/questions/:id', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      questionText: Joi.string().min(5).max(1000),
+      options: Joi.array().items(Joi.string()).min(2).max(6),
+      correctAnswer: Joi.string(),
+      level: Joi.number().integer().min(1).max(5),
+      category: Joi.string().valid('phonics', 'reading', 'writing', 'math'),
+    });
+    const { error, value } = schema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
+    const sets = [], params = [];
+    let i = 1;
+    if (value.questionText) { sets.push(`question_text = $${i++}`); params.push(value.questionText); }
+    if (value.options) { sets.push(`options = $${i++}`); params.push(JSON.stringify(value.options)); }
+    if (value.correctAnswer) { sets.push(`correct_answer = $${i++}`); params.push(value.correctAnswer); }
+    if (value.level) { sets.push(`level = $${i++}`); params.push(value.level); }
+    if (value.category) { sets.push(`category = $${i++}`); params.push(value.category); }
+    if (!sets.length) return res.status(400).json({ error: 'Nothing to update' });
+
+    params.push(req.params.id);
+    const result = await query(
+      `UPDATE test_questions SET ${sets.join(', ')} WHERE id = $${i} RETURNING *`,
+      params
+    );
+    if (!result.rows.length) return res.status(404).json({ error: 'Question not found' });
+    res.json({ question: result.rows[0] });
+  } catch (err) { next(err); }
+});
+
+// ─── DELETE /api/admin/questions/:id ─────────────────────────────────────────
+router.delete('/questions/:id', requireAuth, requireRole('admin'), async (req, res, next) => {
+  try {
+    const result = await query(`DELETE FROM test_questions WHERE id = $1 RETURNING id`, [req.params.id]);
+    if (!result.rows.length) return res.status(404).json({ error: 'Question not found' });
+    res.json({ deleted: true });
+  } catch (err) { next(err); }
+});
+
 module.exports = router;

@@ -8,6 +8,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import ClassDetailPage from './pages/dashboard/ClassDetailPage';
 import StudentDetailPage from './pages/dashboard/StudentDetailPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminCMS from './pages/admin/AdminCMS';
 import ParentScorecard from './pages/parent/ParentScorecard';
 import MessagingPage from './pages/messages/MessagingPage';
 import StudentDashboardWeb from './pages/student/StudentDashboardWeb';
@@ -75,6 +76,14 @@ const App = () => (
         element={
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminCMS />
           </ProtectedRoute>
         }
       />

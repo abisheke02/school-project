@@ -47,6 +47,7 @@ const LevelRing = ({ level }) => {
 
 const StudentDashboardWeb = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { user, logout } = useAuthStore();
   const [profile, setProfile] = useState(null);
   const [analytics, setAnalytics] = useState(null);
@@ -135,7 +136,7 @@ const StudentDashboardWeb = () => {
               key={tab.path}
               onClick={() => navigate(tab.path)}
               className={`px-4 py-3 text-sm font-semibold border-b-2 transition
-                ${window.location.pathname === tab.path
+                ${pathname === tab.path
                   ? 'border-blue-600 text-blue-700'
                   : 'border-transparent text-slate-500 hover:text-slate-700'}`}
             >

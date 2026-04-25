@@ -7,6 +7,7 @@ import {
 } from 'recharts';
 import Layout from '../../components/Layout';
 import { studentAPI, analyticsAPI, reportsAPI } from '../../services/api';
+import { trackStudentViewed } from '../../services/analytics';
 
 const LEVEL_LABELS = ['', 'Starter', 'Basic', 'Intermediate', 'Advanced', 'Mastery'];
 
@@ -35,6 +36,7 @@ const StudentDetailPage = () => {
         setProfile(p);
         setTestHistory(history || []);
         setAnalytics(analyticsData);
+        trackStudentViewed(studentId);
       })
       .catch(() => toast.error('Could not load student'))
       .finally(() => setLoading(false));

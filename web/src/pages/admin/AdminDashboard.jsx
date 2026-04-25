@@ -74,6 +74,12 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-3">
             <button
+              onClick={() => navigate('/admin/cms')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-2xl text-xs font-bold hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-95"
+            >
+              ✏️ Content CMS
+            </button>
+            <button
               onClick={() => navigate('/dashboard')}
               className="px-6 py-3 bg-[var(--text-main)] text-[var(--bg-main)] rounded-2xl text-xs font-bold hover:opacity-90 transition-all shadow-xl shadow-black/5 active:scale-95"
             >

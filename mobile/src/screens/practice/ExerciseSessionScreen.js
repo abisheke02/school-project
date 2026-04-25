@@ -221,6 +221,113 @@ const DictationExercise = ({ item, onAnswer }) => {
   );
 };
 
+// ─── ReadAloud Exercise (STT-scored speaking) ─────────────────────────────────
+const ReadAloudExercise = ({ item, onAnswer }) => {
+  const [phase, setPhase] = useState('ready'); // ready | listening | done
+  const [transcript, setTranscript] = useState('');
+  const [sttError, setSttError] = useState(null);
+
+  const text = item.text || item.sentence || item.word || '';
+
+  useEffect(() => {
+    Voice.onSpeechResults = (e) => {
+      const heard = (e.value?.[0] || '').toLowerCase().trim();
+      setTranscript(heard);
+    };
+    Voice.onSpeechError = (e) => {
+      setSttError(e.error?.message || 'Could not hear you.');
+      setPhase('ready');
+    };
+    Voice.onSpeechEnd = () => setPhase('done');
+    return () => { Voice.destroy().then(Voice.removeAllListeners).catch(() => {}); };
+  }, []);
+
+  const startReading = async () => {
+    setTranscript('');
+    setSttError(null);
+    try {
+      await Voice.start('en-IN');
+      setPhase('listening');
+    } catch {
+      setSttError('Microphone unavailable.');
+    }
+  };
+
+  const stopAndScore = async () => {
+    try { await Voice.stop(); } catch {}
+    setPhase('done');
+  };
+
+  const submitReading = () => {
+    const { score } = scoreDictation(transcript, text);
+    const isCorrect = score >= 70;
+    onAnswer(transcript || '(no speech)', isCorrect);
+    setPhase('ready');
+    setTranscript('');
+  };
+
+  const retry = () => { setTranscript(''); setPhase('ready'); };
+
+  return (
+    <View style={styles.readAloudContainer}>
+      <Text style={styles.readAloudLabel}>{item.hint || 'Read this aloud:'}</Text>
+
+      {/* Text to read — large, dyslexia-friendly */}
+      <View style={styles.readAloudTextBox}>
+        <Text style={styles.readAloudText}>{text}</Text>
+        <TouchableOpacity
+          onPress={() => Tts.speak(text, { language: 'en-IN', rate: 0.75 })}
+          style={styles.readAloudHearBtn}
+          accessibilityLabel="Hear the text"
+        >
+          <Text style={styles.readAloudHearText}>🔊 Hear it first</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Transcript */}
+      {transcript ? (
+        <View style={styles.transcriptBox}>
+          <Text style={styles.transcriptLabel}>You read:</Text>
+          <Text style={styles.transcriptText}>"{transcript}"</Text>
+        </View>
+      ) : null}
+
+      {sttError ? <Text style={styles.sttError}>{sttError}</Text> : null}
+
+      {phase === 'ready' && !transcript && (
+        <TouchableOpacity style={styles.micBtn} onPress={startReading} accessibilityLabel="Start reading aloud">
+          <Text style={styles.micIcon}>🎤</Text>
+          <Text style={styles.micBtnText}>Start Reading</Text>
+        </TouchableOpacity>
+      )}
+
+      {phase === 'listening' && (
+        <>
+          <TouchableOpacity style={[styles.micBtn, styles.micBtnActive]} onPress={stopAndScore} accessibilityLabel="Stop recording">
+            <Text style={styles.micIcon}>⏹</Text>
+            <Text style={styles.micBtnText}>Done Reading</Text>
+          </TouchableOpacity>
+          <View style={styles.listeningIndicator}>
+            <ActivityIndicator size="small" color="#D32F2F" />
+            <Text style={styles.listeningText}> Listening…</Text>
+          </View>
+        </>
+      )}
+
+      {phase === 'done' && transcript && (
+        <View style={styles.readAloudActions}>
+          <TouchableOpacity style={styles.retryBtn} onPress={retry}>
+            <Text style={styles.retryBtnText}>Try Again</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.submitBtn} onPress={submitReading}>
+            <Text style={styles.submitBtnText}>Submit ✓</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+};
+
 // ─── Item renderer router ─────────────────────────────────────────────────────
 const renderItem = (type, item, onAnswer) => {
   switch (type) {
@@ -233,6 +340,7 @@ const renderItem = (type, item, onAnswer) => {
     case 'count_tap':    return <CountTapExercise item={item} onAnswer={onAnswer} />;
     case 'word_problem': return <WordProblemExercise item={item} onAnswer={onAnswer} />;
     case 'dictation':    return <DictationExercise item={item} onAnswer={onAnswer} />;
+    case 'read_aloud':   return <ReadAloudExercise item={item} onAnswer={onAnswer} />;
     default: return <Text style={{ color: '#999', padding: 16 }}>Exercise type not supported yet.</Text>;
   }
 };
@@ -557,6 +665,17 @@ const styles = StyleSheet.create({
   micBtnText: { color: '#FFF', fontSize: 16, fontWeight: '700' },
   listeningIndicator: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
   listeningText: { color: '#D32F2F', fontSize: 13, fontWeight: '600' },
+
+  // ReadAloud exercise
+  readAloudContainer: { alignItems: 'center', paddingVertical: 8 },
+  readAloudLabel: { fontSize: 15, color: '#546E7A', marginBottom: 12, fontWeight: '600' },
+  readAloudTextBox: { backgroundColor: '#EDE7F6', borderRadius: 16, paddingHorizontal: 24, paddingVertical: 20, alignItems: 'center', marginBottom: 16, borderWidth: 2, borderColor: '#CE93D8', width: '100%' },
+  readAloudText: { fontSize: 22, fontWeight: '800', color: '#311B92', lineHeight: 34, textAlign: 'center', letterSpacing: 0.5 },
+  readAloudHearBtn: { marginTop: 10, backgroundColor: '#E8EAF6', borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6 },
+  readAloudHearText: { fontSize: 13, color: '#3949AB', fontWeight: '600' },
+  readAloudActions: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  retryBtn: { backgroundColor: '#ECEFF1', borderRadius: 12, paddingHorizontal: 20, paddingVertical: 12 },
+  retryBtnText: { color: '#546E7A', fontSize: 15, fontWeight: '700' },
 
   // Finish screen
   finishContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F4FF', padding: 30 },

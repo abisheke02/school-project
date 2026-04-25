@@ -22,7 +22,7 @@ const complianceRoutes = require('./routes/compliance');
 const { startCronJobs } = require('./jobs/cronJobs');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 const { initFirebase } = require('./config/firebase');
-const { getRedisClient } = require('./config/redis');
+const { connectRedis } = require('./config/redis');
 const { pool } = require('./config/database');
 
 const app = express();
@@ -97,8 +97,8 @@ const start = async () => {
     .then(() => console.log('PostgreSQL connected'))
     .catch(err => console.error('Database unreachable, using Mock Mode:', err.message));
 
-  // 2. Attempt Redis connection
-  try { await getRedisClient(); } catch (err) { console.error('Redis unreachable'); }
+  // 2. Attempt Redis connection (non-blocking — server starts regardless)
+  connectRedis().catch(() => {});
 
   // 3. Initialize Firebase Admin
   try { initFirebase(); } catch (err) { console.error('Firebase failed'); }

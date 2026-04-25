@@ -4,6 +4,7 @@ import {
   ScrollView, Alert, Animated, ActivityIndicator,
 } from 'react-native';
 import Tts from 'react-native-tts';
+import Voice from 'react-native-voice';
 import { studentAPI } from '../../services/api';
 
 const PASS_THRESHOLD = 70;
@@ -18,8 +19,26 @@ const TestQuizScreen = ({ navigation, route }) => {
   const [submitting, setSubmitting] = useState(false);
   const [startTime] = useState(Date.now());
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 min
+  const [micState, setMicState] = useState('idle'); // idle | listening | done
+  const [speechTranscript, setSpeechTranscript] = useState('');
   const progressAnim = useRef(new Animated.Value(0)).current;
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    Voice.onSpeechResults = (e) => {
+      setSpeechTranscript(e.value?.[0] || '');
+      setMicState('done');
+    };
+    Voice.onSpeechError = () => { setMicState('idle'); };
+    Voice.onSpeechEnd = () => { setMicState((s) => s === 'listening' ? 'done' : s); };
+    return () => { Voice.destroy().then(Voice.removeAllListeners).catch(() => {}); };
+  }, []);
+
+  useEffect(() => {
+    // Reset speech state on question change
+    setMicState('idle');
+    setSpeechTranscript('');
+  }, [currentIndex]);
 
   useEffect(() => {
     loadQuestions();
@@ -101,6 +120,22 @@ const TestQuizScreen = ({ navigation, route }) => {
     }
   };
 
+  const startListening = async () => {
+    setSpeechTranscript('');
+    setMicState('listening');
+    try { await Voice.start('en-IN'); } catch { setMicState('idle'); }
+  };
+
+  const stopListening = async () => {
+    try { await Voice.stop(); } catch {}
+    setMicState('done');
+  };
+
+  const submitSpeechAnswer = (transcript) => {
+    if (submitting) return;
+    selectOption(transcript || '(no speech)');
+  };
+
   const confirmSkip = () => {
     Alert.alert(
       'Submit Test',
@@ -179,34 +214,83 @@ const TestQuizScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Options */}
-        <View style={styles.optionsList}>
-          {options.map((opt, i) => {
-            const isSelected = selectedOption === opt;
-            return (
+        {/* Options or Speaking input */}
+        {question?.question_type === 'speaking' ? (
+          <View style={styles.speakingContainer}>
+            <Text style={styles.speakingHint}>Speak your answer clearly</Text>
+
+            {speechTranscript ? (
+              <View style={styles.transcriptBox}>
+                <Text style={styles.transcriptLabel}>You said:</Text>
+                <Text style={styles.transcriptText}>"{speechTranscript}"</Text>
+              </View>
+            ) : null}
+
+            {micState === 'done' && speechTranscript ? (
+              <View style={styles.speechActions}>
+                <TouchableOpacity
+                  onPress={() => { setSpeechTranscript(''); setMicState('idle'); }}
+                  style={styles.retryBtn}
+                >
+                  <Text style={styles.retryBtnText}>Try Again</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => submitSpeechAnswer(speechTranscript)}
+                  style={styles.speechSubmitBtn}
+                >
+                  <Text style={styles.speechSubmitText}>Submit ✓</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
               <TouchableOpacity
-                key={i}
-                style={[
-                  styles.optionBtn,
-                  isSelected && styles.optionSelected,
-                ]}
-                onPress={() => selectOption(opt)}
-                disabled={selectedOption !== null}
-                accessibilityRole="button"
-                accessibilityLabel={`Option: ${opt}`}
+                onPress={micState === 'listening' ? stopListening : startListening}
+                style={[styles.micButton, micState === 'listening' && styles.micButtonActive]}
+                disabled={selectedOption !== null || submitting}
+                accessibilityLabel={micState === 'listening' ? 'Stop' : 'Tap to speak'}
               >
-                <View style={[styles.optionLetter, isSelected && styles.optionLetterSelected]}>
-                  <Text style={[styles.optionLetterText, isSelected && { color: '#FFF' }]}>
-                    {String.fromCharCode(65 + i)}
-                  </Text>
-                </View>
-                <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
-                  {opt}
+                <Text style={styles.micButtonIcon}>{micState === 'listening' ? '⏹' : '🎤'}</Text>
+                <Text style={styles.micButtonText}>
+                  {micState === 'listening' ? 'Tap to Stop' : 'Tap to Speak'}
                 </Text>
               </TouchableOpacity>
-            );
-          })}
-        </View>
+            )}
+
+            {micState === 'listening' && (
+              <View style={styles.listeningRow}>
+                <ActivityIndicator size="small" color="#D32F2F" />
+                <Text style={styles.listeningText}> Listening…</Text>
+              </View>
+            )}
+          </View>
+        ) : (
+          <View style={styles.optionsList}>
+            {options.map((opt, i) => {
+              const isSelected = selectedOption === opt;
+              return (
+                <TouchableOpacity
+                  key={i}
+                  style={[
+                    styles.optionBtn,
+                    isSelected && styles.optionSelected,
+                  ]}
+                  onPress={() => selectOption(opt)}
+                  disabled={selectedOption !== null}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Option: ${opt}`}
+                >
+                  <View style={[styles.optionLetter, isSelected && styles.optionLetterSelected]}>
+                    <Text style={[styles.optionLetterText, isSelected && { color: '#FFF' }]}>
+                      {String.fromCharCode(65 + i)}
+                    </Text>
+                  </View>
+                  <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
+                    {opt}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -272,6 +356,30 @@ const styles = StyleSheet.create({
   optionLetterText: { fontSize: 14, fontWeight: '800', color: '#1976D2' },
   optionText: { fontSize: 16, color: '#263238', fontWeight: '500', flex: 1 },
   optionTextSelected: { color: '#1565C0', fontWeight: '700' },
+
+  speakingContainer: { paddingHorizontal: 16, paddingBottom: 30, alignItems: 'center' },
+  speakingHint: { fontSize: 14, color: '#546E7A', marginBottom: 16 },
+  micButton: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: '#1976D2', borderRadius: 50,
+    paddingHorizontal: 32, paddingVertical: 18, elevation: 4, marginTop: 8,
+  },
+  micButtonActive: { backgroundColor: '#D32F2F' },
+  micButtonIcon: { fontSize: 24, marginRight: 10 },
+  micButtonText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
+  listeningRow: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
+  listeningText: { color: '#D32F2F', fontSize: 13, fontWeight: '600' },
+  transcriptBox: {
+    backgroundColor: '#FFF8E1', borderRadius: 12, padding: 14, marginBottom: 12,
+    borderWidth: 1, borderColor: '#FFE082', alignItems: 'center', width: '100%',
+  },
+  transcriptLabel: { fontSize: 11, color: '#F57F17', fontWeight: '700', textTransform: 'uppercase', marginBottom: 4 },
+  transcriptText: { fontSize: 18, color: '#263238', fontWeight: '700', textAlign: 'center' },
+  speechActions: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  retryBtn: { backgroundColor: '#ECEFF1', borderRadius: 12, paddingHorizontal: 20, paddingVertical: 12 },
+  retryBtnText: { color: '#546E7A', fontSize: 15, fontWeight: '700' },
+  speechSubmitBtn: { backgroundColor: '#1976D2', borderRadius: 12, paddingHorizontal: 24, paddingVertical: 12 },
+  speechSubmitText: { color: '#FFF', fontSize: 15, fontWeight: '700' },
 });
 
 export default TestQuizScreen;

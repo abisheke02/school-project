@@ -38,6 +38,7 @@ export const schoolAPI = {
   createClass: (data) => api.post('/schools/classes', data),
   getMyClasses: () => api.get('/schools/classes'),
   getClassStudents: (classId) => api.get(`/schools/classes/${classId}/students`),
+  getSubscription: () => api.get('/schools/subscription'),
 };
 
 export const studentAPI = {
@@ -69,6 +70,16 @@ export const adminAPI = {
   updateSchool: (id, data) => api.put(`/admin/schools/${id}`, data),
   getOverview: () => api.get('/analytics/admin/overview'),
   triggerCron: (job) => api.post(`/admin/cron/${job}`),
+  // Exercise CMS
+  getExercises: (params) => api.get('/admin/exercises', { params }),
+  createExercise: (data) => api.post('/admin/exercises', data),
+  updateExercise: (id, data) => api.patch(`/admin/exercises/${id}`, data),
+  deleteExercise: (id) => api.delete(`/admin/exercises/${id}`),
+  // Question CMS
+  getQuestions: (params) => api.get('/admin/questions', { params }),
+  createQuestion: (data) => api.post('/admin/questions', data),
+  updateQuestion: (id, data) => api.patch(`/admin/questions/${id}`, data),
+  deleteQuestion: (id) => api.delete(`/admin/questions/${id}`),
 };
 
 export const reportsAPI = {

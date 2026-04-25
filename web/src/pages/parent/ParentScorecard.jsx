@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from 'recharts';
 import toast from 'react-hot-toast';
 import { analyticsAPI } from '../../services/api';
-import { authAPI } from '../../services/api';
 import useAuthStore from '../../services/authStore';
 
 // Standalone mobile-web page — no Layout chrome, optimised for 2G / < 500KB bundle
@@ -23,7 +23,8 @@ const DayDot = ({ active }) => (
 );
 
 const ParentScorecard = () => {
-  const { user, token } = useAuthStore();
+  const navigate = useNavigate();
+  const { user, token, logout } = useAuthStore();
   const [data, setData] = useState(null);
   const [recs, setRecs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +84,13 @@ const ParentScorecard = () => {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-4xl mb-4">👋</p>
-          <p className="text-slate-500">No student linked to your account. Ask the teacher to link your child.</p>
+          <p className="text-slate-500 mb-6">No student linked to your account. Ask the teacher to link your child.</p>
+          <button
+            onClick={() => { logout(); navigate('/login'); }}
+            className="text-sm text-slate-400 underline"
+          >
+            Sign out
+          </button>
         </div>
       </div>
     );
@@ -99,7 +106,15 @@ const ParentScorecard = () => {
             {profile?.name || 'Your Child'}
           </h1>
         </div>
-        <span className="text-2xl">📊</span>
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">📊</span>
+          <button
+            onClick={() => { logout(); navigate('/login'); }}
+            className="text-xs text-slate-400 border border-slate-200 rounded-lg px-3 py-1.5 hover:bg-slate-50 transition"
+          >
+            Sign out
+          </button>
+        </div>
       </div>
 
       <div className="px-5 py-6 space-y-5 max-w-lg mx-auto">

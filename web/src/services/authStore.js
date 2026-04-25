@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { authAPI } from './api';
+import { identifyUser, resetAnalytics } from './analytics';
 
 const useAuthStore = create((set) => ({
   token: localStorage.getItem('auth_token') || null,
@@ -10,6 +11,7 @@ const useAuthStore = create((set) => ({
     localStorage.setItem('auth_token', backendToken);
     localStorage.setItem('user_data', JSON.stringify(user));
     set({ token: backendToken, user });
+    identifyUser(user);
     return user;
   },
 
@@ -18,6 +20,7 @@ const useAuthStore = create((set) => ({
     localStorage.setItem('auth_token', token);
     localStorage.setItem('user_data', JSON.stringify(user));
     set({ token, user });
+    identifyUser(user);
     return user;
   },
 
@@ -25,12 +28,14 @@ const useAuthStore = create((set) => ({
     localStorage.setItem('auth_token', token);
     localStorage.setItem('user_data', JSON.stringify(user));
     set({ token, user });
+    identifyUser(user);
   },
 
   logout: async () => {
     try { await authAPI.logout(); } catch {}
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
+    resetAnalytics();
     set({ token: null, user: null });
     window.location.href = '/login';
   },
