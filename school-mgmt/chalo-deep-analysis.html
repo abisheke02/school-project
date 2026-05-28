@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chalo Platform — Deep Dive: Every Module & Our Plan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f8;color:#1a202c;font-size:14px}
+.cover{background:linear-gradient(135deg,#0f172a,#1a3a5c,#1a56db);color:#fff;padding:60px 40px;text-align:center}
+.cover h1{font-size:36px;font-weight:900;letter-spacing:-1px}
+.cover p{font-size:15px;opacity:.65;margin-top:8px}
+.cover-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:600}
+.wrap{max-width:1080px;margin:0 auto;padding:30px 20px 60px}
+
+/* SUMMARY BOX */
+.summary-box{background:#fff;border-radius:16px;padding:24px;margin-bottom:28px;box-shadow:0 2px 16px rgba(0,0,0,.05)}
+.summary-box h2{font-size:17px;font-weight:800;margin-bottom:14px}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sum-card{border-radius:10px;padding:14px;text-align:center}
+.sum-card .num{font-size:28px;font-weight:900;display:block}
+.sum-card .lbl{font-size:11px;font-weight:600;margin-top:2px;opacity:.7}
+
+/* MODULE CARD */
+.mc{background:#fff;border-radius:16px;margin-bottom:28px;box-shadow:0 2px 16px rgba(0,0,0,.05);overflow:hidden}
+.mc-head{display:flex;align-items:center;gap:14px;padding:20px 24px}
+.mc-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.mc-title h2{font-size:17px;font-weight:800}
+.mc-title p{font-size:12px;color:#64748b;margin-top:2px}
+.mc-body{padding:0 24px 22px}
+
+/* PILLS ROW */
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.pill{padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700}
+.p-done{background:#dcfce7;color:#15803d}
+.p-warn{background:#fef9c3;color:#92400e}
+.p-no{background:#fee2e2;color:#b91c1c}
+.p-ai{background:#ede9fe;color:#6d28d9}
+.p-new{background:#e0f2fe;color:#0369a1}
+
+/* THREE-COL GRID */
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}
+@media(max-width:750px){.three-col{grid-template-columns:1fr}}
+.col-box{border-radius:10px;padding:14px}
+.col-box h4{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.col-box ul{list-style:none;padding:0}
+.col-box ul li{font-size:12px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.4;color:#374151}
+.col-box ul li:last-child{border:none}
+/* box color presets */
+.b1{background:#f0fdf4;border:1px solid #bbf7d0}.b1 h4{color:#15803d}
+.b2{background:#fff1f2;border:1px solid #fecdd3}.b2 h4{color:#be185d}
+.b3{background:#fdf4ff;border:1px solid #e9d5ff}.b3 h4{color:#7c3aed}
+.b1 ul li::before{content:'✅ ';font-size:10px}
+.b2 ul li::before{content:'❌ ';font-size:10px}
+.b3 ul li::before{content:'➜ ';color:#7c3aed;font-weight:700}
+
+/* CHALO FEATURES TABLE */
+.ftable{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:12px}
+.ftable th{background:#f8fafc;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#64748b;border-bottom:2px solid #e2e8f0}
+.ftable td{padding:8px 10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.ftable tr:last-child td{border:none}
+.ftable tr:hover td{background:#fafbff}
+.st{display:inline-block;padding:2px 7px;border-radius:12px;font-size:10px;font-weight:700}
+.st-have{background:#dcfce7;color:#15803d}
+.st-build{background:#ede9fe;color:#7c3aed}
+.st-new{background:#e0f2fe;color:#0369a1}
+.st-partial{background:#fef9c3;color:#92400e}
+
+/* HIGHLIGHT BOX */
+.highlight{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin:10px 0;font-size:13px}
+.highlight strong{color:#92400e}
+
+/* PRIORITY TABLE */
+.ptable-wrap{background:#fff;border-radius:16px;padding:24px;margin-bottom:28px;box-shadow:0 2px 16px rgba(0,0,0,.05)}
+.ptable-wrap h2{font-size:18px;font-weight:900;margin-bottom:16px}
+table.pri{width:100%;border-collapse:collapse}
+table.pri th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#64748b;border-bottom:2px solid #e2e8f0}
+table.pri td{padding:9px 12px;font-size:12.5px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+table.pri tr:last-child td{border:none}
+table.pri tr:hover td{background:#fafbff}
+.pr1{background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.pr2{background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.pr3{background:#ede9fe;color:#6d28d9;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+
+footer{background:#1e293b;color:#94a3b8;text-align:center;padding:24px;font-size:12px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Chalo Platform — Deep Dive: Every Module & Our Plan</h1>
+  <p>Sourced directly from Chalo's live platform source code — every screen, every feature, exact comparison</p>
+  <div class="cover-chips">
+    <div class="chip">Source: chaloschools.in/testv3 live code</div>
+    <div class="chip">180+ screens found</div>
+    <div class="chip">15 modules</div>
+    <div class="chip">Our status vs Chalo</div>
+    <div class="chip">May 2026</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SUMMARY -->
+<div class="summary-box">
+  <h2>What We Found Inside Chalo (Actual Source)</h2>
+  <div class="sum-grid">
+    <div class="sum-card" style="background:#f0fdf4;border:1px solid #bbf7d0">
+      <span class="num" style="color:#15803d">180+</span>
+      <span class="lbl">Total Screens Found</span>
+    </div>
+    <div class="sum-card" style="background:#eff6ff;border:1px solid #bfdbfe">
+      <span class="num" style="color:#1d4ed8">15</span>
+      <span class="lbl">Major Modules</span>
+    </div>
+    <div class="sum-card" style="background:#fdf4ff;border:1px solid #e9d5ff">
+      <span class="num" style="color:#7c3aed">60+</span>
+      <span class="lbl">We Have Built / Partial</span>
+    </div>
+    <div class="sum-card" style="background:#fff1f2;border:1px solid #fecdd3">
+      <span class="num" style="color:#be185d">120+</span>
+      <span class="lbl">Still To Add / Improve</span>
+    </div>
+  </div>
+  <div class="highlight" style="margin-top:14px">
+    <strong>Key Insight:</strong> Chalo is far deeper than we initially mapped. Fee module alone has 25+ reports. Examination has 3 separate report card systems (CBSE, HPC, Other Exams). Front Office has a full CRM with call follow-up. There are workflows for concession approval, fee category change, refunds — all with approval chains.
+  </div>
+</div>
+
+<!-- ═════════════ 1. ADMINISTRATION ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f8fafc,#e2e8f0)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#475569,#1e293b)">⚙️</div>
+    <div class="mc-title"><h2>01 — Administration & Setup</h2><p>School configuration, masters, roles, users, academic structure</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">School Master ✓</span>
+      <span class="pill p-done">Branch / Company Master ✓</span>
+      <span class="pill p-done">Academic Year ✓</span>
+      <span class="pill p-done">Term Master ✓</span>
+      <span class="pill p-done">Class & Section ✓</span>
+      <span class="pill p-done">Subject Master ✓</span>
+      <span class="pill p-done">Role & User Master ✓</span>
+      <span class="pill p-no">Holiday & Weekly-off ✗</span>
+      <span class="pill p-no">SMS/Email Settings ✗</span>
+      <span class="pill p-no">Logo Configuration ✗</span>
+      <span class="pill p-no">Workflow Approval ✗</span>
+      <span class="pill p-no">Data Import ✗</span>
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>SchoolMaster / BranchMaster</td><td>School name, address, logo, contact details</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>AcademicYearCreation</td><td>Create 2025-26 academic year with start/end dates</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>TermMaster</td><td>Define Term 1, Term 2 with dates</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>ClassMaster / ClassSectionMaster</td><td>Add Grade 1, Grade 2 with sections A, B, C</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>SubjectMaster / SubjectTypeMaster</td><td>Add subjects (Maths, Science), mark as scholastic/co-scholastic</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>ClassSubjectMapping</td><td>Assign which subjects are taught in which class</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>HouseMaster</td><td>Define school houses (Red, Blue, Green, Yellow)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>BoardMaster / LevelMaster</td><td>CBSE, ICSE, State board configuration</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>HolidayMaster</td><td>Mark national holidays, school events — excluded from attendance</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>WeekConfiguration / AcademicWeeklyoff</td><td>Set which days school is open (Mon–Sat or Mon–Fri)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RoleMaster / RoleAuthorization / ScreenMaster</td><td>Define roles, assign which screens each role can see</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>UserMaster</td><td>Add/manage admin users, assign role, set login credentials</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>LogoConfiguration</td><td>Upload school logo, right-logo, report header image</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>SMSEmailSetting / ScheduledSMSEmailSetting</td><td>Configure SMS gateway, email SMTP, set scheduled alerts</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>AutomatedEMailConfiguration</td><td>Auto-emails for fee due, absent, exam results</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>OnlinePaymentConfiguration</td><td>Configure Razorpay/payment gateway keys per school</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>WorkFlowApproval</td><td>Approval chain: concession/refund needs HOD then principal sign-off</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>DataImportMainPage</td><td>Bulk upload students/staff/fees from Excel</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>AutoNumber</td><td>Configure auto-format for admission numbers (2024/001)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ChaloBannerSelection</td><td>Pick UI theme / banner image per school</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StorageExtension</td><td>Configure cloud storage quota per school</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>Key Simple Improvements</h4>
+        <ul>
+          <li>Add Holiday calendar setup screen</li>
+          <li>School logo upload on settings page</li>
+          <li>Auto-number format for admission nos.</li>
+          <li>Weekly-off configuration (Sat/Sun)</li>
+          <li>Bulk data import from Excel</li>
+          <li>Role-based screen permission editor</li>
+          <li>SMS/Email gateway configuration</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>holidays table + exclude from attendance denominator</li>
+          <li>Multer upload for school logo → S3/public path</li>
+          <li>auto_number_config table with prefix+padding+counter</li>
+          <li>school_week_config table (working days bitmask)</li>
+          <li>Bulk import: Excel → parse → validate → batch INSERT</li>
+          <li>screen_permissions table linked to roles</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#fdf4ff;border:1px solid #e9d5ff"><h4 style="color:#7c3aed">New Unique Features</h4>
+        <ul style="color:#374151">
+          <li>Workflow approval engine (multi-level sign-off)</li>
+          <li>Scheduled SMS/WhatsApp triggers (cron-based)</li>
+          <li>Storage quota management per school tenant</li>
+          <li>Multi-branch support (company → branch)</li>
+          <li>CBSE + ICSE + State board multi-config</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 2. FRONT OFFICE / CRM ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fdf4ff,#ede9fe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">📞</div>
+    <div class="mc-title"><h2>02 — Front Office / Admissions CRM</h2><p>Enquiry tracking, call follow-up, shortlisting, pre-admission fee</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Enquiry list + stage advance ✓</span>
+      <span class="pill p-done">Funnel view ✓</span>
+      <span class="pill p-no">Call Follow-up log ✗</span>
+      <span class="pill p-no">Call Register report ✗</span>
+      <span class="pill p-no">Sibling detection ✗</span>
+      <span class="pill p-no">Shortlisting module ✗</span>
+      <span class="pill p-no">Pre-admission fee collection ✗</span>
+      <span class="pill p-no">Admission priority/category ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>What Chalo has that we don't:</strong> Full call-centre style CRM — each enquiry has a call history, follow-up date, next action. Sibling detection (new student whose sibling already studies here). Pre-admission fee before full enrollment. Admission categories (management quota, NRI, staff ward) with priority rules.
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>EnquiryList</td><td>All walk-in enquiries in a table with quick filters</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>CallFollowup</td><td>Log each phone call: who called, what was discussed, next follow-up date</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RptCallRegister</td><td>Report: all calls made, by staff, by date, conversion outcome</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RptEnquiryList</td><td>Filtered enquiry report by class, source, date, status</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ShortlistedStudent</td><td>After interview: shortlist students, then confirm admission</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ApplicantSiblingsReport</td><td>Flag new applicants who have a sibling already studying here</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>SiblingDetailsReport</td><td>List all students with siblings in same school</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>AdmissionCategoryMaster</td><td>Define categories: General, NRI, Management, Staff Ward, OBC</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>AdmissionPriorityMaster</td><td>Set seat allocation priority per category per class</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>PreAdmissionFeeCollection</td><td>Collect registration/application fee before full admission</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>What to Build</h4>
+        <ul>
+          <li>Call follow-up log per enquiry (notes + next date)</li>
+          <li>Call register report (staff-wise call log)</li>
+          <li>Admission category (General/NRI/Mgmt) setup</li>
+          <li>Sibling detection: check parent mobile match</li>
+          <li>Shortlisting step between interview and admission</li>
+          <li>Pre-admission fee: collect + receipt before enrollment</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>enquiry_call_log table: enquiry_id, staff_id, notes, follow_up_date</li>
+          <li>GET /admissions/:id/calls · POST /admissions/:id/call</li>
+          <li>Sibling query: JOIN parents on phone number → check existing students</li>
+          <li>admission_categories table with priority_order</li>
+          <li>Pre-admission fee linked to enquiry → converts to main fee on enrollment</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Currently Missing (Gaps)</h4>
+        <ul>
+          <li>No call history per enquiry</li>
+          <li>No automatic sibling discount trigger</li>
+          <li>No seat availability check per class</li>
+          <li>No admission category quota management</li>
+          <li>Pre-admission fee not linked to main fee</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 3. STUDENTS ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">🎓</div>
+    <div class="mc-title"><h2>03 — Student Management</h2><p>Profiles, documents, certificates, gate pass, promotion, TC</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Student list + search ✓</span>
+      <span class="pill p-done">Backend: profile, parent, documents ✓</span>
+      <span class="pill p-no">Add/Edit form ✗</span>
+      <span class="pill p-no">Gate Pass ✗</span>
+      <span class="pill p-no">Bonafide Certificate ✗</span>
+      <span class="pill p-no">TC Checklist ✗</span>
+      <span class="pill p-no">Income Tax Certificate ✗</span>
+      <span class="pill p-no">Promotion screen ✗</span>
+      <span class="pill p-no">Fee Category Change ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>Key surprise from Chalo:</strong> Student management goes well beyond profiles. Chalo has Gate Pass (student leaving school early), Bonafide Certificate (PDF for bank/visa), TC Checklist (ensure dues cleared before TC), Income Tax Certificate (fee paid certificate for parents' IT returns), and a Fee Category Change workflow (if a student's category changes, it needs approval chain).
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>StudentAdmissionDetails</td><td>Full student profile with parent, documents, photo</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>PromotionScreen</td><td>Year-end: promote all students to next class in bulk</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>PromotionCancellation</td><td>Undo a promotion if student needs to repeat year</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>NonPromotedStudentList</td><td>Report: list of students who are repeating (failed/held back)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StudentGatePass</td><td>Student leaves school mid-day: create pass with time/reason/parent approval</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentGatePassReport</td><td>Report: all gate passes issued, by date, by student</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>BonafideCertificate</td><td>Generate PDF certificate: "This is to certify that [name] studies in Grade X"</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TCChecklistUpdation</td><td>Before issuing TC, verify: fees cleared, books returned, no dues</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TCStudentChecklist</td><td>Report of students with TC checklist status</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StudentFeeIncomeTaxCertificate</td><td>PDF certificate of fees paid (for parent's tax return, Section 80C)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentFeeCategoryChange</td><td>Move student from General to OBC fee category mid-year</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentFeeCategoryChangeApproval</td><td>Principal approves the category change request</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentParticipationReport</td><td>Report: which competitions/events each student participated in</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentBirthdayReport</td><td>This month's student birthdays list</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StudentAdmissionReport</td><td>Class-wise admission count for government reporting</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StudentUserActivityMasterReport</td><td>Track when each student/parent last logged into the portal</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>Priority Builds</h4>
+        <ul>
+          <li>Add/Edit student form with all fields</li>
+          <li>Year-end bulk promotion wizard</li>
+          <li>Gate Pass: issue + track + report</li>
+          <li>Bonafide Certificate PDF generator</li>
+          <li>TC checklist (clear dues before TC)</li>
+          <li>Income Tax Certificate PDF for parents</li>
+          <li>Fee category change with approval</li>
+          <li>Birthday alerts (upcoming birthdays)</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>gate_passes table: student_id, reason, out_time, return_time, status</li>
+          <li>tc_checklist table: items (fees_cleared, books_returned, uniform_returned)</li>
+          <li>PDFKit: bonafide, TC, income tax cert templates</li>
+          <li>Promotion: UPDATE class_students SET class_id=next_class WHERE academic_year=current</li>
+          <li>student_fee_category_change + approval_status</li>
+          <li>Participation events table linked to student</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Currently Missing</h4>
+        <ul>
+          <li>No gate pass management</li>
+          <li>No certificate generation (bonafide, TC, IT cert)</li>
+          <li>No bulk promotion wizard</li>
+          <li>No fee category change workflow</li>
+          <li>No student participation tracking</li>
+          <li>No birthday reminder</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 4. ATTENDANCE ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#14b8a6,#0f766e)">✅</div>
+    <div class="mc-title"><h2>04 — Attendance</h2><p>Student & staff attendance with reasons, block-wise view, SMS alerts</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Mark P/A/Late ✓</span>
+      <span class="pill p-done">Class overview ✓</span>
+      <span class="pill p-warn">UUID input — not user friendly ⚠</span>
+      <span class="pill p-no">Attendance Reason/Excuse ✗</span>
+      <span class="pill p-no">Block-wise (section-wise) view ✗</span>
+      <span class="pill p-no">Absent summary report ✗</span>
+      <span class="pill p-no">Attendance SMS to parents ✗</span>
+      <span class="pill p-no">Configuration (min % etc.) ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>What Chalo has extra:</strong> Attendance Reason Master — when marking absent, teacher can select a reason (sick, family function, no reason given). This feeds into excuse vs unexcused absence. Also has Block-wise attendance — school organised into blocks/buildings can see section-by-section at a glance. FeePendencySMS and ExaminationSMS are separate scheduled communication screens.
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>Student Attendance (mark)</td><td>Teacher marks Present/Absent/Late per student for the day</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>BlockWiseStudentAttendance</td><td>View attendance by section/block: all sections of Grade 5 in one grid</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>AttendanceReasonMaster</td><td>Create reason codes: Sick, Family Function, Exam Leave, No Reason</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>AttendanceConfiguration</td><td>Set minimum attendance %, grace period, how it shows on report card</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StudentAbsentSummary / StudentSummary_Absent</td><td>Report: students with most absences, class-wise summary this month</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StaffAbsentSummary / StaffSummary_Absent</td><td>Report: staff absent today, this week, this month</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ExaminationSMS</td><td>Send SMS to parents of students with low attendance before exam</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>FeePendencySMS</td><td>Scheduled SMS to parents of students with fee dues</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>DigitalSecretary_Dashboard</td><td>Real-time dashboard for front desk: absent staff list + substitute suggestions</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>What to Build</h4>
+        <ul>
+          <li>Class dropdown instead of UUID input</li>
+          <li>Absence reason dropdown (sick / no reason / leave)</li>
+          <li>Block/section grid view across all sections</li>
+          <li>Min attendance % configuration</li>
+          <li>Monthly absent summary report</li>
+          <li>WhatsApp/SMS alert when student absent</li>
+          <li>Digital Secretary dashboard (front desk view)</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>attendance_reason_master table</li>
+          <li>Add reason_id to student_attendance</li>
+          <li>attendance_config: min_pct, grace_period per school</li>
+          <li>GET /attendance/block-wise → GROUP BY class with section breakdown</li>
+          <li>POST /attendance/mark triggers WhatsApp webhook for absent</li>
+          <li>Scheduled SMS: cron reads attendance → sends via WATI/360Dialog</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Current Gaps</h4>
+        <ul>
+          <li>UUID text box (no one knows class UUIDs)</li>
+          <li>No reason field for absence</li>
+          <li>No automatic parent notification</li>
+          <li>No attendance threshold alert</li>
+          <li>No front-desk substitute dashboard</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 5. TIMETABLE ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#6366f1,#4338ca)">🤖</div>
+    <div class="mc-title"><h2>05 — Timetable Management</h2><p>AI generation, substitution, lab timetable, backup/restore</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">AI timetable generation (Claude) ✓</span>
+      <span class="pill p-done">5×8 grid view ✓</span>
+      <span class="pill p-done">Substitution backend ✓</span>
+      <span class="pill p-warn">UUID class input ⚠</span>
+      <span class="pill p-no">Combine Subjects ✗</span>
+      <span class="pill p-no">Staff Rule Creation ✗</span>
+      <span class="pill p-no">Lab Timetable ✗</span>
+      <span class="pill p-no">Backup / Restore ✗</span>
+      <span class="pill p-no">Substitution UI ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>New discovery from Chalo source:</strong> Separate Lab Timetable (science lab has its own schedule separate from class timetable). CombineSubject — when two classes are merged for a single subject (like combined Physical Education). StaffRuleCreationMaster — admin sets rules like "Teacher X can't take more than 5 periods/day" before AI runs. TimeTableBackupRestore — save a working timetable before making changes.
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>AutomaticTimeTable / AutomaticTimeTableGeneration</td><td>AI generates conflict-free timetable from teacher-subject-class data</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>SubstitutionTimeTable</td><td>Absent teacher → find available substitute → confirm and record</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>TTClassSubjectMapping</td><td>Map which teacher handles which subject in which class</td><td><span class="st st-have">Have it</span></td></tr>
+        <tr><td>CombineSubject</td><td>Multiple classes taught together (e.g., Grade 9A + 9B for PT)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffRuleCreationMaster</td><td>Rules: max periods/day, preferred slots, can't be first period</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TimeTableBackupRestore</td><td>Snapshot current timetable → restore if something goes wrong</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>TimeTableDetailsReport</td><td>Print-ready timetable for each class and each teacher</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>LabTimeTableDetailsReport</td><td>Science/computer lab has its own booking schedule</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>What to Build</h4>
+        <ul>
+          <li>Class dropdown selector (replace UUID input)</li>
+          <li>Substitution management UI (absent → find sub → confirm)</li>
+          <li>Staff rules editor (max periods, preferred slots)</li>
+          <li>Print/PDF timetable for class and teacher</li>
+          <li>Timetable snapshot / backup button</li>
+          <li>Combined subjects support</li>
+          <li>Lab timetable separate view</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>timetable_rules: max_periods_per_day, preferred_periods, excluded_periods</li>
+          <li>combined_subjects: multiple class_ids for one slot</li>
+          <li>timetable_snapshots: versioned copy of current schedule</li>
+          <li>lab_timetable_slots: lab_id, class_id, period, day</li>
+          <li>Substitution UI: GET absent teacher's slots → show free staff → POST confirm</li>
+          <li>Print CSS: @media print for timetable grid</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Current Gaps</h4>
+        <ul>
+          <li>No substitution UI (backend exists)</li>
+          <li>No staff rules before AI generation</li>
+          <li>No combined class support</li>
+          <li>No lab booking timetable</li>
+          <li>No backup/restore timetable</li>
+          <li>UUID input — unusable by end users</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 6. EXAMINATION ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#ef4444,#b91c1c)">📝</div>
+    <div class="mc-title"><h2>06 — Examination & Report Cards</h2><p>5 exam systems, 3 report card types, deep result analysis</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">AI Remark rephrase ✓</span>
+      <span class="pill p-done">CBSE grade scale DB ✓</span>
+      <span class="pill p-done">Backend: marks + report card PDF ✓</span>
+      <span class="pill p-no">Mark Entry UI ✗</span>
+      <span class="pill p-no">Exam creation UI ✗</span>
+      <span class="pill p-no">HPC Report Card ✗</span>
+      <span class="pill p-no">Other Exams (NEET/JEE) ✗</span>
+      <span class="pill p-no">12 result analysis reports ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>Major discovery:</strong> Chalo has THREE separate report card systems — (1) Standard CBSE progress card, (2) HPC (Holistic Progress Card) with curriculum + assessment + rating, (3) Other Exam system for JEE/NEET/entrance exams. Mark entry has 3 MODES: Classic (desktop grid), Mobile (phone-friendly), Manual (offline paper entry). Plus 12 result analysis reports we don't have at all.
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>ExaminationSettingsMaster</td><td>Configure exam types, grade boundaries, scholastic/co-scholastic split</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>ExaminationPlanningMaster</td><td>Set exam schedule, generate hall ticket / admit card</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ExaminationMarkEntry (3 modes)</td><td>Classic: desktop grid. Mobile: phone-friendly. Manual: paper-based offline.</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ProgressCardSettingMaster</td><td>Design the report card layout — which subjects appear, grade visibility</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ProgressCardReportGeneration</td><td>Generate + download report cards for all students at once</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ExamWiseProgressCardReportGeneration</td><td>Generate report cards filtered by exam (FA1, SA1 only)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>IndividualAssessmentReport / ReportCard</td><td>Per student: subject-wise marks, grade, remarks, attendance in one PDF</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ExaminationConsolidatedReport</td><td>All students × all subjects in one spreadsheet view</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td><strong>HPC System</strong></td><td></td><td></td></tr>
+        <tr><td>HPCRatingMaster</td><td>Holistic Progress Card — rate students on curriculum areas (creativity, sports etc.)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>HPCReportCard</td><td>HPC report card generation with circular charts and ratings</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>CurriculumMaster</td><td>Define curriculum areas for HPC rating</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>AssessmentEntry</td><td>Enter HPC assessment scores per student per curriculum area</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td><strong>Other Exams</strong></td><td></td><td></td></tr>
+        <tr><td>OtherExamMaster / Configuration</td><td>Setup JEE/NEET/entrance exam tracking separate from school exams</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>OtherExaminationMarkEntry</td><td>Enter mock test marks for JEE/NEET students</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>OtherExamRankGeneration</td><td>Generate AIR-style rank among school's JEE/NEET students</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>OtherExamReportCard</td><td>JEE/NEET progress report card for students</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td><strong>Result Analysis (12 reports)</strong></td><td></td><td></td></tr>
+        <tr><td>CentumReport</td><td>Students who scored 100% in any subject — celebrate toppers</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>ClassWiseResultAnalysis</td><td>Pass%, average, highest, lowest per class per subject</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffWiseResultAnalysis</td><td>How well did each teacher's students perform? Teacher accountability</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>OverAllAverageReport</td><td>School-wide average across all subjects and classes</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>SingleDigitMarksReport</td><td>Students who scored in single digits (0–9) — need urgent support</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>SubjectAverageCountReport</td><td>Average marks per subject across school</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>SubjectFailCountReport</td><td>How many students failed each subject — identify weak areas</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>TeacherPerformanceReport / SubjectAnalysis</td><td>Teacher performance: their students' pass%, average, improvement</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>ASLReportGeneration</td><td>Assessment of Speaking and Listening (CBSE special activity report)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>PortalProgressCardConfig / ConfigurePortalProgressView</td><td>Choose what parents see on their portal (which exams, which subjects)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>NEETJEEStudents</td><td>Track which students are appearing for NEET/JEE this year</td><td><span class="st st-new">New</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>Priority Builds</h4>
+        <ul>
+          <li>Mark entry form (Classic mode: student grid + marks input)</li>
+          <li>Exam creation with subjects + date + max marks</li>
+          <li>Progress card PDF generator (CBSE format)</li>
+          <li>Consolidated marksheet view (all students × subjects)</li>
+          <li>4 core analysis reports: class-wise, subject fail, teacher-wise, centum</li>
+          <li>Publish report cards → parent WhatsApp link</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>Marks entry: GET /exams/:id/students → grid with input[type=number]</li>
+          <li>Auto grade on blur: compute from grade_config table</li>
+          <li>Analysis queries: GROUP BY class/teacher/subject with pass_count, avg_marks</li>
+          <li>PDFKit report card with: header, student info, subject table, remarks, attendance</li>
+          <li>HPC: curriculum_master + assessment_entry + hpc_report tables</li>
+          <li>other_exams: separate schema from main exams</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>What We Don't Have Yet</h4>
+        <ul>
+          <li>No marks entry UI (critical — backend only)</li>
+          <li>No HPC (Holistic Progress Card) at all</li>
+          <li>No NEET/JEE tracking</li>
+          <li>None of the 12 result analysis reports</li>
+          <li>No exam portal config for parents</li>
+          <li>No single-digit student alert</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 7. FEE MANAGEMENT ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fefce8,#fef9c3)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#eab308,#a16207)">💰</div>
+    <div class="mc-title"><h2>07 — Fee Management</h2><p>25+ screens: collection, concession, refund, payment scheduler, day closure, 20+ reports</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Outstanding table ✓</span>
+      <span class="pill p-done">EOD report ✓</span>
+      <span class="pill p-done">Backend: 3-method collection + AI reconciliation ✓</span>
+      <span class="pill p-no">Counter collection form ✗</span>
+      <span class="pill p-no">Day Closure + Cash Denomination ✗</span>
+      <span class="pill p-no">Refund workflow ✗</span>
+      <span class="pill p-no">Payment Scheduler (EMI) ✗</span>
+      <span class="pill p-no">Late fee auto-apply ✗</span>
+      <span class="pill p-no">20+ fee reports ✗</span>
+    </div>
+    <div class="highlight">
+      <strong>Biggest gap found:</strong> Chalo's fee module is an entire accounting system. Day Closure = EOD accounting with physical cash note counting (₹500×10, ₹100×5 etc.). Payment Scheduler = EMI-style installment setup per student. Concession has a full approval workflow. Donation fees separate from regular fees. Credit notes for fee corrections. 20+ reports covering every angle of fee collection.
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>NewFeeCollectionStudent</td><td>Main fee collection: search student → see dues → collect → print receipt</td><td><span class="st st-partial">Partial (backend only)</span></td></tr>
+        <tr><td>DayClosure</td><td>EOD: count physical cash by denomination, reconcile with system total, close day</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>CashDenomination</td><td>Enter ₹500 × 10 notes, ₹100 × 25 notes etc. to get total cash count</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>ConcessionMasterRequest</td><td>Request a fee concession for a student (e.g., 50% on tuition for merit)</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>ConcessionApproval</td><td>Principal approves or rejects the concession request</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RefundEntry</td><td>Record a fee refund for a student (over-payment or withdrawal)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RefundApproval</td><td>Finance head approves refund before money is returned</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>RefundReceipt</td><td>Generate refund receipt PDF</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>LateFeeMaster</td><td>Auto-add ₹X late fee after due date — configured per fee head</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>PaymentScheduler</td><td>Allow student to pay in installments: ₹5000/month for 3 months</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>LumpSumFeesConfiguration</td><td>Offer discounted annual lump-sum fee option (pay full year at once)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>LumpsumFeesStudentMapping</td><td>Apply lump-sum option to specific students</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>DonationFeeCollection</td><td>Collect voluntary donations separate from regular fees</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>DonationFeesCancellation</td><td>Cancel a donation entry if incorrectly recorded</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StudentFeeCategory</td><td>Assign fee category to student (determines which fee structure applies)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>FeesCollectionPriority</td><td>When partial payment: which fee heads get paid first (tuition before bus)</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>BusFeeStructureMain / BusFeeStudentwise</td><td>Separate fee structure for transport (distance-based, stop-based)</td><td><span class="st st-partial">Partial</span></td></tr>
+        <tr><td>HostelFeeStructureMain / HostelFeeStudentwise</td><td>Hostel fee separate from school fee</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td><strong>Reports (20+)</strong></td><td>ConsolidatedCollection, ConsolidatedPending, OverallPaid/NonPaid, FeeHeadWise Paid/NonPaid, AbstractReport, InvoiceReport, ExcuseFee, ExtraFee, CreditNote, TermFeeSummary, FeesDailyStatement, CompanyWise, PartialCollection, and more</td><td><span class="st st-build">Build all</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>Priority Builds (Simple)</h4>
+        <ul>
+          <li>Counter collection modal: student → dues → collect → receipt</li>
+          <li>Day Closure with cash denomination entry</li>
+          <li>Concession approval workflow (request → approve)</li>
+          <li>Refund entry + approval + receipt</li>
+          <li>Late fee auto-apply after due date</li>
+          <li>Payment scheduler (EMI per student)</li>
+          <li>6 core reports: consolidated collection, pending, fee-head-wise</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>day_closures table: date, expected_cash, counted_cash, denomination_json, closed_by</li>
+          <li>refund_requests + refund_approvals (workflow pattern)</li>
+          <li>late_fee_config: fee_head_id, days_grace, amount_per_day / percentage</li>
+          <li>payment_schedules: student_id, installment_no, amount, due_date, paid</li>
+          <li>fee_collection_priority: school_id, fee_head_id, priority_order</li>
+          <li>Cron: daily check for late fees → auto-add to outstanding</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Critical Gaps</h4>
+        <ul>
+          <li>No counter collection form on screen</li>
+          <li>No day closure (EOD accounting)</li>
+          <li>No cash denomination counting</li>
+          <li>No refund management</li>
+          <li>No late fee automation</li>
+          <li>No payment installment (EMI)</li>
+          <li>20+ fee reports all missing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 8. STAFF ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fff7ed,#fed7aa)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#f97316,#c2410c)">👥</div>
+    <div class="mc-title"><h2>08 — Staff Management</h2><p>Profiles, syllabus updation, evaluation, birthday, history</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Staff list + type filter ✓</span>
+      <span class="pill p-done">Today's attendance summary ✓</span>
+      <span class="pill p-no">Add staff form ✗</span>
+      <span class="pill p-no">Syllabus daily updation ✗</span>
+      <span class="pill p-no">Staff evaluation criteria ✗</span>
+      <span class="pill p-no">Staff history (transfers) ✗</span>
+      <span class="pill p-no">Birthday report ✗</span>
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>Staff Profile</td><td>Full staff details: designation, qualification, joining date, photo, documents</td><td><span class="st st-partial">Partial (backend only)</span></td></tr>
+        <tr><td>NewSyllabusDailyUpdation</td><td>Teacher marks what topics were covered in each period today — syllabus tracker</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffEvaluationCriteria</td><td>Define appraisal criteria: punctuality, class performance, parent feedback score</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffHistory</td><td>Track promotions, transfers, salary changes over the years</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffBirthdayReport</td><td>This month's staff birthdays (send wishes, plan celebration)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StaffUseageReport</td><td>How many periods each teacher taught this week/month — workload report</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>StaffAbsentSummary</td><td>Staff with most absences this term — for HR review</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>StaffRuleCreationMaster</td><td>Rules for timetable: max periods, preferred subjects, unavailable slots</td><td><span class="st st-build">Build</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>What to Build</h4>
+        <ul>
+          <li>Add Staff form with all fields + photo upload</li>
+          <li>Daily syllabus updation (teacher logs what was taught)</li>
+          <li>Staff appraisal criteria setup + scoring</li>
+          <li>Staff workload report (periods taught per week)</li>
+          <li>Staff birthday alert (dashboard widget)</li>
+          <li>Staff history page (promotions, transfers)</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>syllabus_coverage: staff_id, class_id, subject_id, date, topics_covered</li>
+          <li>staff_evaluation_criteria + staff_evaluation_scores tables</li>
+          <li>staff_history: staff_id, change_type, old_value, new_value, changed_date</li>
+          <li>GET /staff/birthday?month= → DOB filter for current month</li>
+          <li>GET /staff/workload?from=&to= → COUNT timetable_slots by teacher</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Gaps</h4>
+        <ul>
+          <li>Can't add a new teacher from the screen</li>
+          <li>No syllabus coverage tracking</li>
+          <li>No staff appraisal system</li>
+          <li>No workload visibility</li>
+          <li>No staff history tracking</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 9. TRANSPORT ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">🚌</div>
+    <div class="mc-title"><h2>09 — Transport Management</h2><p>Vehicles, routes, drivers, boarding points, dashboard</p></div>
+  </div>
+  <div class="mc-body">
+    <div class="pills">
+      <span class="pill p-done">Backend: routes, stops, assign ✓</span>
+      <span class="pill p-no">No frontend page at all ✗</span>
+      <span class="pill p-no">Vehicle Document Management ✗</span>
+      <span class="pill p-no">Boarding Point Master ✗</span>
+      <span class="pill p-no">Transport Dashboard ✗</span>
+      <span class="pill p-no">Vehicle Type Master ✗</span>
+    </div>
+    <table class="ftable">
+      <thead><tr><th>Chalo Screen</th><th>Simple: What it does</th><th>Our Status</th></tr></thead>
+      <tbody>
+        <tr><td>Transportation_DashBoard</td><td>Today's transport status: buses on route, students picked up, any issues</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>VehicleMaster</td><td>Register each bus: reg number, capacity, insurance date, fitness date</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>VehicleTypeMaster</td><td>Define vehicle types: school bus, mini-van, auto</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>VehicleDocumentMaster</td><td>Track vehicle documents: PUC, insurance, fitness expiry — alert before expiry</td><td><span class="st st-new">New</span></td></tr>
+        <tr><td>DriverMaster</td><td>Driver profile: name, license, license expiry, phone, photo</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TMBoardingPointMaster</td><td>Define pickup stops with GPS coordinates and timing</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>BusFeeStructureMain</td><td>Fee structure based on distance/stop (closer stop = lower fee)</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>BusFeeStudentwise</td><td>How much each student is charged for transport</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TransportStudentReport</td><td>Which students use which route/bus</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>TransportFeePaidReport</td><td>Which transport students have paid / not paid bus fee</td><td><span class="st st-build">Build</span></td></tr>
+        <tr><td>BusFeeNonPaidReport</td><td>Students who haven't paid bus fees — send reminder</td><td><span class="st st-build">Build</span></td></tr>
+      </tbody>
+    </table>
+    <div class="three-col" style="margin-top:14px">
+      <div class="col-box b3">
+        <h4>Full Build Needed</h4>
+        <ul>
+          <li>Create /transport page + sidebar link</li>
+          <li>Vehicle registration with document expiry tracking</li>
+          <li>Driver management with license expiry alert</li>
+          <li>Route + boarding point setup</li>
+          <li>Student-to-route assignment</li>
+          <li>Distance-based bus fee structure</li>
+          <li>Transport dashboard (today's status)</li>
+        </ul>
+      </div>
+      <div class="col-box" style="background:#eff6ff;border:1px solid #bfdbfe"><h4 style="color:#1d4ed8">Technical Work</h4>
+        <ul style="color:#374151">
+          <li>vehicle_documents: vehicle_id, doc_type, expiry_date, file_url</li>
+          <li>Cron: alert 30 days before vehicle document expiry</li>
+          <li>bus_fee_structure: route_id, stop_id, annual_fee, term_fee</li>
+          <li>Auto-link bus fee to student fee when assigned to route</li>
+          <li>GET /transport/dashboard → today's bus status summary</li>
+        </ul>
+      </div>
+      <div class="col-box b2">
+        <h4>Entire Module Missing</h4>
+        <ul>
+          <li>No frontend page built at all</li>
+          <li>No vehicle document expiry tracking</li>
+          <li>No distance-based fee structure</li>
+          <li>No transport-specific fee integration</li>
+          <li>No transport dashboard</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 10–15. REMAINING MODULES ═════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#22c55e,#15803d)">📦</div>
+    <div class="mc-title"><h2>10–15 — Other Major Modules</h2><p>Payroll, Library, Hostel, Communication, Digital Secretary, Sports</p></div>
+  </div>
+  <div class="mc-body">
+    <table class="ftable">
+      <thead><tr><th>Module</th><th>Chalo Features</th><th>Our Status</th><th>What to Build</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>💵 Payroll</strong></td>
+          <td>Salary structure, monthly run, payslip PDF, PF register, attendance-linked LOP</td>
+          <td><span class="st st-partial">Backend only</span></td>
+          <td>Run payroll page, payslip download, salary structure editor per staff</td>
+        </tr>
+        <tr>
+          <td><strong>📚 Library</strong></td>
+          <td>Book catalog, issue/return, ₹2/day fine, overdue tracking, barcode-ready</td>
+          <td><span class="st st-partial">Backend only</span></td>
+          <td>Full library page: catalog, issue, return, overdue, fine payment</td>
+        </tr>
+        <tr>
+          <td><strong>🏠 Hostel</strong></td>
+          <td>Hostel student list, hostel fee structure, paid/unpaid reports — completely separate from school fee</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>Hostel module: room allocation, hostel fee setup, hostel reports</td>
+        </tr>
+        <tr>
+          <td><strong>📢 Communication</strong></td>
+          <td>SMS templates, scheduled SMS, email config, WhatsApp — fee reminder SMS, exam SMS, absent SMS</td>
+          <td><span class="st st-partial">Backend circulars only</span></td>
+          <td>Circulars page + SMS/WhatsApp config + scheduled alerts management</td>
+        </tr>
+        <tr>
+          <td><strong>🤖 Digital Secretary</strong></td>
+          <td>Real-time front-desk tool: shows absent staff, suggests substitutes, urgent tasks — replaces a physical secretary</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>Dashboard widget: absent staff + free teacher suggestions + pending tasks</td>
+        </tr>
+        <tr>
+          <td><strong>🔬 Laboratory</strong></td>
+          <td>Lab timetable, equipment management, lab fee collection, lab reports</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>Lab booking timetable as Phase 4 feature</td>
+        </tr>
+        <tr>
+          <td><strong>🏆 Sports</strong></td>
+          <td>Student participation in sports events, inter-school competitions, team management</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>Participation tracking, event management in Phase 4</td>
+        </tr>
+        <tr>
+          <td><strong>📦 Inventory</strong></td>
+          <td>School assets, stock management (stationery, furniture), purchase orders</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>Fixed asset register + inventory tracking in Phase 4</td>
+        </tr>
+        <tr>
+          <td><strong>🌐 Multi-language</strong></td>
+          <td>UI supports English, Hindi, Tamil, Marathi — parent-facing pages translate</td>
+          <td><span class="st st-new">Not started</span></td>
+          <td>i18n setup with react-i18next, JSON translation files</td>
+        </tr>
+        <tr>
+          <td><strong>📊 AI Features</strong></td>
+          <td>Chalo uses eduthalamus.ai/schoolapi for rephrase. We use Claude API — our AI is more powerful and has 5 features vs Chalo's 1</td>
+          <td><span class="st st-have">Ahead of Chalo</span></td>
+          <td>Add: fee default prediction, admission scoring, attendance anomaly detection</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═════════════ PRIORITY TABLE ═════════════ -->
+<div class="ptable-wrap">
+  <h2>Full Priority Plan — Based on Actual Chalo Analysis</h2>
+  <table class="pri">
+    <thead><tr><th>#</th><th>What to Build</th><th>Why (Simple)</th><th>Effort</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Class dropdown selectors (Attendance, Timetable, Reports)</td><td>UUID inputs make app unusable for real staff</td><td>3 hrs</td><td><span class="pr1">Critical</span></td></tr>
+      <tr><td>2</td><td>Mark Entry form: Exam list → student grid → marks + auto grade</td><td>Examinations page is currently a placeholder</td><td>1 day</td><td><span class="pr1">Critical</span></td></tr>
+      <tr><td>3</td><td>Counter fee collection modal + receipt print</td><td>Accountant's primary daily job — no UI exists</td><td>1 day</td><td><span class="pr1">Critical</span></td></tr>
+      <tr><td>4</td><td>Communications page (circular composer + AI rephrase + audience)</td><td>Backend fully done, no page at all</td><td>1 day</td><td><span class="pr1">Critical</span></td></tr>
+      <tr><td>5</td><td>Add Student form + student detail view page</td><td>Can't enroll anyone from the screen</td><td>1 day</td><td><span class="pr1">Critical</span></td></tr>
+      <tr><td>6</td><td>Staff attendance marking UI + Add Staff form</td><td>Summary shows but no way to mark</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>7</td><td>Library page (catalog, issue, return, overdue)</td><td>Backend done, zero frontend</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>8</td><td>Payroll page (run + payslips + salary structure)</td><td>Backend done, zero frontend</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>9</td><td>Report card PDF generation + publish + parent WhatsApp link</td><td>Core school need — backend almost ready</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>10</td><td>Day Closure + Cash Denomination entry</td><td>Chalo's EOD accounting feature — accountant needs this daily</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>11</td><td>Transport page (routes, vehicles, driver, student assign)</td><td>Backend done, zero frontend</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>12</td><td>Holiday calendar + weekly-off config</td><td>Attendance % is wrong without this</td><td>4 hrs</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>13</td><td>Concession approval workflow (request → approve chain)</td><td>Chalo has this — schools require principal approval for concessions</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>14</td><td>Refund entry + approval + receipt</td><td>Schools process refunds frequently — need full workflow</td><td>1 day</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>15</td><td>Bulk promotion wizard (year-end)</td><td>Every school does this once a year — currently manual</td><td>4 hrs</td><td><span class="pr2">High</span></td></tr>
+      <tr><td>16</td><td>6 core fee reports (consolidated, pending, FeeHead-wise, daily)</td><td>Accountant runs these every day — Chalo has 20+</td><td>1 day</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>17</td><td>4 result analysis reports (class-wise, subject fail, centum, teacher-wise)</td><td>Principal reviews these after every exam</td><td>1 day</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>18</td><td>Bonafide Certificate + Income Tax Certificate PDF</td><td>Parents request these frequently — Chalo has both</td><td>4 hrs</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>19</td><td>Gate Pass module (student early exit)</td><td>Schools manage 10–20 gate passes daily — Chalo has full module</td><td>4 hrs</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>20</td><td>Daily syllabus updation by teachers</td><td>Unique Chalo feature — principal can track curriculum coverage</td><td>1 day</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>21</td><td>Late fee auto-apply after due date</td><td>Chalo auto-adds ₹X after payment deadline — revenue important</td><td>4 hrs</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>22</td><td>Payment Scheduler (EMI installments)</td><td>Chalo allows EMI setup per student — popular for expensive schools</td><td>1 day</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>23</td><td>Call Follow-up CRM for admissions enquiries</td><td>Chalo has full call log per enquiry — better conversion tracking</td><td>4 hrs</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>24</td><td>Digital Secretary Dashboard</td><td>Chalo's unique front-desk tool — absent staff + substitute suggestions live</td><td>1 day</td><td><span class="pr3">Medium</span></td></tr>
+      <tr><td>25</td><td>Multi-language support (Tamil + Hindi)</td><td>Chalo supports 4 languages — Tamil Nadu schools will want Tamil UI</td><td>2 days</td><td><span class="pr3">Medium</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+<footer>
+  <p>Chalo Deep-Dive Analysis — Sourced from live chaloschools.in platform source code — May 2026</p>
+  <p style="margin-top:6px">180+ screens mapped · 25 priority items identified · Our AI features remain ahead of Chalo's</p>
+</footer>
+</body>
+</html>

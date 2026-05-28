@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(ipconfig)",
+      "Bash(docker --version)",
+      "PowerShell(docker --version)",
+      "Bash(npm install *)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(\\(Get-ChildItem \"d:\\\\projects\\\\school\\\\school-mgmt\\\\web\\\\node_modules\" -ErrorAction SilentlyContinue\\).Count)",
+      "Read(//c/Users/kanna/AppData/Local/npm-cache/_logs/**)"
+    ],
+    "additionalDirectories": [
+      "d:\\projects\\school\\school-mgmt\\backend\\src"
+    ]
+  }
+}

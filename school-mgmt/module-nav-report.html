@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chalo Schools – Full Navigation & Gap Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4f8;color:#1a202c;font-size:13px;}
+.cover{background:linear-gradient(135deg,#1e3a5f 0%,#2d6a9f 50%,#1e3a5f 100%);color:#fff;padding:60px 40px;text-align:center;page-break-after:always;}
+.cover h1{font-size:32px;letter-spacing:2px;margin-bottom:12px;}
+.cover h2{font-size:18px;font-weight:400;opacity:.85;margin-bottom:30px;}
+.cover-pills{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;}
+.cover-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:8px 20px;font-size:12px;}
+.toc{background:#fff;padding:40px;page-break-after:always;}
+.toc h2{font-size:20px;color:#1e3a5f;margin-bottom:20px;padding-bottom:10px;border-bottom:3px solid #2d6a9f;}
+.toc ul{list-style:none;}
+.toc li{padding:8px 0;border-bottom:1px dashed #e2e8f0;display:flex;justify-content:space-between;}
+.toc li a{color:#2d6a9f;text-decoration:none;font-weight:500;}
+.toc .section-num{color:#718096;font-size:11px;}
+.section{padding:30px 40px;}
+.section-header{background:linear-gradient(135deg,#1e3a5f,#2d6a9f);color:#fff;padding:16px 24px;border-radius:8px 8px 0 0;margin-bottom:0;}
+.section-header h2{font-size:18px;letter-spacing:.5px;}
+.section-header p{font-size:11px;opacity:.8;margin-top:4px;}
+.section-body{background:#fff;border:1px solid #cbd5e0;border-top:none;border-radius:0 0 8px 8px;padding:24px;}
+h3{font-size:14px;color:#1e3a5f;margin:16px 0 8px;padding-left:10px;border-left:3px solid #2d6a9f;}
+table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11.5px;}
+th{background:#1e3a5f;color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.3px;}
+td{padding:7px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top;}
+tr:nth-child(even) td{background:#f7fafc;}
+tr:hover td{background:#ebf4ff;}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap;}
+.y{background:#c6f6d5;color:#22543d;}
+.n{background:#fed7d7;color:#742a2a;}
+.p{background:#fefcbf;color:#744210;}
+.all3{background:#bee3f8;color:#1a365d;}
+.plg-dav{background:#e9d8fd;color:#44337a;}
+.tv3-only{background:#fed7d7;color:#742a2a;}
+.plg-only{background:#c6f6d5;color:#22543d;}
+.dav-only{background:#feebc8;color:#7b341e;}
+.module-header{background:#2d3748;color:#fff;padding:10px 14px;margin:16px 0 0;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center;}
+.module-header span{font-size:12px;font-weight:700;letter-spacing:.5px;}
+.module-header .counts{font-size:10px;opacity:.75;}
+.module-table{border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:16px;}
+.screen-row td{padding:5px 10px;font-size:11px;}
+.status-cell{text-align:center;width:60px;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;padding:10px;background:#f7fafc;border-radius:6px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;}
+.gap-complete{background:#c6f6d5;color:#22543d;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
+.gap-partial{background:#fefcbf;color:#744210;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
+.gap-missing{background:#fed7d7;color:#742a2a;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
+.summary-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:16px 0;}
+.summary-card{background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #e2e8f0;}
+.summary-card .num{font-size:28px;font-weight:700;color:#1e3a5f;}
+.summary-card .lbl{font-size:10px;color:#718096;margin-top:4px;}
+.insight-box{background:#ebf8ff;border-left:4px solid #2d6a9f;padding:12px 16px;margin:10px 0;border-radius:0 6px 6px 0;font-size:11.5px;}
+.warn-box{background:#fffbeb;border-left:4px solid #d69e2e;padding:12px 16px;margin:10px 0;border-radius:0 6px 6px 0;font-size:11.5px;}
+.report-list{list-style:none;}
+.report-list li{padding:4px 0;font-size:11px;border-bottom:1px dashed #e2e8f0;}
+.report-list li:before{content:"📄 ";font-size:10px;}
+.page-break{page-break-before:always;}
+@media print{
+  body{font-size:10px;background:#fff;}
+  .section{padding:15px 20px;}
+  .cover{padding:40px 20px;}
+  .toc{padding:20px;}
+  .summary-cards{grid-template-columns:repeat(5,1fr);}
+  .page-break{page-break-before:always;}
+  .no-break{page-break-inside:avoid;}
+  table{font-size:9.5px;}
+  th,td{padding:5px 7px;}
+  @page{size:A4 landscape;margin:12mm 10mm;}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>CHALO SCHOOLS — ERP DEEP ANALYSIS</h1>
+  <h2>Full Navigation Tree · Common Services · Gap Analysis · Reports Inventory</h2>
+  <div class="cover-pills">
+    <div class="cover-pill">Chalo testv3 — 190 screens</div>
+    <div class="cover-pill">PLG — 205 screens</div>
+    <div class="cover-pill">DAV — 202 screens</div>
+    <div class="cover-pill">248 Unique Screens · 17 Modules</div>
+    <div class="cover-pill">Generated: May 2026</div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#sec1">Section 1 — Navigation Menu Tree (All 3 ERPs)</a><span class="section-num">Page 3</span></li>
+    <li><a href="#sec2">Section 2 — Common &amp; Unique Services</a><span class="section-num">Page 10</span></li>
+    <li><a href="#sec3">Section 3 — Our Platform Gap Analysis</a><span class="section-num">Page 12</span></li>
+    <li><a href="#sec4">Section 4 — Reports Inventory per Module</a><span class="section-num">Page 14</span></li>
+  </ul>
+  <div style="margin-top:24px;" class="legend">
+    <div class="legend-item"><span class="badge y">Y</span> Present in ERP</div>
+    <div class="legend-item"><span class="badge n">—</span> Not present</div>
+    <div class="legend-item"><span class="badge all3">ALL 3</span> Common to all schools</div>
+    <div class="legend-item"><span class="badge plg-dav">PLG+DAV</span> Exclusive to PLG &amp; DAV</div>
+    <div class="legend-item"><span class="badge tv3-only">TV3 ONLY</span> testv3 exclusive</div>
+    <div class="legend-item"><span class="gap-complete">COMPLETE</span> Our platform has it</div>
+    <div class="legend-item"><span class="gap-partial">PARTIAL</span> Partially implemented</div>
+    <div class="legend-item"><span class="gap-missing">MISSING</span> Not implemented yet</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1 — NAVIGATION TREE                                 -->
+<!-- ============================================================ -->
+<div class="section page-break" id="sec1">
+  <div class="section-header">
+    <h2>Section 1 — Full Navigation Menu Tree</h2>
+    <p>All screens across 17 modules · T = testv3 · P = PLG · D = DAV</p>
+  </div>
+  <div class="section-body">
+
+    <div class="summary-cards">
+      <div class="summary-card"><div class="num">17</div><div class="lbl">Modules</div></div>
+      <div class="summary-card"><div class="num">248</div><div class="lbl">Unique Screens</div></div>
+      <div class="summary-card"><div class="num">190</div><div class="lbl">testv3 Screens</div></div>
+      <div class="summary-card"><div class="num">205</div><div class="lbl">PLG Screens</div></div>
+      <div class="summary-card"><div class="num">202</div><div class="lbl">DAV Screens</div></div>
+    </div>
+
+    <!-- MODULE 1: ADMISSION -->
+    <div class="module-header no-break">
+      <span>01 — ADMISSION</span>
+      <span class="counts">TV3: 8 &nbsp;|&nbsp; PLG: 11 &nbsp;|&nbsp; DAV: 12</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>AdmissionCategoryMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Admission categories setup (General, Management, NRI…)</td></tr>
+        <tr class="screen-row"><td>AdmissionPriorityMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Priority rules for admission queue</td></tr>
+        <tr class="screen-row"><td>EnquiryList</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>View &amp; manage admission enquiries</td></tr>
+        <tr class="screen-row"><td>CallFollowup</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Telecalling follow-up on enquiries</td></tr>
+        <tr class="screen-row"><td>RptCallRegister</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Call register report</td></tr>
+        <tr class="screen-row"><td>RptEnquiryList</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Enquiry list report with filters</td></tr>
+        <tr class="screen-row"><td>ApplicantSiblingsReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Sibling applicants report</td></tr>
+        <tr class="screen-row"><td>ShortlistedStudent (from Student)</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Shortlisted applicants management</td></tr>
+        <tr class="screen-row"><td>HealthForm</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Health declaration form at admission</td></tr>
+        <tr class="screen-row"><td>ApplicationStatusCountReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Count by application status</td></tr>
+        <tr class="screen-row"><td>InterviewStudents</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Interview scheduling &amp; results</td></tr>
+        <tr class="screen-row"><td>VisitorInformationReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Walk-in visitor tracking report</td></tr>
+        <tr class="screen-row"><td>OnlineApplicationStatus</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Online application portal status</td></tr>
+        <tr class="screen-row"><td>OnlineEnquirys</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Online enquiry portal management</td></tr>
+        <tr class="screen-row"><td>SendBulkApplicationLink</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bulk SMS/email with application link</td></tr>
+        <tr class="screen-row"><td>StudentAdmissionDetails</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Detailed admission record per student</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 2: STUDENT -->
+    <div class="module-header no-break">
+      <span>02 — STUDENT MANAGEMENT</span>
+      <span class="counts">TV3: 22 &nbsp;|&nbsp; PLG: 25 &nbsp;|&nbsp; DAV: 25</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>StudentSummary_Absent / BlockWiseStudentAttendance</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Attendance summary views</td></tr>
+        <tr class="screen-row"><td>BonafideCertificate</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Generate bonafide certificate</td></tr>
+        <tr class="screen-row"><td>StudentAdmissionReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Admission report with filters</td></tr>
+        <tr class="screen-row"><td>StudentBirthdayReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Upcoming &amp; monthly birthdays</td></tr>
+        <tr class="screen-row"><td>StudentFeeCategory / Change / Approval</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee category assignment &amp; change workflow</td></tr>
+        <tr class="screen-row"><td>StudentFeeIncomeTaxCertificate</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Income tax certificate for fee paid</td></tr>
+        <tr class="screen-row"><td>TCChecklistUpdate / TCStudentChecklst</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Transfer certificate checklist &amp; issue</td></tr>
+        <tr class="screen-row"><td>PromotionScreen / PromotionCancellation</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>End-of-year class promotion</td></tr>
+        <tr class="screen-row"><td>NonPromotedStudentList</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Students held back report</td></tr>
+        <tr class="screen-row"><td>RizviFeeExport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>External fee export format</td></tr>
+        <tr class="screen-row"><td>StudentAbsentSummary</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Absent students summary</td></tr>
+        <tr class="screen-row"><td>StudentPromotionCancellationReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Promotion cancellation audit</td></tr>
+        <tr class="screen-row"><td>StudentBulkUpdate</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bulk update student records</td></tr>
+        <tr class="screen-row"><td>StudentAttendanceQuizDetails</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Quiz-linked attendance details</td></tr>
+        <tr class="screen-row"><td>StudentMarkCertificate</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Mark certificate generation</td></tr>
+        <tr class="screen-row"><td>StudentTcApproval / TCBulkUpdate</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>TC approval workflow &amp; bulk TC</td></tr>
+        <tr class="screen-row"><td>StudentPromotionStatus</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Current year promotion status</td></tr>
+        <tr class="screen-row"><td>StudentFeeCategoryApproval</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Fee category change approval</td></tr>
+        <tr class="screen-row"><td>PortalLoginAccess</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Enable/disable parent portal access</td></tr>
+        <tr class="screen-row"><td>SiblingDetailsReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Sibling pairs report</td></tr>
+        <tr class="screen-row"><td>StudentGatePass / GatePassReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Gate pass issuance &amp; report</td></tr>
+        <tr class="screen-row"><td>StudentParticipationReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Student participation in activities</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- MODULE 3-6 continuation -->
+<div class="section page-break">
+  <div class="section-header">
+    <h2>Section 1 (continued) — Staff · Fees · Examination · HPC · TOS</h2>
+    <p>T = testv3 · P = PLG · D = DAV</p>
+  </div>
+  <div class="section-body">
+
+    <!-- MODULE 3: STAFF -->
+    <div class="module-header no-break">
+      <span>03 — STAFF MANAGEMENT</span>
+      <span class="counts">TV3: 8 &nbsp;|&nbsp; PLG: 12 &nbsp;|&nbsp; DAV: 12</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>StaffAbsentSummary / StaffSummary_Absent</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Staff absence tracking &amp; summary</td></tr>
+        <tr class="screen-row"><td>StaffBirthdayReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Staff birthday list</td></tr>
+        <tr class="screen-row"><td>StaffEvaluationCriteria</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Define staff evaluation parameters</td></tr>
+        <tr class="screen-row"><td>StaffUseageReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Staff login &amp; usage analytics</td></tr>
+        <tr class="screen-row"><td>NewSyllabusDailyUpdation</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Daily syllabus completion update</td></tr>
+        <tr class="screen-row"><td>SpecialEventMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Special events calendar management</td></tr>
+        <tr class="screen-row"><td>EventMaster / EventDetailsReport / EventCategory</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Events management with categories &amp; reports</td></tr>
+        <tr class="screen-row"><td>DistrictMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>District master data</td></tr>
+        <tr class="screen-row"><td>StaffBulkUpdate</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bulk update staff records</td></tr>
+        <tr class="screen-row"><td>StaffHistory</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Staff employment history</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 4: FEES (abbreviated due to 36 screens) -->
+    <div class="module-header no-break">
+      <span>04 — FEES MANAGEMENT</span>
+      <span class="counts">TV3: 28 &nbsp;|&nbsp; PLG: 26 &nbsp;|&nbsp; DAV: 28 &nbsp;|&nbsp; 36 unique screens</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>NewFeeCollectionStudent (from 18_Other)</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Collect fees from individual student</td></tr>
+        <tr class="screen-row"><td>PaymentScheduler</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Schedule payment due dates</td></tr>
+        <tr class="screen-row"><td>ConcessionMasterRequest / ConcessionApproval</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee concession request &amp; approval workflow</td></tr>
+        <tr class="screen-row"><td>RefundEntry / RefundApproval / RefundReceipt</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee refund workflow</td></tr>
+        <tr class="screen-row"><td>DonationFeeCollection / Cancellation</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Donation collection &amp; reversal</td></tr>
+        <tr class="screen-row"><td>OnlinePaymentConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Configure payment gateway</td></tr>
+        <tr class="screen-row"><td>LumpSumFeesConfiguration / LumpsumFeesStudentMapping</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Lumpsum fee setup &amp; student mapping</td></tr>
+        <tr class="screen-row"><td>BusFeeStructureMain / BusFeeStudentwise</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bus fee configuration per route</td></tr>
+        <tr class="screen-row"><td>HostelFeeStructureMain / HostelFeeStudentwise</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Hostel fee setup per student</td></tr>
+        <tr class="screen-row"><td>LateFeeMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Late payment fine configuration</td></tr>
+        <tr class="screen-row"><td>CashDenomination</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Cash denomination entry at collection</td></tr>
+        <tr class="screen-row"><td>ConfigureFeesReceipt</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Customize fee receipt format</td></tr>
+        <tr class="screen-row"><td>GSTMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>GST rates for fee heads</td></tr>
+        <tr class="screen-row"><td>FeeMasterApproval</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Fee structure approval workflow</td></tr>
+        <tr class="screen-row"><td>DayClosure</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>End-of-day collection closure</td></tr>
+        <tr class="screen-row"><td>FeesCollectionPriority / FeesCollectionReportV1</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Fee priority ordering &amp; legacy report</td></tr>
+        <tr class="screen-row"><td>RefundReceiptReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Refund receipt report</td></tr>
+        <tr class="screen-row"><td>DonationCollection</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Separate donation collection screen</td></tr>
+        <tr class="screen-row"><td>CollectionReport_Branchwise / Classwise</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Branch/class-wise collection report</td></tr>
+        <tr class="screen-row"><td>ProjectionCollectionReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Future collection projection</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 5: EXAMINATION -->
+    <div class="module-header no-break">
+      <span>05 — EXAMINATION</span>
+      <span class="counts">TV3: 35 &nbsp;|&nbsp; PLG: 27 &nbsp;|&nbsp; DAV: 27 &nbsp;|&nbsp; 38 unique screens</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>ExaminationPlanningMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Schedule exam dates &amp; subjects</td></tr>
+        <tr class="screen-row"><td>ExaminationMarkEntry / ExaminationConsolidatedReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Mark entry &amp; consolidated report</td></tr>
+        <tr class="screen-row"><td>ExamSettingsMasterCtrl / ExamTypeOrderConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Exam type &amp; order settings</td></tr>
+        <tr class="screen-row"><td>ProgressCardReportGeneration / ExamWiseProgressCard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Progress card generation &amp; print</td></tr>
+        <tr class="screen-row"><td>ProgressCardSettingMaster / PortalProgressCardConfig</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Progress card layout config</td></tr>
+        <tr class="screen-row"><td>OtherExamMaster / OtherExamMarkEntry / RankGeneration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Non-academic exam setup &amp; marks</td></tr>
+        <tr class="screen-row"><td>IndividualAssessmentReport / ReportCard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Individual student assessment report</td></tr>
+        <tr class="screen-row"><td>ASLReportGeneration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Assessment for Speaking &amp; Listening report</td></tr>
+        <tr class="screen-row"><td>NEETJEEStudents / NEETJEEExamReportCard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>NEET/JEE exam tracking</td></tr>
+        <tr class="screen-row"><td>TeacherwiseAnalysisReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Teacher-wise result analysis</td></tr>
+        <tr class="screen-row"><td>ExamMarksEntryApproval</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Marks entry approval workflow</td></tr>
+        <tr class="screen-row"><td>ResultAnalysisReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Overall result analysis</td></tr>
+        <tr class="screen-row"><td>ConsolidatedExamConfigurationCtrl</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Consolidated exam config</td></tr>
+        <tr class="screen-row"><td>CentumReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>100% scorers report</td></tr>
+        <tr class="screen-row"><td>ClassWiseResultAnalysis / StaffWiseResultAnalysis</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Class &amp; staff result analysis</td></tr>
+        <tr class="screen-row"><td>TeacherPerformanceReport / SubjectAnalysis</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Teacher performance tracking</td></tr>
+        <tr class="screen-row"><td>SubjectAverageCountReport / SubjectFailCountReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Subject-level pass/fail analysis</td></tr>
+        <tr class="screen-row"><td>OverAllAverageReport / SingleDigitMarksReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Overall average &amp; single-digit marks</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 6: HPC -->
+    <div class="module-header no-break">
+      <span>06 — HPC (Holistic Progress Card)</span>
+      <span class="counts">TV3: 4 &nbsp;|&nbsp; PLG: 5 &nbsp;|&nbsp; DAV: 0 &nbsp;— NOT in DAV</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>HPCRatingMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>HPC rating scale setup</td></tr>
+        <tr class="screen-row"><td>CurriculumMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Curriculum areas for assessment</td></tr>
+        <tr class="screen-row"><td>AssessmentEntry</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Teacher enters holistic assessment</td></tr>
+        <tr class="screen-row"><td>HPCReportCard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Holistic progress card generation</td></tr>
+        <tr class="screen-row"><td>AssessmentEntryApproval</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>HPC entry approval workflow (PLG only)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 7: TOS -->
+    <div class="module-header no-break">
+      <span>07 — TOS (Terms of Service / Subject Configuration)</span>
+      <span class="counts">TV3: 0 &nbsp;|&nbsp; PLG: 8 &nbsp;|&nbsp; DAV: 8 &nbsp;— NOT in testv3</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>TOSTopicMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Topic list per subject</td></tr>
+        <tr class="screen-row"><td>TOSPaperConfiguration</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Table of specifications per paper</td></tr>
+        <tr class="screen-row"><td>TOSSubjectCoordinator</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Assign coordinators per subject</td></tr>
+        <tr class="screen-row"><td>TOSEffortMaster / TOSEffortMarkEntry</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Effort marks setup &amp; entry</td></tr>
+        <tr class="screen-row"><td>EvaluationAreaMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Evaluation area definitions</td></tr>
+        <tr class="screen-row"><td>CommentCategoryMaster / NewCommentCategoryMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Teacher comments categories</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- MODULE 8-14 -->
+<div class="section page-break">
+  <div class="section-header">
+    <h2>Section 1 (continued) — Timetable · Attendance · Transport · Hostel · Digital Secretary · Communication</h2>
+    <p>T = testv3 · P = PLG · D = DAV</p>
+  </div>
+  <div class="section-body">
+
+    <!-- MODULE 8: TIMETABLE -->
+    <div class="module-header no-break">
+      <span>08 — TIMETABLE</span>
+      <span class="counts">TV3: 9 &nbsp;|&nbsp; PLG: 9 &nbsp;|&nbsp; DAV: 8</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>AutomaticTimeTableGeneration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Auto-generate timetable</td></tr>
+        <tr class="screen-row"><td>CombineSubject</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Combine subjects across sections</td></tr>
+        <tr class="screen-row"><td>StaffRuleCreationMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Staff teaching rules &amp; constraints</td></tr>
+        <tr class="screen-row"><td>SubstitutionTimeTable</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Manage staff substitutions</td></tr>
+        <tr class="screen-row"><td>LabTimeTableDetailsReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Lab usage timetable report</td></tr>
+        <tr class="screen-row"><td>TimeTableDetailsReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Full timetable report</td></tr>
+        <tr class="screen-row"><td>OnlineTimeTable</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Portal-visible timetable</td></tr>
+        <tr class="screen-row"><td>SubstitutionPriority</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Substitution priority rules</td></tr>
+        <tr class="screen-row"><td>TimeTableBackupRestore</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Backup &amp; restore timetable data</td></tr>
+        <tr class="screen-row"><td>AutomaticTimeTable (config)</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Auto timetable configuration screen</td></tr>
+        <tr class="screen-row"><td>TTClassSubjectMapping</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Map subjects to classes for TT</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 9: ATTENDANCE -->
+    <div class="module-header no-break">
+      <span>09 — ATTENDANCE CONFIGURATION</span>
+      <span class="counts">TV3: 2 &nbsp;|&nbsp; PLG: 1 &nbsp;|&nbsp; DAV: 1</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>AttendanceConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Attendance rules, late marks, SMS triggers</td></tr>
+        <tr class="screen-row"><td>AttendanceReasonMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Reason codes for absence (testv3 only)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 11: TRANSPORT -->
+    <div class="module-header no-break">
+      <span>11 — TRANSPORT</span>
+      <span class="counts">TV3: 6 &nbsp;|&nbsp; PLG: 3 &nbsp;|&nbsp; DAV: 3</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>VehicleMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Register vehicles with capacity</td></tr>
+        <tr class="screen-row"><td>VehicleType</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Vehicle type categories</td></tr>
+        <tr class="screen-row"><td>DriverMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Driver profiles &amp; licenses</td></tr>
+        <tr class="screen-row"><td>TMBoardingPointMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Route boarding points (testv3 only)</td></tr>
+        <tr class="screen-row"><td>VehicleDocumentMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Vehicle doc tracking — insurance, FC (testv3)</td></tr>
+        <tr class="screen-row"><td>Transportation_DashBoard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Transport dashboard (testv3 only)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 12: HOSTEL -->
+    <div class="module-header no-break">
+      <span>12 — HOSTEL</span>
+      <span class="counts">TV3: 3 &nbsp;|&nbsp; PLG: 3 &nbsp;|&nbsp; DAV: 3</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>HostelStudentReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Hostel enrolled students list</td></tr>
+        <tr class="screen-row"><td>HostelFeePaidReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Hostel fee paid list</td></tr>
+        <tr class="screen-row"><td>HostelFeeNonPaidReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Hostel fee outstanding list</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 13: DIGITAL SECRETARY -->
+    <div class="module-header no-break">
+      <span>13 — DIGITAL SECRETARY</span>
+      <span class="counts">TV3: 1 &nbsp;|&nbsp; PLG: 1 &nbsp;|&nbsp; DAV: 1</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>DigitalSecretary_DashBoard</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>AI-powered secretary dashboard (common)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 14: COMMUNICATION -->
+    <div class="module-header no-break">
+      <span>14 — COMMUNICATION (SMS / Email)</span>
+      <span class="counts">TV3: 6 &nbsp;|&nbsp; PLG: 6 &nbsp;|&nbsp; DAV: 6 &nbsp;— Identical across all 3</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>SMSEmailSetting</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>SMS gateway &amp; email SMTP config</td></tr>
+        <tr class="screen-row"><td>AutomatedEMailConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Automated email triggers setup</td></tr>
+        <tr class="screen-row"><td>FeePendencySMS</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>SMS alerts for fee pending</td></tr>
+        <tr class="screen-row"><td>ExaminationSMS</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>SMS for exam results &amp; timetable</td></tr>
+        <tr class="screen-row"><td>ScheduledSMSEmailSetting</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Schedule bulk SMS/email</td></tr>
+        <tr class="screen-row"><td>SMSDetailsReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>SMS sent/failed report</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- MODULE 15-18 -->
+<div class="section page-break">
+  <div class="section-header">
+    <h2>Section 1 (continued) — School Info · Admin · Reports/Other</h2>
+    <p>T = testv3 · P = PLG · D = DAV</p>
+  </div>
+  <div class="section-body">
+
+    <!-- MODULE 15: SCHOOL INFO -->
+    <div class="module-header no-break">
+      <span>15 — SCHOOL INFO / MASTERS</span>
+      <span class="counts">TV3: 15 &nbsp;|&nbsp; PLG: 20 &nbsp;|&nbsp; DAV: 20</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>SchoolMaster / SchoolAcademicDetail</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>School profile &amp; academic year details</td></tr>
+        <tr class="screen-row"><td>ClassMaster / ClassSectionMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Class &amp; section setup</td></tr>
+        <tr class="screen-row"><td>SubjectMaster / SubjectTypeMaster / ClassSubjectMapping</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Subject setup &amp; class mapping</td></tr>
+        <tr class="screen-row"><td>BoardMaster / LevelMaster / TermMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Academic hierarchy masters</td></tr>
+        <tr class="screen-row"><td>NationalityMaster / ReligionMaster / HouseMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Student demographic masters</td></tr>
+        <tr class="screen-row"><td>CompanyMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Parent employer companies</td></tr>
+        <tr class="screen-row"><td>ChaloBanner</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Portal banner/announcement management</td></tr>
+        <tr class="screen-row"><td>StreamMaster / SubjectCombination</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Stream &amp; subject combination for +2 schools</td></tr>
+        <tr class="screen-row"><td>VisitorEntry / VisitorStatusMaster / VisitorTypeMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Visitor management system</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 16: ADMIN -->
+    <div class="module-header no-break">
+      <span>16 — ADMIN / CONFIGURATION</span>
+      <span class="counts">TV3: 17 &nbsp;|&nbsp; PLG: 22 &nbsp;|&nbsp; DAV: 22</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>AcademicYearCreation / AcademicWeeklyoff</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Academic year &amp; weekly off setup</td></tr>
+        <tr class="screen-row"><td>BranchMaster / BranchMasterConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Multi-branch setup</td></tr>
+        <tr class="screen-row"><td>RoleMaster / RoleAuthorization / UserMaster / ScreenMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>RBAC — roles, users, screen permissions</td></tr>
+        <tr class="screen-row"><td>ConfigurationMaster</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Global school configuration flags</td></tr>
+        <tr class="screen-row"><td>HolidayMaster / WeekConfiguration</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>School calendar holidays</td></tr>
+        <tr class="screen-row"><td>LogoConfiguration / PortalUserLoginHistory</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Branding &amp; login history</td></tr>
+        <tr class="screen-row"><td>StudentUserActivityMasterReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Student portal activity log</td></tr>
+        <tr class="screen-row"><td>ActivityMaster / CommonDepartmentMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Activity &amp; department master data</td></tr>
+        <tr class="screen-row"><td>LogAndAuditTrailUserReport / StaffUserActivityMasterReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Audit trail &amp; staff activity logs</td></tr>
+        <tr class="screen-row"><td>UserActivityMainPage / UserActivityBulkDelete</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>User activity management</td></tr>
+        <tr class="screen-row"><td>RegionMaster / FoodHabitsMaster</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Region &amp; dietary preference masters</td></tr>
+        <tr class="screen-row"><td>AutoNumber</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Auto-numbering configuration</td></tr>
+        <tr class="screen-row"><td>StorageExtension</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Cloud storage extension purchase</td></tr>
+        <tr class="screen-row"><td>WorkFlowApproval</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Global workflow approval settings</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MODULE 18: OTHER/REPORTS -->
+    <div class="module-header no-break">
+      <span>18 — FEE REPORTS / OTHER</span>
+      <span class="counts">TV3: 26 &nbsp;|&nbsp; PLG: 26 &nbsp;|&nbsp; DAV: 26</span>
+    </div>
+    <table class="module-table no-break">
+      <thead><tr><th>Screen / Menu Item</th><th style="width:55px;text-align:center">TV3</th><th style="width:55px;text-align:center">PLG</th><th style="width:55px;text-align:center">DAV</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="screen-row"><td>FeeDailyCollectionStatement</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Daily fee collection statement</td></tr>
+        <tr class="screen-row"><td>ConsolidatedCollectionReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>All-term consolidated collection</td></tr>
+        <tr class="screen-row"><td>FeeHeadWisePaidReport / NonPaidReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee head-wise paid/outstanding</td></tr>
+        <tr class="screen-row"><td>OverallPaidReport / OverallNonPaidReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Overall paid &amp; outstanding list</td></tr>
+        <tr class="screen-row"><td>FeesSummaryReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee summary by class/section</td></tr>
+        <tr class="screen-row"><td>AbstractReport / InvoiceReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Fee abstract &amp; invoice report</td></tr>
+        <tr class="screen-row"><td>AdmissionFeeReport / FeeAcademic</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Admission fee &amp; academic fee reports</td></tr>
+        <tr class="screen-row"><td>ConcessionSummaryReport / DatewiseReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Concession summary &amp; date-wise</td></tr>
+        <tr class="screen-row"><td>DataImportMainPage</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bulk data import (students, fees, etc.)</td></tr>
+        <tr class="screen-row"><td>TransportFeePaidReport / TransportStudentReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Transport fee &amp; student reports</td></tr>
+        <tr class="screen-row"><td>BusFeeNonPaidReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Bus fee outstanding</td></tr>
+        <tr class="screen-row"><td>NEETANDJEENonPaidReport / NEETAndJEEStudentReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>NEET/JEE fee reports</td></tr>
+        <tr class="screen-row"><td>CreditNoteReport / CreditNoteStatusReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Credit note tracking</td></tr>
+        <tr class="screen-row"><td>ExcuseFeeReport / ExtraFeeReport / PreAdmissionFeeCollection</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Excuse/extra/pre-admission fee reports</td></tr>
+        <tr class="screen-row"><td>DonationFeeCollection / Cancellation / Report</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Donation fee management</td></tr>
+        <tr class="screen-row"><td>PartiallyFeesCollectionSummaryReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Partial payment summary</td></tr>
+        <tr class="screen-row"><td>CompanyWiseConsolidatedCollectionReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Company-wise collection (employer)</td></tr>
+        <tr class="screen-row"><td>ConsolidatedCollectionReceiptReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Consolidated receipt report</td></tr>
+        <tr class="screen-row"><td>SalesCountReport / UnpaidFeesSummaryReport</td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge y">Y</span></td><td>Sales count &amp; unpaid summary</td></tr>
+        <tr class="screen-row"><td>OverallConsolidatedSummaryReport / TermFeesSummaryReport</td><td class="status-cell"><span class="badge y">Y</span></td><td class="status-cell"><span class="badge n">—</span></td><td class="status-cell"><span class="badge n">—</span></td><td>Overall consolidated &amp; term summary</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2 — COMMON & UNIQUE SERVICES                        -->
+<!-- ============================================================ -->
+<div class="section page-break" id="sec2">
+  <div class="section-header">
+    <h2>Section 2 — Common &amp; Unique Services</h2>
+    <p>What each school version shares vs what is exclusive</p>
+  </div>
+  <div class="section-body">
+
+    <div class="summary-cards">
+      <div class="summary-card"><div class="num" style="color:#2b6cb0">150</div><div class="lbl">Common to all 3</div></div>
+      <div class="summary-card"><div class="num" style="color:#6b46c1">44</div><div class="lbl">PLG + DAV only</div></div>
+      <div class="summary-card"><div class="num" style="color:#c53030">35</div><div class="lbl">testv3 only</div></div>
+      <div class="summary-card"><div class="num" style="color:#276749">6</div><div class="lbl">PLG only</div></div>
+      <div class="summary-card"><div class="num" style="color:#c05621">8</div><div class="lbl">DAV only</div></div>
+    </div>
+
+    <h3>Screens Common to All 3 Schools (150 screens)</h3>
+    <div class="insight-box">These 150 screens form the core Chalo platform — every school gets them. They span all 17 modules and represent the baseline product.</div>
+    <table>
+      <thead><tr><th>Module</th><th>Common Count</th><th>Key Shared Screens</th></tr></thead>
+      <tbody>
+        <tr><td>Admission</td><td>6</td><td>AdmissionCategoryMaster, AdmissionPriorityMaster, EnquiryList, CallFollowup, RptCallRegister, RptEnquiryList, ApplicantSiblingsReport</td></tr>
+        <tr><td>Student</td><td>14</td><td>BonafideCertificate, StudentFeeCategory, TCChecklistUpdate, PromotionScreen, StudentBirthdayReport, StudentAbsentSummary, RizviFeeExport…</td></tr>
+        <tr><td>Staff</td><td>6</td><td>StaffAbsentSummary, StaffBirthdayReport, StaffEvaluationCriteria, StaffUseageReport, NewSyllabusDailyUpdation, SpecialEventMaster</td></tr>
+        <tr><td>Fees</td><td>18</td><td>ConcessionApproval, RefundEntry, DonationFeeCollection, OnlinePaymentConfiguration, BusFeeStructureMain, LateFeeMaster, PaymentScheduler…</td></tr>
+        <tr><td>Examination</td><td>21</td><td>ExaminationPlanningMaster, ExaminationMarkEntry, ProgressCardReportGeneration, OtherExamMaster, ASLReportGeneration, NEETJEEStudents…</td></tr>
+        <tr><td>HPC</td><td>4</td><td>HPCRatingMaster, CurriculumMaster, AssessmentEntry, HPCReportCard</td></tr>
+        <tr><td>TOS</td><td>0</td><td>None — TOS is PLG+DAV only</td></tr>
+        <tr><td>Timetable</td><td>6</td><td>AutomaticTimeTableGeneration, CombineSubject, StaffRuleCreationMaster, SubstitutionTimeTable, LabTimeTableDetailsReport, TimeTableDetailsReport</td></tr>
+        <tr><td>Attendance</td><td>1</td><td>AttendanceConfiguration</td></tr>
+        <tr><td>Transport</td><td>3</td><td>VehicleMaster, VehicleType, DriverMaster</td></tr>
+        <tr><td>Hostel</td><td>3</td><td>HostelStudentReport, HostelFeePaidReport, HostelFeeNonPaidReport</td></tr>
+        <tr><td>Digital Secretary</td><td>1</td><td>DigitalSecretary_DashBoard</td></tr>
+        <tr><td>Communication</td><td>6</td><td>All 6 — SMSEmailSetting, AutomatedEMailConfiguration, FeePendencySMS, ExaminationSMS, ScheduledSMSEmailSetting, SMSDetailsReport</td></tr>
+        <tr><td>School Info</td><td>11</td><td>SchoolMaster, ClassMaster, SubjectMaster, BoardMaster, NationalityMaster, ReligionMaster, HouseMaster, ChaloBanner…</td></tr>
+        <tr><td>Admin</td><td>11</td><td>AcademicYearCreation, BranchMaster, RoleMaster, UserMaster, ConfigurationMaster, HolidayMaster, LogoConfiguration…</td></tr>
+        <tr><td>Fee Reports</td><td>20</td><td>FeeDailyCollectionStatement, ConsolidatedCollectionReport, FeeHeadWisePaidReport, FeesSummaryReport, AbstractReport…</td></tr>
+      </tbody>
+    </table>
+
+    <h3>PLG + DAV Exclusive (44 screens) — Not in testv3</h3>
+    <div class="warn-box">These represent premium or board-specific add-ons deployed for PLG &amp; DAV schools but absent from the base testv3 configuration.</div>
+    <table>
+      <thead><tr><th>Module</th><th>Screens</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td>TOS (entire module)</td><td>8</td><td>Table of Specifications, Topic Masters, Effort Marks, Subject Coordinators — board-mandated exam structure</td></tr>
+        <tr><td>Student</td><td>7</td><td>StudentBulkUpdate, StudentMarkCertificate, StudentTcApproval, TCBulkUpdate, StudentPromotionStatus, StudentAttendanceQuizDetails, StudentTcApproval</td></tr>
+        <tr><td>Staff</td><td>4</td><td>EventMaster, EventCategory, EventDetailsReport, DistrictMaster, StaffBulkUpdate</td></tr>
+        <tr><td>Fees</td><td>4</td><td>ConfigureFeesReceipt, GSTMaster, HealthForm, VisitorInformationReport</td></tr>
+        <tr><td>Examination</td><td>3</td><td>ExamMarksEntryApproval, ResultAnalysisReport, NEETJEEExamReportCard</td></tr>
+        <tr><td>Timetable</td><td>3</td><td>OnlineTimeTable, SubstitutionPriority, (TimeTableBackupRestore in PLG)</td></tr>
+        <tr><td>School Info</td><td>5</td><td>StreamMaster, SubjectCombination, VisitorEntry, VisitorStatusMaster, VisitorTypeMaster</td></tr>
+        <tr><td>Admin</td><td>7</td><td>ActivityMaster, LogAndAuditTrailUserReport, UserActivityMainPage, UserActivityBulkDelete, RegionMaster, FoodHabitsMaster, StaffUserActivityMasterReport</td></tr>
+        <tr><td>Fee Reports</td><td>3</td><td>ConsolidatedCollectionReceiptReport, SalesCountReport, UnpaidFeesSummaryReport</td></tr>
+      </tbody>
+    </table>
+
+    <h3>testv3 Exclusive (35 screens) — Not in PLG or DAV</h3>
+    <table>
+      <thead><tr><th>Module</th><th>Screens</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Examination</td><td>8</td><td>CentumReport, ClassWiseResultAnalysis, StaffWiseResultAnalysis, TeacherPerformanceReport, SubjectAverageCountReport, SubjectFailCountReport, OverAllAverageReport, SingleDigitMarksReport</td></tr>
+        <tr><td>Student</td><td>4</td><td>SiblingDetailsReport, StudentGatePass, StudentGatePassReport, StudentParticipationReport</td></tr>
+        <tr><td>Fees</td><td>5</td><td>DayClosure, FeesCollectionPriority, FeesCollectionReportV1, RefundReceiptReport, FeeMasterApproval (PLG only actually)</td></tr>
+        <tr><td>Transport</td><td>3</td><td>TMBoardingPointMaster, VehicleDocumentMaster, Transportation_DashBoard</td></tr>
+        <tr><td>Attendance</td><td>1</td><td>AttendanceReasonMaster</td></tr>
+        <tr><td>Admin</td><td>4</td><td>AutoNumber, StorageExtension, WorkFlowApproval, (StaffHistory in Staff)</td></tr>
+        <tr><td>Timetable</td><td>2</td><td>AutomaticTimeTable (config), TTClassSubjectMapping</td></tr>
+        <tr><td>Fee Reports</td><td>3</td><td>OverallConsolidatedSummaryReport, TermFeesSummaryReport, Testwindow</td></tr>
+        <tr><td>Admission</td><td>1</td><td>StudentAdmissionDetails (moved to student in PLG/DAV)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>PLG-Only (6 screens)</h3>
+    <table>
+      <thead><tr><th>Screen</th><th>Module</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>ApplicationStatusCountReport</td><td>Admission</td><td>Count by application status</td></tr>
+        <tr><td>InterviewStudents</td><td>Admission</td><td>Interview scheduling</td></tr>
+        <tr><td>StudentFeeCategoryApproval</td><td>Student</td><td>Fee category change approval</td></tr>
+        <tr><td>AssessmentEntryApproval</td><td>HPC</td><td>HPC marks approval workflow</td></tr>
+        <tr><td>NewConcessionCategoryMasterApproval</td><td>Fees</td><td>New concession approval</td></tr>
+        <tr><td>FeeMasterApproval</td><td>Fees</td><td>Fee structure approval</td></tr>
+      </tbody>
+    </table>
+
+    <h3>DAV-Only (8 screens)</h3>
+    <table>
+      <thead><tr><th>Screen</th><th>Module</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>OnlineApplicationStatus</td><td>Admission</td><td>Online application portal status</td></tr>
+        <tr><td>OnlineEnquirys</td><td>Admission</td><td>Online enquiry portal</td></tr>
+        <tr><td>SendBulkApplicationLink</td><td>Admission</td><td>Bulk SMS with application link</td></tr>
+        <tr><td>PortalLoginAccess</td><td>Student</td><td>Enable/disable parent portal</td></tr>
+        <tr><td>CollectionReport_Branchwise</td><td>Fees</td><td>Branch-wise collection report</td></tr>
+        <tr><td>CollectionReport_Classwise</td><td>Fees</td><td>Class-wise collection report</td></tr>
+        <tr><td>DonationCollection</td><td>Fees</td><td>Standalone donation screen</td></tr>
+        <tr><td>ProjectionCollectionReport</td><td>Fees</td><td>Future collection projection</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3 — GAP ANALYSIS                                    -->
+<!-- ============================================================ -->
+<div class="section page-break" id="sec3">
+  <div class="section-header">
+    <h2>Section 3 — Our Platform Gap Analysis (school-mgmt vs Chalo ERP)</h2>
+    <p>React 18 + Express + PostgreSQL + Claude API · Compared against Chalo testv3 as baseline</p>
+  </div>
+  <div class="section-body">
+
+    <div class="summary-cards">
+      <div class="summary-card"><div class="num" style="color:#276749">3</div><div class="lbl">Complete Modules</div></div>
+      <div class="summary-card"><div class="num" style="color:#744210">7</div><div class="lbl">Partial Modules</div></div>
+      <div class="summary-card"><div class="num" style="color:#742a2a">7</div><div class="lbl">Missing Modules</div></div>
+      <div class="summary-card"><div class="num" style="color:#1a365d">15</div><div class="lbl">Backend Routes</div></div>
+      <div class="summary-card"><div class="num" style="color:#1a365d">40</div><div class="lbl">DB Tables</div></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th style="width:100px">Status</th>
+          <th>What We Have</th>
+          <th>What's Missing / To Build</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="no-break">
+          <td><strong>Admission</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: admissions.js · Frontend: pages/admissions · Enquiry list, student screening flow, email invite from class page</td>
+          <td>No admission category/priority masters · No call follow-up system · No online application portal · No bulk application link sender · No bonafide/TC flow yet</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Student</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: students.js · Frontend: pages/students · Student list, profile, fee category assignment, basic reports</td>
+          <td>No promotion/TC workflow · No gate pass · No income tax certificate · No bulk update · No sibling report · No participation tracking · No parent portal access toggle</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Staff</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: staff.js · Frontend: pages/staff · Staff list, profile, basic absent summary</td>
+          <td>No evaluation criteria · No syllabus updation · No staff history · No event management · No bulk update · No staff usage analytics</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Fees</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: fees.js · Frontend: pages/fees · Fee collection, basic receipt, concession request, payment scheduler shell</td>
+          <td>No Razorpay integration · No lumpsum fee config · No bus/hostel fee structure · No refund workflow · No day closure · No donation fees · No GST master · No concession approval workflow</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Examination</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: examinations.js · Frontend: pages/examinations · Exam planning, mark entry shell, basic progress card config</td>
+          <td>No other exam (NEET/JEE) · No ASL report · No progress card generation PDF (endpoint exists but not wired) · No result analysis · No teacher performance report · No HPC · No TOS</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>HPC</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>—</td>
+          <td>Entire module absent — Rating master, curriculum areas, assessment entry, HPC report card</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>TOS</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>—</td>
+          <td>Entire module absent — Topic master, paper configuration, effort marks, evaluation areas, comment categories</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Timetable</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: timetable.js · Frontend: pages/timetable · Basic timetable structure present</td>
+          <td>No auto-generation algorithm · No substitution management · No staff rules engine · No backup/restore · No combined subjects · No online TT for portal</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Attendance</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: attendance.js · Frontend: pages/attendance · Mark attendance, basic report</td>
+          <td>No attendance configuration screen · No reason master · No automated SMS triggers · No late mark rules · No period-wise attendance</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Transport</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>Route: transport.js exists (backend only — no frontend page)</td>
+          <td>No vehicle master UI · No driver management · No boarding point master · No route assignment · No transport dashboard · No vehicle document tracking</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Hostel</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>—</td>
+          <td>Entire module absent — student enrollment, fee linkage, paid/unpaid reports</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Digital Secretary</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Claude API integrated (claude-sonnet-4-6) · Analytics route present · AI-powered insights in dashboard</td>
+          <td>No dedicated Digital Secretary dashboard · No structured AI query interface · No document generation via AI</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Communication</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>Route: communications.js (backend only — no frontend page)</td>
+          <td>No SMS gateway config UI · No email SMTP setup · No fee pendency SMS · No scheduled SMS · No SMS report · OTP provider not configured</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>School Info / Masters</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>Route: schools.js (backend only — no frontend page) · Some data seeded in migrations</td>
+          <td>No class master UI · No subject master · No board/term/level master · No holiday calendar UI · No academic year creation flow</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Admin / Configuration</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: auth.js · User login, JWT, role stored in DB · Admin CMS page</td>
+          <td>No full RBAC screen permission system · No role authorization matrix · No audit trail · No activity logs · No user activity reports · No branch master UI</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Reports</strong></td>
+          <td><span class="gap-partial">PARTIAL</span></td>
+          <td>Route: reports.js · Frontend: pages/reports · Fee outstanding, attendance summary, EOD collection wired to UI · Marksheet PDF endpoint exists</td>
+          <td>No consolidated collection report · No head-wise reports · No abstract/invoice · No admission reports · No staff reports · Marksheet PDF not called from frontend</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Library</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>Route: library.js (backend only)</td>
+          <td>No book catalog · No issue/return workflow · No fine management · No library reports (Chalo also lacks this — unique to our plan)</td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Payroll</strong></td>
+          <td><span class="gap-missing">MISSING</span></td>
+          <td>Route: payroll.js (backend only)</td>
+          <td>No payroll processing · No salary slip generation · No PF/ESI · No payslip reports (Chalo also lacks this — unique to our plan)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box">
+      <strong>Key Insight:</strong> Our platform has backend routes for 15 modules but frontend pages for only 10 (admissions, attendance, auth, dashboard, examinations, fees, reports, staff, students, timetable). Library, payroll, transport, communications, and schools have no frontend pages yet. HPC, TOS, and Hostel are entirely absent even in backend.
+    </div>
+
+    <div class="warn-box">
+      <strong>Critical Missing Infrastructure:</strong> OTP provider not configured (SMS auth) · FCM/WhatsApp not integrated · No cron jobs for scheduled SMS/reports · Razorpay not wired to fees UI · audit_logs table exists but no UI · UUID dropdowns for class/section not fully populated.
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4 — REPORTS INVENTORY                               -->
+<!-- ============================================================ -->
+<div class="section page-break" id="sec4">
+  <div class="section-header">
+    <h2>Section 4 — Reports Inventory per Module</h2>
+    <p>All report screens across Chalo ERP vs our platform capability</p>
+  </div>
+  <div class="section-body">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>Chalo Reports (All 3 ERPs)</th>
+          <th style="width:120px">Our Platform</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="no-break">
+          <td><strong>Admission</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>RptCallRegister — call follow-up register</li>
+              <li>RptEnquiryList — enquiry list with status filters</li>
+              <li>ApplicantSiblingsReport — sibling applicant pairs</li>
+              <li>ApplicationStatusCountReport (PLG only)</li>
+              <li>VisitorInformationReport (PLG+DAV)</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span><br><small>No admission reports in our platform</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Student</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>StudentAdmissionReport</li>
+              <li>StudentBirthdayReport</li>
+              <li>StudentAbsentSummary / BlockWiseStudentAttendance</li>
+              <li>StudentSummary_Absent</li>
+              <li>BonafideCertificate (print)</li>
+              <li>StudentPromotionCancellationReport</li>
+              <li>StudentFeeIncomeTaxCertificate</li>
+              <li>StudentMarkCertificate (PLG+DAV)</li>
+              <li>StudentGatePassReport (TV3)</li>
+              <li>StudentParticipationReport (TV3)</li>
+              <li>SiblingDetailsReport (TV3)</li>
+              <li>StudentPromotionStatus (PLG+DAV)</li>
+            </ul>
+          </td>
+          <td><span class="gap-partial">PARTIAL</span><br><small>Basic student list only; no certificates or absence reports</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Staff</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>StaffAbsentSummary</li>
+              <li>StaffSummary_Absent</li>
+              <li>StaffBirthdayReport</li>
+              <li>StaffUseageReport — portal usage analytics</li>
+              <li>EventDetailsReport (PLG+DAV)</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span><br><small>No staff reports in our platform</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Fees</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>FeeDailyCollectionStatement</li>
+              <li>ConsolidatedCollectionReport</li>
+              <li>FeeHeadWisePaidReport</li>
+              <li>FeeHeadWiseNonPaidReport</li>
+              <li>OverallPaidReport / OverallNonPaidReport</li>
+              <li>FeesSummaryReport</li>
+              <li>AbstractReport / InvoiceReport</li>
+              <li>AdmissionFeeReport / FeeAcademic</li>
+              <li>ConcessionSummaryReport / ConcessionDatewiseReport</li>
+              <li>CompanyWiseConsolidatedCollectionReport</li>
+              <li>PartiallyFeesCollectionSummaryReport</li>
+              <li>CreditNoteReport / CreditNoteStatusReport</li>
+              <li>DonationFeesCancellation reports</li>
+              <li>ExcuseFeeReport / ExtraFeeReport</li>
+              <li>ProjectionCollectionReport (DAV)</li>
+              <li>CollectionReport_Branchwise (DAV) / Classwise (DAV)</li>
+              <li>OverallConsolidatedSummaryReport (TV3)</li>
+              <li>TermFeesSummaryReport (TV3)</li>
+            </ul>
+          </td>
+          <td><span class="gap-partial">PARTIAL</span><br><small>Fee outstanding report + EOD collection in our platform; rest missing</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Examination</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>ProgressCardReportGeneration (print)</li>
+              <li>ExamWiseProgressCardReportGeneration</li>
+              <li>ExaminationConsolidatedReport</li>
+              <li>IndividualAssessmentReport / ReportCard</li>
+              <li>ASLReportGeneration</li>
+              <li>OtherExamReportCard / OtherExaminationMarkEntry</li>
+              <li>TeacherwiseAnalysisReport</li>
+              <li>ResultAnalysisReport (PLG+DAV)</li>
+              <li>NEETJEEExamReportCard (PLG+DAV)</li>
+              <li>CentumReport (TV3)</li>
+              <li>ClassWiseResultAnalysis / StaffWiseResultAnalysis (TV3)</li>
+              <li>TeacherPerformanceReport + SubjectAnalysis (TV3)</li>
+              <li>SubjectAverageCountReport / SubjectFailCountReport (TV3)</li>
+              <li>OverAllAverageReport / SingleDigitMarksReport (TV3)</li>
+            </ul>
+          </td>
+          <td><span class="gap-partial">PARTIAL</span><br><small>Marksheet PDF endpoint exists but not wired to frontend; no analysis reports</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>HPC</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>HPCReportCard — holistic progress card print</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>TOS</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>TOSPaperConfiguration — paper blueprint print</li>
+              <li>TOSEffortMaster — effort distribution report</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Timetable</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>TimeTableDetailsReport — full TT print</li>
+              <li>LabTimeTableDetailsReport — lab allocation</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span><br><small>No timetable reports in our platform yet</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Attendance</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>BlockWiseStudentAttendance (in Student module)</li>
+              <li>StudentAbsentSummary (in Student module)</li>
+              <li>StaffAbsentSummary (in Staff module)</li>
+            </ul>
+          </td>
+          <td><span class="gap-partial">PARTIAL</span><br><small>Attendance summary report wired to UI in our platform</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Transport</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>TransportFeePaidReport</li>
+              <li>TransportStudentReport</li>
+              <li>BusFeeNonPaidReport</li>
+              <li>Transportation_DashBoard (TV3)</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span><br><small>No transport reports in our platform</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Hostel</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>HostelStudentReport</li>
+              <li>HostelFeePaidReport</li>
+              <li>HostelFeeNonPaidReport</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Communication</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>SMSDetailsReport — sent/failed log</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Admin</strong></td>
+          <td>
+            <ul class="report-list">
+              <li>PortalUserLoginHistory</li>
+              <li>StudentUserActivityMasterReport</li>
+              <li>LogAndAuditTrailUserReport (PLG+DAV)</li>
+              <li>StaffUserActivityMasterReport (PLG+DAV)</li>
+              <li>UserActivityMainPage (PLG+DAV)</li>
+            </ul>
+          </td>
+          <td><span class="gap-missing">MISSING</span><br><small>No activity/audit reports in our platform</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Library</strong> (our plan)</td>
+          <td>Not in Chalo ERP</td>
+          <td><span class="gap-missing">MISSING</span><br><small>Route exists but no implementation</small></td>
+        </tr>
+        <tr class="no-break">
+          <td><strong>Payroll</strong> (our plan)</td>
+          <td>Not in Chalo ERP</td>
+          <td><span class="gap-missing">MISSING</span><br><small>Route exists but no implementation</small></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Priority Build Roadmap (based on gap analysis)</h3>
+    <table>
+      <thead><tr><th>Priority</th><th>Module / Feature</th><th>Reason</th><th>Effort</th></tr></thead>
+      <tbody>
+        <tr><td>🔴 P1</td><td>School Info Masters (Class, Subject, Term, Holiday UI)</td><td>Blocks all other modules — needed for dropdowns everywhere</td><td>Medium</td></tr>
+        <tr><td>🔴 P1</td><td>Fee Collection — Razorpay + Receipt PDF</td><td>Core revenue feature; backend exists, needs gateway + PDF</td><td>Medium</td></tr>
+        <tr><td>🔴 P1</td><td>Communication — SMS gateway config + fee pendency SMS</td><td>Schools depend on SMS heavily for attendance &amp; fee alerts</td><td>Medium</td></tr>
+        <tr><td>🟠 P2</td><td>Student — Promotion / TC workflow</td><td>Year-end critical; missing completely</td><td>High</td></tr>
+        <tr><td>🟠 P2</td><td>Examination — Progress card PDF (wire existing endpoint)</td><td>Endpoint exists; just needs frontend call + template</td><td>Low</td></tr>
+        <tr><td>🟠 P2</td><td>Reports — Consolidated collection + head-wise reports</td><td>Accountant daily need</td><td>Medium</td></tr>
+        <tr><td>🟡 P3</td><td>Transport — Vehicle master + driver UI frontend</td><td>Backend exists; needs UI only</td><td>Low</td></tr>
+        <tr><td>🟡 P3</td><td>Admin — RBAC screen permission matrix</td><td>Multi-school deployment requirement</td><td>High</td></tr>
+        <tr><td>🟡 P3</td><td>Attendance — Configuration screen + SMS trigger</td><td>Auto-SMS on absent is expected by schools</td><td>Medium</td></tr>
+        <tr><td>🟢 P4</td><td>HPC module</td><td>Required for CBSE schools specifically</td><td>High</td></tr>
+        <tr><td>🟢 P4</td><td>Hostel module</td><td>Residential schools only</td><td>High</td></tr>
+        <tr><td>🟢 P4</td><td>Library module</td><td>Differentiator vs Chalo</td><td>Medium</td></tr>
+        <tr><td>🟢 P4</td><td>Payroll module</td><td>Differentiator vs Chalo</td><td>High</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div style="background:#1e3a5f;color:#fff;text-align:center;padding:20px;font-size:11px;margin-top:20px;">
+  Chalo Schools ERP Analysis · Generated May 2026 · 248 screens · 17 modules · 3 school instances
+</div>
+
+</body>
+</html>

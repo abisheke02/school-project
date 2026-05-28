@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chalo ERP – Navigation Gap Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:9.5px;color:#1a202c;background:#fff;}
+/* COVER */
+.cover{background:linear-gradient(160deg,#1a3a5c 0%,#2575a8 100%);color:#fff;padding:80px 40px;text-align:center;min-height:100vh;display:flex;flex-direction:column;justify-content:center;page-break-after:always;}
+.cover h1{font-size:26px;letter-spacing:1.5px;margin-bottom:10px;}
+.cover h2{font-size:14px;font-weight:400;opacity:.8;margin-bottom:40px;}
+.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:420px;margin:0 auto;}
+.cover-card{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:14px;}
+.cover-card .num{font-size:24px;font-weight:700;}
+.cover-card .lbl{font-size:10px;opacity:.75;margin-top:2px;}
+/* SUMMARY PAGE */
+.summary-page{padding:20px 18px;page-break-after:always;}
+/* MODULE SECTION */
+.module-section{padding:16px 18px;page-break-before:always;}
+.module-title{background:#1a3a5c;color:#fff;padding:9px 14px;font-size:12px;font-weight:700;letter-spacing:.8px;border-radius:5px 5px 0 0;margin-bottom:0;display:flex;justify-content:space-between;align-items:center;}
+.module-title .sch{font-size:9px;font-weight:400;opacity:.75;}
+.group-block{margin-bottom:12px;}
+.group-header{background:#2575a8;color:#fff;padding:6px 12px 6px 18px;font-size:10px;font-weight:600;letter-spacing:.4px;}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:9px;}
+thead tr th{background:#2c3e50;color:#fff;padding:5px 8px;text-align:left;font-size:8.5px;font-weight:600;}
+tbody tr td{padding:4px 8px;border-bottom:1px solid #e8ecf0;vertical-align:middle;}
+tbody tr:nth-child(even) td{background:#f7f9fc;}
+tbody tr:hover td{background:#eef4fb;}
+td.name{padding-left:22px;font-size:9px;color:#1a202c;}
+td.name .sub{font-size:8px;color:#718096;}
+/* BADGES */
+.hv{background:#c6f6d5;color:#22543d;padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;white-space:nowrap;}
+.pt{background:#fefcbf;color:#744210;padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;white-space:nowrap;}
+.ms{background:#fed7d7;color:#742a2a;padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;white-space:nowrap;}
+.na{background:#e2e8f0;color:#4a5568;padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;white-space:nowrap;}
+.ours{background:#d6bcfa;color:#44337a;padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;white-space:nowrap;}
+/* SCHOOL TAGS */
+.tag{display:inline-block;font-size:7px;padding:1px 4px;border-radius:3px;margin-left:4px;font-weight:600;}
+.tag-all{background:#bee3f8;color:#1a365d;}
+.tag-pd{background:#e9d8fd;color:#44337a;}
+.tag-tv{background:#fed7d7;color:#742a2a;}
+.tag-p{background:#c6f6d5;color:#22543d;}
+.tag-d{background:#feebc8;color:#7b341e;}
+/* SUMMARY TABLE */
+.sum-table td,.sum-table th{padding:6px 10px;font-size:9px;}
+.sum-table .mod{font-weight:600;color:#1a3a5c;}
+h3{font-size:11px;color:#1a3a5c;margin:14px 0 6px;border-left:3px solid #2575a8;padding-left:8px;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 14px;padding:8px 12px;background:#f7f9fc;border-radius:5px;}
+.legend span{font-size:8.5px;display:flex;align-items:center;gap:4px;}
+.note-box{background:#fffbeb;border-left:3px solid #d69e2e;padding:7px 10px;font-size:8.5px;margin:8px 0;border-radius:0 4px 4px 0;}
+.info-box{background:#ebf8ff;border-left:3px solid #2575a8;padding:7px 10px;font-size:8.5px;margin:8px 0;border-radius:0 4px 4px 0;}
+/* PROGRESS BAR */
+.prog-wrap{background:#e2e8f0;border-radius:4px;height:8px;width:100%;}
+.prog-bar{height:8px;border-radius:4px;}
+@media print{
+  @page{size:A4 portrait;margin:12mm 10mm;}
+  body{font-size:9px;}
+  .cover{min-height:auto;padding:60px 30px;}
+  .page-break{page-break-before:always;}
+  .no-break{page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover">
+  <div style="font-size:11px;letter-spacing:3px;opacity:.6;margin-bottom:14px;">CHALO SCHOOLS ERP</div>
+  <h1>Navigation Gap Analysis</h1>
+  <h2>Every menu option — what our platform has vs what is missing</h2>
+  <div class="cover-grid">
+    <div class="cover-card"><div class="num">248</div><div class="lbl">Chalo Menu Items</div></div>
+    <div class="cover-card"><div class="num">17</div><div class="lbl">Modules</div></div>
+    <div class="cover-card"><div class="num">3</div><div class="lbl">Complete (UI + API)</div></div>
+    <div class="cover-card"><div class="num">7</div><div class="lbl">Partially Built</div></div>
+  </div>
+  <div style="margin-top:36px;font-size:9px;opacity:.55;">Chalo testv3 · PLG · DAV &nbsp;|&nbsp; Our Platform: React 18 + Express + PostgreSQL + Claude AI &nbsp;|&nbsp; May 2026</div>
+</div>
+
+<!-- ══════════ SUMMARY ══════════ -->
+<div class="summary-page">
+  <h3 style="font-size:14px;margin-bottom:10px;">Platform Coverage Summary</h3>
+  <div class="legend">
+    <span><span class="hv">HAVE</span> Fully built — UI + API working</span>
+    <span><span class="pt">PARTIAL</span> Backend route exists, UI limited or missing</span>
+    <span><span class="ms">MISSING</span> Not implemented at all</span>
+    <span><span class="na">N/A</span> Not applicable to our platform</span>
+    <span><span class="ours">OUR EXTRA</span> We have this, Chalo doesn't</span>
+    <span><span class="tag tag-all">ALL</span> Common to all 3 schools</span>
+    <span><span class="tag tag-pd">PLG+DAV</span> PLG &amp; DAV only</span>
+    <span><span class="tag tag-tv">TV3</span> testv3 only</span>
+  </div>
+  <table class="sum-table" style="border:1px solid #e2e8f0;">
+    <thead><tr><th>Module</th><th>Chalo Items</th><th>We Have</th><th>Partial</th><th>Missing</th><th>Coverage</th></tr></thead>
+    <tbody>
+      <tr><td class="mod">Administration</td><td>48</td><td>4</td><td>8</td><td>36</td><td><div class="prog-wrap"><div class="prog-bar" style="width:25%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Admission</td><td>15</td><td>0</td><td>3</td><td>12</td><td><div class="prog-wrap"><div class="prog-bar" style="width:20%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Student</td><td>30</td><td>3</td><td>4</td><td>23</td><td><div class="prog-wrap"><div class="prog-bar" style="width:23%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Staff</td><td>13</td><td>2</td><td>2</td><td>9</td><td><div class="prog-wrap"><div class="prog-bar" style="width:31%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Fees</td><td>28</td><td>1</td><td>4</td><td>23</td><td><div class="prog-wrap"><div class="prog-bar" style="width:18%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod">Examination</td><td>35</td><td>0</td><td>5</td><td>30</td><td><div class="prog-wrap"><div class="prog-bar" style="width:14%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod">HPC</td><td>5</td><td>0</td><td>0</td><td>5</td><td><div class="prog-wrap"><div class="prog-bar" style="width:0%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod">TOS</td><td>8</td><td>0</td><td>0</td><td>8</td><td><div class="prog-wrap"><div class="prog-bar" style="width:0%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod">Timetable</td><td>11</td><td>0</td><td>3</td><td>8</td><td><div class="prog-wrap"><div class="prog-bar" style="width:27%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Attendance</td><td>2</td><td>1</td><td>1</td><td>0</td><td><div class="prog-wrap"><div class="prog-bar" style="width:75%;background:#68d391;"></div></div></td></tr>
+      <tr><td class="mod">Transport</td><td>6</td><td>0</td><td>2</td><td>4</td><td><div class="prog-wrap"><div class="prog-bar" style="width:33%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Hostel</td><td>3</td><td>0</td><td>0</td><td>3</td><td><div class="prog-wrap"><div class="prog-bar" style="width:0%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod">Communication</td><td>6</td><td>0</td><td>2</td><td>4</td><td><div class="prog-wrap"><div class="prog-bar" style="width:33%;background:#f6ad55;"></div></div></td></tr>
+      <tr><td class="mod">Digital Secretary</td><td>1</td><td>0</td><td>1</td><td>0</td><td><div class="prog-wrap"><div class="prog-bar" style="width:60%;background:#68d391;"></div></div></td></tr>
+      <tr><td class="mod">Fee Reports</td><td>28</td><td>2</td><td>2</td><td>24</td><td><div class="prog-wrap"><div class="prog-bar" style="width:14%;background:#fed7d7;"></div></div></td></tr>
+      <tr><td class="mod" style="color:#44337a;">Library (Our Extra)</td><td>—</td><td>0</td><td>4</td><td>2</td><td><div class="prog-wrap"><div class="prog-bar" style="width:55%;background:#9f7aea;"></div></div></td></tr>
+      <tr><td class="mod" style="color:#44337a;">Payroll (Our Extra)</td><td>—</td><td>0</td><td>4</td><td>2</td><td><div class="prog-wrap"><div class="prog-bar" style="width:55%;background:#9f7aea;"></div></div></td></tr>
+    </tbody>
+  </table>
+  <div class="info-box" style="margin-top:12px;">Our platform has <strong>15 backend route files</strong> and <strong>10 frontend pages</strong>. Frontend pages cover: Login, Dashboard, Admissions, Students, Staff, Fees, Examinations, Timetable, Attendance, Reports. No UI yet for: Transport, Communications, Library, Payroll, School Info masters, Demographics.</div>
+</div>
+
+<!-- ══════════ ADMINISTRATION ══════════ -->
+<div class="module-section" id="admin">
+  <div class="module-title">ADMINISTRATION <span class="sch">Role: School Admin / Management</span></div>
+
+  <!-- School Configuration -->
+  <div class="group-block no-break">
+    <div class="group-header">▸ School Configuration</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">School Master<br><span class="sub">School profile, affiliation, address, logo</span></td><td><span class="pt">PARTIAL</span></td><td>schools.js — GET/POST school, affiliation_no, board_type. <em>No UI page.</em></td></tr>
+        <tr><td class="name">Company Master<br><span class="sub">Parent employer companies list</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Holiday Master<br><span class="sub">School holiday calendar per academic year</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — holidays table needed</td></tr>
+        <tr><td class="name">Block Configuration<br><span class="sub">Time block / period setup (morning/afternoon)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Event<br><span class="sub">School events calendar <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Branch Master<br><span class="sub">Multi-branch school setup</span></td><td><span class="ms">MISSING</span></td><td>schools.js has school concept but no branch hierarchy UI</td></tr>
+        <tr><td class="name">Branch Master Configuration<br><span class="sub">Branch-level settings override</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Auto Number<br><span class="sub">Admission/receipt auto-numbering rules <span class="tag tag-tv">TV3</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Storage Configuration<br><span class="sub">Cloud storage purchase/management</span></td><td><span class="na">N/A</span></td><td>Platform-managed cloud storage, not school-configurable</td></tr>
+        <tr><td class="name">WhatsApp Configuration<br><span class="sub">WhatsApp Business API key setup</span></td><td><span class="ms">MISSING</span></td><td>TODO noted in attendance.js — no config endpoint or UI</td></tr>
+        <tr><td class="name">Usage Analytics Report<br><span class="sub">Staff portal usage statistics</span></td><td><span class="pt">PARTIAL</span></td><td>analytics.js — dashboard metrics (students, fees, attendance). No usage report page.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Auth & Authorization -->
+  <div class="group-block no-break">
+    <div class="group-header">▸ Authentication &amp; Authorization</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Role Master<br><span class="sub">Define roles (Admin, Teacher, Accountant…)</span></td><td><span class="pt">PARTIAL</span></td><td>auth.js — roles: super_admin, school_admin, principal, teacher. No role management UI.</td></tr>
+        <tr><td class="name">Role Authorization<br><span class="sub">Screen-level permission matrix per role</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — authorize() middleware exists but no UI to manage permissions</td></tr>
+        <tr><td class="name">User Master<br><span class="sub">Create/edit user accounts</span></td><td><span class="pt">PARTIAL</span></td><td>auth.js — POST /register, GET /me. No admin user-list page.</td></tr>
+        <tr><td class="name">Portal User<br><span class="sub">Parent/student portal login management</span></td><td><span class="ms">MISSING</span></td><td>No parent/student portal implemented</td></tr>
+        <tr><td class="name">Portal UserLogin History<br><span class="sub">Login time/device log for portal users</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Non-Logged Portal User Details<br><span class="sub">Portal users who never logged in</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Portal Activity Tracking Report<br><span class="sub">Student/parent portal page visits</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff Activity Tracking Report<br><span class="sub">Staff login &amp; screen activity log</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Log And Audit Trail<br><span class="sub">All data-change audit log</span></td><td><span class="pt">PARTIAL</span></td><td>audit_logs table in DB (migration 001). No UI to view/search it.</td></tr>
+        <tr><td class="name">Portal Menu Master<br><span class="sub">Configure which menus show for each role</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff Usage Report<br><span class="sub">Which screens each staff uses, how often</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Administration continued -->
+<div class="module-section page-break">
+  <div class="module-title">ADMINISTRATION (continued) <span class="sch">Preliminary Masters · Academic Masters · Demographic Masters</span></div>
+
+  <!-- Preliminary Masters -->
+  <div class="group-block no-break">
+    <div class="group-header">▸ Preliminary Masters</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Board Master<br><span class="sub">CBSE, Matric, State Board etc.</span></td><td><span class="ms">MISSING</span></td><td>board_type column in schools table (hardcoded). No UI.</td></tr>
+        <tr><td class="name">Level Master<br><span class="sub">Primary, Middle, Secondary, Higher Secondary</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Term Master<br><span class="sub">Term 1, Term 2, Annual etc.</span></td><td><span class="ms">MISSING</span></td><td>terms table in DB. No management UI.</td></tr>
+        <tr><td class="name">Subject Type Master<br><span class="sub">Theory, Practical, Language, Elective</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">House Master<br><span class="sub">School houses (Red, Blue, Green…)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Food Habits Master<br><span class="sub">Vegetarian/Non-Veg options <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Activity Master<br><span class="sub">Co-curricular activity types <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Visitor Entry / Status / Type Masters<br><span class="sub">Visitor management setup <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Department Master<br><span class="sub">Staff departments <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="pt">PARTIAL</span></td><td>departments table in DB + staff.js references it. No UI to manage departments.</td></tr>
+        <tr><td class="name">Configuration Master<br><span class="sub">Global school feature flags</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Academic Masters -->
+  <div class="group-block no-break">
+    <div class="group-header">▸ Academic Masters</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Academic Year Creation<br><span class="sub">Create new academic year (e.g. 2026-2027)</span></td><td><span class="ms">MISSING</span></td><td>academic_years table in DB. No creation/management UI.</td></tr>
+        <tr><td class="name">Academic Week Off<br><span class="sub">Set weekly off days (Sat/Sun)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Class Master<br><span class="sub">Class names: Nursery, KG, I–XII</span></td><td><span class="ms">MISSING</span></td><td>classes table in DB + schools.js GET /classes. No management UI.</td></tr>
+        <tr><td class="name">Class Section Master<br><span class="sub">Sections per class: A, B, C</span></td><td><span class="ms">MISSING</span></td><td>section column in classes table. No section management UI.</td></tr>
+        <tr><td class="name">Subject Master<br><span class="sub">All subjects offered</span></td><td><span class="ms">MISSING</span></td><td>subjects table in DB. No subject management UI.</td></tr>
+        <tr><td class="name">Class Subject Mapping<br><span class="sub">Which subjects taught in which class</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Stream Master<br><span class="sub">Science, Commerce, Arts (for +1/+2) <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Subject Combination<br><span class="sub">Subject sets per stream <span class="tag tag-pd">PLG+DAV</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Week Configuration<br><span class="sub">Working days per week setup</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Logo Configuration<br><span class="sub">Upload school logo for receipts/reports</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">School Academic Detail<br><span class="sub">Board affiliation, academic settings</span></td><td><span class="pt">PARTIAL</span></td><td>schools.js — affiliation_no, board_type stored. No dedicated edit page.</td></tr>
+        <tr><td class="name">Chalo Banner<br><span class="sub">Portal announcement banner</span></td><td><span class="na">N/A</span></td><td>No student/parent portal in our platform</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Demographic Masters -->
+  <div class="group-block no-break">
+    <div class="group-header">▸ Demographic Masters</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Country Master</td><td><span class="ms">MISSING</span></td><td>Not implemented — hardcoded "India" in schools table</td></tr>
+        <tr><td class="name">State Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">City Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Mother Tongue Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Community Master<br><span class="sub">OC, BC, MBC, SC, ST etc.</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Caste Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Nationality Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Religion Master</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Region Master <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-box">All 9 demographic masters are missing. These are needed as dropdown options in student admission forms (community, caste, mother tongue, nationality, religion, country).</div>
+</div>
+
+<!-- ══════════ ADMISSION ══════════ -->
+<div class="module-section page-break" id="admission">
+  <div class="module-title">ADMISSION MODULE <span class="sch">Enquiry → Follow-up → Shortlist → Admission</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Masters &amp; Operations</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Admission Category Master<br><span class="sub">General, Management, NRI, Sports quota</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needed for admission_enquiries table</td></tr>
+        <tr><td class="name">Admission Priority Master<br><span class="sub">Sibling priority, staff child priority rules</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Enquiry List<br><span class="sub">View &amp; manage all admission enquiries</span></td><td><span class="pt">PARTIAL</span></td><td>admissions.js GET / — enquiries with funnel status. AdmissionsPage.jsx shows funnel chart.</td></tr>
+        <tr><td class="name">Call Followup<br><span class="sub">Telecalling log — date, response, next call</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no call log table or UI</td></tr>
+        <tr><td class="name">Shortlisted Student<br><span class="sub">Move from enquiry to shortlisted</span></td><td><span class="pt">PARTIAL</span></td><td>admissions.js PATCH /:id/status — status transitions. No dedicated shortlist page.</td></tr>
+        <tr><td class="name">Health Form <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Health declaration at admission stage</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Online Enquiry Portal <span class="tag tag-d">DAV</span><br><span class="sub">Public online enquiry form</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Online Application Status <span class="tag tag-d">DAV</span><br><span class="sub">Track status of online applications</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Send Bulk Application Link <span class="tag tag-d">DAV</span><br><span class="sub">SMS with admission link to prospects</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Interview Students <span class="tag tag-p">PLG</span><br><span class="sub">Schedule &amp; record admission interviews</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Reports &amp; Lists</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Call Register Report<br><span class="sub">All call follow-ups with status</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no call log data</td></tr>
+        <tr><td class="name">Enquiry List Report<br><span class="sub">Filtered enquiry list printable</span></td><td><span class="pt">PARTIAL</span></td><td>admissions.js GET / with filters. No print/PDF generation.</td></tr>
+        <tr><td class="name">Applicant Siblings Report<br><span class="sub">Enquiries where sibling is enrolled</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Application Status Count Report <span class="tag tag-p">PLG</span><br><span class="sub">Count by enquiry/application status</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Visitor Information Report <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Walk-in visitors log report</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ STUDENT ══════════ -->
+<div class="module-section page-break" id="student">
+  <div class="module-title">STUDENT MANAGEMENT <span class="sch">Student records, promotion, TC, certificates</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Student Operations</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Student List<br><span class="sub">All active students with class/section filter</span></td><td><span class="hv">HAVE</span></td><td>StudentsPage.jsx + students.js GET / — list with class, search filter</td></tr>
+        <tr><td class="name">Student Profile / Detail<br><span class="sub">Full student record with parent info</span></td><td><span class="hv">HAVE</span></td><td>students.js GET /:id — student + parent + class data</td></tr>
+        <tr><td class="name">Fee Category Management<br><span class="sub">Assign/change fee category per student</span></td><td><span class="pt">PARTIAL</span></td><td>fee_category in students. students.js PATCH /:id. No dedicated category-change workflow.</td></tr>
+        <tr><td class="name">Student Fee Category Change Approval<br><span class="sub">Approval workflow for category change <span class="tag tag-all">ALL</span></span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no approval workflow</td></tr>
+        <tr><td class="name">Promotion Screen<br><span class="sub">Year-end promote all students to next class</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — critical year-end feature</td></tr>
+        <tr><td class="name">Promotion Cancellation<br><span class="sub">Reverse an incorrect promotion</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Non-Promoted Student List<br><span class="sub">Students held back in same class</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student Bulk Update <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Excel import to update multiple students</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">TC Checklist Update / TC Student Checklist<br><span class="sub">No-dues checklist before TC issue</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student TC Approval / TC Bulk Update <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">TC approval workflow &amp; bulk TC</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student Gate Pass / Gate Pass Report <span class="tag tag-tv">TV3</span><br><span class="sub">Outpass during school hours</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Portal Login Access <span class="tag tag-d">DAV</span><br><span class="sub">Enable/disable parent portal access per student</span></td><td><span class="ms">MISSING</span></td><td>No parent portal in our platform</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Student Reports &amp; Certificates</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Student Admission Report<br><span class="sub">Class-wise admitted students list</span></td><td><span class="pt">PARTIAL</span></td><td>students.js + admissions.js data available. No formatted report/print.</td></tr>
+        <tr><td class="name">Student Birthday Report<br><span class="sub">Monthly/today birthdays list</span></td><td><span class="ms">MISSING</span></td><td>dob in students table. No birthday report endpoint.</td></tr>
+        <tr><td class="name">Bonafide Certificate<br><span class="sub">Printable bonafide for banks/colleges</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needs PDF generation with school letterhead</td></tr>
+        <tr><td class="name">Student Mark Certificate <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Printable marks statement</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student Fee Income Tax Certificate<br><span class="sub">80C certificate for parents</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needs fee payment data + PDF</td></tr>
+        <tr><td class="name">Student Absent Summary / Block Wise Attendance<br><span class="sub">Absence count per student per period</span></td><td><span class="pt">PARTIAL</span></td><td>attendance.js GET /report. Basic data available. No formatted print.</td></tr>
+        <tr><td class="name">Student Promotion Status <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Current year promotion outcome per student</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student Promotion Cancellation Report<br><span class="sub">Who was un-promoted &amp; when</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Sibling Details Report <span class="tag tag-tv">TV3</span><br><span class="sub">Students who are siblings</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Student Participation Report <span class="tag tag-tv">TV3</span><br><span class="sub">Co-curricular participation per student</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Rizvi Fee Export<br><span class="sub">External format fee data export</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ STAFF ══════════ -->
+<div class="module-section page-break" id="staff">
+  <div class="module-title">STAFF MANAGEMENT <span class="sch">Staff records, evaluation, syllabus, events</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Staff Operations</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Staff List<br><span class="sub">All active staff with department filter</span></td><td><span class="hv">HAVE</span></td><td>StaffPage.jsx + staff.js GET / — list with staff_type, department</td></tr>
+        <tr><td class="name">Staff Profile / Details<br><span class="sub">Full staff record, designation, joining date</span></td><td><span class="hv">HAVE</span></td><td>staff.js GET /:id — full profile with user info</td></tr>
+        <tr><td class="name">Staff Evaluation Criteria<br><span class="sub">KPI parameters for staff appraisal</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">New Syllabus Daily Updation<br><span class="sub">Teachers mark daily syllabus completion</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needs syllabus_completion table</td></tr>
+        <tr><td class="name">Special Event Master<br><span class="sub">School special events (Sports Day, etc.)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Event Master / Event Category / Event Details <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Full event management with categories</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">District Master <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">District list for staff address</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff Bulk Update <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Excel import for staff records</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff History <span class="tag tag-tv">TV3</span><br><span class="sub">Previous school employment history</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Staff Reports</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Staff Absent Summary / Staff Summary Absent<br><span class="sub">Absence count per staff</span></td><td><span class="pt">PARTIAL</span></td><td>attendance.js GET /staff-attendance data exists. No formatted report.</td></tr>
+        <tr><td class="name">Staff Birthday Report<br><span class="sub">Monthly staff birthdays</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff Usage Report<br><span class="sub">Portal login &amp; feature usage per staff</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Event Details Report <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Events with attendance &amp; participation</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ FEES ══════════ -->
+<div class="module-section page-break" id="fees">
+  <div class="module-title">FEES MANAGEMENT <span class="sch">Fee structure, collection, concession, refund</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Fee Setup / Masters</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Fee Structure (per class+term)<br><span class="sub">Define fee heads &amp; amounts per class/term</span></td><td><span class="pt">PARTIAL</span></td><td>fees.js GET /structure, fee_structures table in DB. No UI to create/edit structure.</td></tr>
+        <tr><td class="name">Lump Sum Fees Configuration<br><span class="sub">One-time annual fee setup</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Lumpsum Fees Student Mapping<br><span class="sub">Assign lumpsum plan to students</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Bus Fee Structure Main<br><span class="sub">Route-wise bus fee amounts</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Bus Fee Studentwise<br><span class="sub">Assign bus fee to individual students</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Hostel Fee Structure Main<br><span class="sub">Hostel fee by room type</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Hostel Fee Studentwise<br><span class="sub">Assign hostel fee per student</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Late Fee Master<br><span class="sub">Fine rules for late payment</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Payment Scheduler<br><span class="sub">Due dates per term/instalment</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Configure Fees Receipt <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Customize receipt header/footer/format</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">GST Master <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">GST rates for applicable fee heads</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Online Payment Configuration<br><span class="sub">Razorpay / payment gateway setup</span></td><td><span class="ms">MISSING</span></td><td>TODO noted in code — Razorpay not wired</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Fee Collection &amp; Transactions</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Fee Collection (Student-wise)<br><span class="sub">Collect fee, generate receipt</span></td><td><span class="pt">PARTIAL</span></td><td>FeesPage.jsx + fees.js POST /collect. Basic collection. No receipt PDF, no Razorpay.</td></tr>
+        <tr><td class="name">Cash Denomination<br><span class="sub">Enter cash denominations at collection</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Concession Master Request<br><span class="sub">Request fee concession for a student</span></td><td><span class="pt">PARTIAL</span></td><td>concession_requests table in DB. Basic backend. No dedicated UI.</td></tr>
+        <tr><td class="name">Concession Approval<br><span class="sub">Approve/reject concession requests</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no approval workflow UI</td></tr>
+        <tr><td class="name">Refund Entry<br><span class="sub">Initiate fee refund</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Refund Approval <span class="tag tag-tv">TV3</span><br><span class="sub">Approve refund request</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Refund Receipt / Report <span class="tag tag-tv">TV3</span><br><span class="sub">Refund receipt print &amp; report</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Donation Fee Collection / Cancellation<br><span class="sub">Charitable/donation fee collection</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Day Closure <span class="tag tag-tv">TV3</span><br><span class="sub">End-of-day cash collection finalization</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Fee Master Approval <span class="tag tag-p">PLG</span><br><span class="sub">Approval for fee structure changes</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Fees Collection Priority <span class="tag tag-tv">TV3</span><br><span class="sub">Priority order for fee head collection</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Pre-Admission Fee Collection<br><span class="sub">Registration fee before full admission</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ EXAMINATION ══════════ -->
+<div class="module-section page-break" id="exam">
+  <div class="module-title">EXAMINATION MODULE <span class="sch">Planning, mark entry, progress cards, analysis</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Exam Setup</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Examination Planning Master<br><span class="sub">Schedule exam dates per class/subject</span></td><td><span class="pt">PARTIAL</span></td><td>ExaminationsPage.jsx + examinations.js GET / — exam list. Create exam exists.</td></tr>
+        <tr><td class="name">Exam Settings Master<br><span class="sub">Max marks, pass marks, grade config</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — exam settings not configurable via UI</td></tr>
+        <tr><td class="name">Exam Type Order Configuration<br><span class="sub">Order PT1, PT2, Half-Yearly, Annual</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Consolidated Exam Configuration<br><span class="sub">How terms combine for final result</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Progress Card Setting Master<br><span class="sub">Layout &amp; content of progress card</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Portal Progress Card Config / Configure Portal Progress View<br><span class="sub">What parents see on portal</span></td><td><span class="ms">MISSING</span></td><td>No parent portal in our platform</td></tr>
+        <tr><td class="name">Other Exam Master / Config<br><span class="sub">Non-academic exams (competitions, NEET mock)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">NEET JEE Students Configuration<br><span class="sub">Mark students as NEET/JEE aspirants</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Mark Entry</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Examination Mark Entry<br><span class="sub">Enter subject marks per student</span></td><td><span class="pt">PARTIAL</span></td><td>examinations.js POST /:exam_id/marks — PT1, notebook, enrichment, half-yearly marks. No UI table for bulk entry.</td></tr>
+        <tr><td class="name">Exam Marks Entry Approval <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">HOD approves mark entries</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Other Exam Mark Entry / Other Examination Mark Entry<br><span class="sub">Marks for non-academic exams</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Other Exam Rank Generation<br><span class="sub">Generate class/school rank for other exams</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Individual Assessment Report / Report Card<br><span class="sub">Subject-wise assessment per student</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">ASL Report Generation<br><span class="sub">Assessment for Speaking &amp; Listening (CBSE)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Progress Cards &amp; Reports</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Progress Card Report Generation<br><span class="sub">Print class-wise progress cards</span></td><td><span class="pt">PARTIAL</span></td><td>reports.js GET /marksheet — PDF endpoint exists using PDFKit. Not wired to frontend yet.</td></tr>
+        <tr><td class="name">Exam Wise Progress Card Report Generation<br><span class="sub">Per-exam progress card</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Other Exam Report Card<br><span class="sub">Report card for non-academic exams</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">NEET JEE Exam Report Card <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Competitive exam performance card</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Examination Consolidated Report<br><span class="sub">All subjects, all exams in one sheet</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Result Analysis Report <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Pass%, fail%, average analysis</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Teacherwise Analysis Report<br><span class="sub">Each teacher's class results</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Class Wise Result Analysis <span class="tag tag-tv">TV3</span><br><span class="sub">Class-wise pass/fail/average</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Teacher Performance Report + Subject Analysis <span class="tag tag-tv">TV3</span><br><span class="sub">Teacher effectiveness metrics</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Subject Average / Fail Count / Centum Report <span class="tag tag-tv">TV3</span><br><span class="sub">Subject-level pass/fail/100% scorers</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Overall Average / Single Digit Marks Report <span class="tag tag-tv">TV3</span><br><span class="sub">School-wide average &amp; below-10 marks</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ HPC + TOS ══════════ -->
+<div class="module-section page-break" id="hpc">
+  <div class="module-title">HPC — Holistic Progress Card <span class="sch">TV3 + PLG only · Not in DAV</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">HPC Rating Master<br><span class="sub">Rating scale (A+, A, B…) for holistic skills</span></td><td><span class="ms">MISSING</span></td><td>Entire HPC module absent from our platform</td></tr>
+        <tr><td class="name">Curriculum Master<br><span class="sub">Holistic skill areas being assessed</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Assessment Entry<br><span class="sub">Teacher rates each student on skill areas</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Assessment Entry Approval <span class="tag tag-p">PLG</span><br><span class="sub">HOD approves HPC entries</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">HPC Report Card<br><span class="sub">Print holistic progress card</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note-box">HPC is required for CBSE schools. All 5 screens are completely absent — needs a new module with rating master, curriculum setup, teacher entry form, and PDF generation.</div>
+
+  <div class="module-title" style="margin-top:20px;">TOS — Table of Specifications <span class="sch">PLG + DAV only · Not in testv3</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">TOS Topic Master<br><span class="sub">Topics per subject per class</span></td><td><span class="ms">MISSING</span></td><td>Entire TOS module absent</td></tr>
+        <tr><td class="name">TOS Paper Configuration<br><span class="sub">Blueprint — topic vs question type distribution</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">TOS Subject Coordinator<br><span class="sub">Assign coordinator per subject</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">TOS Effort Master / Effort Mark Entry<br><span class="sub">Effort marks setup and teacher entry</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Evaluation Area Master<br><span class="sub">Areas of evaluation definition</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Comment Category Master / New Comment Category<br><span class="sub">Teacher comment templates by category</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ TIMETABLE + ATTENDANCE ══════════ -->
+<div class="module-section page-break" id="tt">
+  <div class="module-title">TIMETABLE MODULE <span class="sch">Auto-generation, substitution, staff rules</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">View Timetable (class-wise)<br><span class="sub">Class weekly timetable view</span></td><td><span class="pt">PARTIAL</span></td><td>TimetablePage.jsx + timetable.js GET /:class_id — slots with subject &amp; teacher.</td></tr>
+        <tr><td class="name">Automatic Time Table Generation<br><span class="sub">AI-powered auto timetable generator</span></td><td><span class="pt">PARTIAL</span></td><td>timetable.js POST /generate — Claude AI generates TT from rules. Frontend doesn't call it yet.</td></tr>
+        <tr><td class="name">Combine Subject<br><span class="sub">Same teacher for multiple sections at once</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Staff Rule Creation Master<br><span class="sub">Max periods/day, preferred slots per staff</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needed for AI generation to work properly</td></tr>
+        <tr><td class="name">TT Class Subject Mapping <span class="tag tag-tv">TV3</span><br><span class="sub">Pre-map subjects to classes for TT</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Substitution Time Table<br><span class="sub">Manage absent teacher substitutions</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Substitution Priority <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Auto-pick substitute by priority rules</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Online Time Table <span class="tag tag-pd">PLG+DAV</span><br><span class="sub">Timetable visible on parent/student portal</span></td><td><span class="ms">MISSING</span></td><td>No parent portal</td></tr>
+        <tr><td class="name">Time Table Backup / Restore <span class="tag tag-all">TV3+PLG</span><br><span class="sub">Save &amp; restore timetable snapshots</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Lab Time Table Details Report<br><span class="sub">Lab slot usage across classes</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Time Table Details Report<br><span class="sub">Full timetable printable report</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — data exists, no print format</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module-title" style="margin-top:20px;">ATTENDANCE MODULE <span class="sch">Configuration &amp; mark attendance</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Mark Student Attendance<br><span class="sub">Period-wise or day-wise attendance entry</span></td><td><span class="hv">HAVE</span></td><td>AttendancePage.jsx + attendance.js POST /mark — bulk mark by class. ON CONFLICT upsert.</td></tr>
+        <tr><td class="name">Staff Attendance<br><span class="sub">Mark staff present/absent</span></td><td><span class="pt">PARTIAL</span></td><td>staff_attendance table in DB, analytics.js uses it. No dedicated staff attendance page.</td></tr>
+        <tr><td class="name">Attendance Configuration<br><span class="sub">Minimum attendance %, late mark rules, SMS trigger</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — hardcoded rules in queries</td></tr>
+        <tr><td class="name">Attendance Reason Master <span class="tag tag-tv">TV3</span><br><span class="sub">Reason codes: Sick, Leave, Holiday...</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Auto SMS on Absent<br><span class="sub">WhatsApp/SMS alert to parents when marked absent</span></td><td><span class="ms">MISSING</span></td><td>TODO in attendance.js code — WhatsApp config not set up</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ TRANSPORT + HOSTEL ══════════ -->
+<div class="module-section page-break" id="transport">
+  <div class="module-title">TRANSPORT MODULE <span class="sch">Vehicles, routes, drivers, boarding points</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Routes &amp; Stops Management<br><span class="sub">Define routes with boarding stops &amp; order</span></td><td><span class="pt">PARTIAL</span></td><td>transport.js GET/POST /routes, /routes/:id/stops. Backend only — no UI page.</td></tr>
+        <tr><td class="name">Student Transport Assignment<br><span class="sub">Assign route to student</span></td><td><span class="pt">PARTIAL</span></td><td>student_transport table + transport.js. Backend only.</td></tr>
+        <tr><td class="name">Vehicle Master<br><span class="sub">Register vehicles with capacity, reg number</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no vehicles table in transport.js</td></tr>
+        <tr><td class="name">Vehicle Type<br><span class="sub">Bus, Van, Auto categories</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Driver Master<br><span class="sub">Driver profiles, license, phone</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">TM Boarding Point Master <span class="tag tag-tv">TV3</span><br><span class="sub">Boarding point locations on routes</span></td><td><span class="ms">MISSING</span></td><td>stops table exists but no boarding-point master concept</td></tr>
+        <tr><td class="name">Vehicle Document Master <span class="tag tag-tv">TV3</span><br><span class="sub">Insurance, FC, permit expiry tracking</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Transportation Dashboard <span class="tag tag-tv">TV3</span><br><span class="sub">Real-time vehicle &amp; route status</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note-box">Transport has backend routes &amp; stops data but zero frontend. Vehicle master, driver master, and all UI pages need to be built. All report screens (TransportFeePaidReport, BusFeeNonPaidReport, TransportStudentReport) are also missing.</div>
+
+  <div class="module-title" style="margin-top:20px;">HOSTEL MODULE <span class="sch">Hostel enrollment &amp; fee tracking</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Hostel Student Enrollment<br><span class="sub">Register students in hostel with room</span></td><td><span class="ms">MISSING</span></td><td>Entire hostel module absent — no route, no tables</td></tr>
+        <tr><td class="name">Hostel Student Report<br><span class="sub">All hostel students list</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Hostel Fee Paid Report<br><span class="sub">Students who paid hostel fee</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Hostel Fee Non-Paid Report<br><span class="sub">Students with outstanding hostel fee</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ COMMUNICATION ══════════ -->
+<div class="module-section page-break" id="comm">
+  <div class="module-title">COMMUNICATION MODULE <span class="sch">SMS, Email, WhatsApp, Circulars</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">SMS / Email Setting<br><span class="sub">Configure SMS gateway &amp; SMTP email</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — no gateway config table or UI</td></tr>
+        <tr><td class="name">Automated Email Configuration<br><span class="sub">Trigger rules: on admission, on fee payment…</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Fee Pendency SMS<br><span class="sub">Bulk SMS to parents with fee due</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — TODO in codebase</td></tr>
+        <tr><td class="name">Examination SMS<br><span class="sub">Exam schedule &amp; result SMS to parents</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Scheduled SMS / Email Setting<br><span class="sub">Schedule bulk messages for future date</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — needs cron job infrastructure</td></tr>
+        <tr><td class="name">SMS Details Report<br><span class="sub">Log of sent/failed SMS messages</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Circulars (AI-assisted) <span class="ours">OUR EXTRA</span><br><span class="sub">Create circular with Claude AI rephrasing</span></td><td><span class="pt">PARTIAL</span></td><td>communications.js — GET/POST /circulars with Claude AI rephrasing. No frontend page.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="info-box"><strong>Our advantage:</strong> communications.js uses Claude claude-sonnet-4-6 to professionally rephrase circular text. This is unique to our platform — Chalo has no AI in their communication module. Needs a frontend page to expose this.</div>
+
+  <div class="module-title" style="margin-top:20px;">DIGITAL SECRETARY <span class="sch">AI-powered school assistant dashboard</span></div>
+  <div class="group-block no-break">
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Digital Secretary Dashboard<br><span class="sub">AI insights: attendance trends, fee alerts, exam analysis</span></td><td><span class="pt">PARTIAL</span></td><td>Claude AI integrated in timetable.js + examinations.js + communications.js. Dashboard shows analytics. No dedicated Digital Secretary page.</td></tr>
+        <tr><td class="name">AI Timetable Generation <span class="ours">OUR EXTRA</span><br><span class="sub">Claude AI generates conflict-free timetable</span></td><td><span class="pt">PARTIAL</span></td><td>timetable.js POST /generate uses Claude — backend done. Not called from frontend.</td></tr>
+        <tr><td class="name">AI Exam Insight <span class="ours">OUR EXTRA</span><br><span class="sub">Claude analyzes exam results for weak areas</span></td><td><span class="pt">PARTIAL</span></td><td>examinations.js POST /analyze uses Claude — backend done. Not in frontend.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ FEE REPORTS ══════════ -->
+<div class="module-section page-break" id="fee-reports">
+  <div class="module-title">FEE REPORTS MODULE <span class="sch">All collection, outstanding, concession, transport reports</span></div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Collection Reports</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Fee Daily Collection Statement<br><span class="sub">Today's collections by mode of payment</span></td><td><span class="pt">PARTIAL</span></td><td>reports.js GET /eod-collection — EOD data. Basic. Not in ReportsPage UI.</td></tr>
+        <tr><td class="name">Consolidated Collection Report<br><span class="sub">All-term total collected, term-wise breakup</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Consolidated Collection Receipt Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Collection Report Branchwise / Classwise <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Company Wise Consolidated Collection Report</td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Projection Collection Report <span class="tag tag-d">DAV</span><br><span class="sub">Future expected collections</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Overall Consolidated Summary Report <span class="tag tag-tv">TV3</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Term Fees Summary Report <span class="tag tag-tv">TV3</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Sales Count Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Outstanding Reports</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Fee Head Wise Paid Report<br><span class="sub">Amount paid per fee head across classes</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Fee Head Wise Non Paid Report<br><span class="sub">Outstanding per fee head</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Overall Paid Report<br><span class="sub">All students who have paid in full</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Overall Non Paid Report / Fee Outstanding<br><span class="sub">Students with any outstanding amount</span></td><td><span class="hv">HAVE</span></td><td>reports.js GET /fee-outstanding + ReportsPage.jsx — class-wise outstanding with totals.</td></tr>
+        <tr><td class="name">Fees Summary Report<br><span class="sub">Class/section-wise fee summary</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Partially Fees Collection Summary Report<br><span class="sub">Students who paid partial amount</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Unpaid Fees Summary Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Concession Summary / Datewise Report<br><span class="sub">Concession granted by date/category</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="group-block no-break">
+    <div class="group-header">▸ Invoice, Donation, Transport &amp; Other Fee Reports</div>
+    <table>
+      <thead><tr><th style="width:42%">Menu Item</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Abstract Report / Invoice Report<br><span class="sub">Fee abstract &amp; individual invoice print</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Admission Fee Report / Fee Academic<br><span class="sub">Admission-time fee &amp; academic fee reports</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Credit Note Report / Credit Note Status<br><span class="sub">Credit notes issued &amp; utilized</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Donation Fee Collection / Cancellation Reports<br><span class="sub">Donation receipts and reversal log</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Excuse Fee / Extra Fee Report<br><span class="sub">Waived &amp; extra charges report</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Transport Fee Paid Report / Transport Student Report<br><span class="sub">Bus fee collection &amp; students on routes</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Bus Fee Non Paid Report<br><span class="sub">Students with outstanding bus fee</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">NEET/JEE Non Paid / Student Report<br><span class="sub">NEET/JEE fee outstanding &amp; student list</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Data Import Main Page<br><span class="sub">Bulk data import (students, fees, marks)</span></td><td><span class="ms">MISSING</span></td><td>Not implemented — individual creates only</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ OUR EXTRAS ══════════ -->
+<div class="module-section page-break" id="extras">
+  <div class="module-title" style="background:#44337a;">OUR PLATFORM — UNIQUE MODULES <span class="sch">Not in Chalo ERP · Our competitive advantage</span></div>
+
+  <div class="info-box">These modules are <strong>exclusive to our platform</strong> — Chalo does not have them. They are differentiators that can attract schools looking for a more complete solution.</div>
+
+  <div class="group-block no-break">
+    <div class="group-header" style="background:#553c9a;">▸ Library Management <span style="font-size:8px;">(library.js — backend only, no UI page yet)</span></div>
+    <table>
+      <thead><tr><th style="width:42%">Feature</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Book Catalog<br><span class="sub">ISBN, title, author, subject, copies</span></td><td><span class="pt">PARTIAL</span></td><td>library.js GET/POST /books — full CRUD with subject mapping. No UI page.</td></tr>
+        <tr><td class="name">Book Issue<br><span class="sub">Issue book to student/staff with due date</span></td><td><span class="pt">PARTIAL</span></td><td>library.js POST /issue — reduces available_copies, sets due_date. No UI.</td></tr>
+        <tr><td class="name">Book Return<br><span class="sub">Return book, auto-calculate fine</span></td><td><span class="pt">PARTIAL</span></td><td>library.js POST /return — fine calculation logic. No UI.</td></tr>
+        <tr><td class="name">Fine Management<br><span class="sub">Collect fine for overdue returns</span></td><td><span class="ms">MISSING</span></td><td>Fine calculated but no collection/payment flow</td></tr>
+        <tr><td class="name">Library Reports (Issued, Overdue, Stock)<br><span class="sub">Book status and circulation reports</span></td><td><span class="ms">MISSING</span></td><td>Not implemented</td></tr>
+        <tr><td class="name">Library Frontend Page<br><span class="sub">UI for librarian to manage all above</span></td><td><span class="ms">MISSING</span></td><td>pages/library/ does not exist — needs to be created</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-block no-break">
+    <div class="group-header" style="background:#553c9a;">▸ Payroll Management <span style="font-size:8px;">(payroll.js — backend only, no UI page yet)</span></div>
+    <table>
+      <thead><tr><th style="width:42%">Feature</th><th style="width:13%">Status</th><th>Our Platform</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Salary Structure<br><span class="sub">Basic, HRA, DA, allowances, PF, ESI, TDS</span></td><td><span class="pt">PARTIAL</span></td><td>payroll.js GET/POST /structure — full salary component breakdown. No UI.</td></tr>
+        <tr><td class="name">Monthly Payroll Run<br><span class="sub">Process payroll for all staff in one month</span></td><td><span class="pt">PARTIAL</span></td><td>payroll.js POST /run — calculates net pay with deductions. No UI.</td></tr>
+        <tr><td class="name">Payslip Generation<br><span class="sub">PDF payslip per staff member</span></td><td><span class="pt">PARTIAL</span></td><td>payroll.js GET /payslip — endpoint exists. No PDF template.</td></tr>
+        <tr><td class="name">PF / ESI / TDS Reporting<br><span class="sub">Statutory deduction reports</span></td><td><span class="ms">MISSING</span></td><td>Data exists in salary_structures, no report endpoint</td></tr>
+        <tr><td class="name">Payroll Frontend Page<br><span class="sub">HR admin UI for payroll processing</span></td><td><span class="ms">MISSING</span></td><td>pages/payroll/ does not exist — needs to be created</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:16px;">Priority Roadmap — What to Build Next</h3>
+  <table>
+    <thead><tr><th style="width:8%">Priority</th><th style="width:32%">Feature</th><th style="width:35%">Why</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td style="color:#c53030;font-weight:700;">P1</td><td>School Info Masters UI (Class, Subject, Holiday, Term)</td><td>Blocks all dropdowns in every other module</td><td>2–3 days</td></tr>
+      <tr><td style="color:#c53030;font-weight:700;">P1</td><td>Fee Receipt PDF + Razorpay</td><td>Core revenue feature — schools can't collect without receipt</td><td>3–4 days</td></tr>
+      <tr><td style="color:#c53030;font-weight:700;">P1</td><td>SMS/WhatsApp Config UI</td><td>Attendance absent SMS is a daily school need</td><td>2 days</td></tr>
+      <tr><td style="color:#dd6b20;font-weight:700;">P2</td><td>Student Promotion + TC workflow</td><td>Year-end critical — missing completely</td><td>3–4 days</td></tr>
+      <tr><td style="color:#dd6b20;font-weight:700;">P2</td><td>Wire Progress Card PDF to Frontend</td><td>PDFKit endpoint exists — just needs UI trigger</td><td>1 day</td></tr>
+      <tr><td style="color:#dd6b20;font-weight:700;">P2</td><td>Transport Vehicle + Driver UI page</td><td>Backend exists, just needs a frontend page</td><td>1–2 days</td></tr>
+      <tr><td style="color:#dd6b20;font-weight:700;">P2</td><td>Library + Payroll UI pages</td><td>Backend fully done — just needs frontend</td><td>2 days each</td></tr>
+      <tr><td style="color:#2f855a;font-weight:700;">P3</td><td>RBAC Screen Permission Matrix</td><td>Multi-school deployment requires role-based access</td><td>3–4 days</td></tr>
+      <tr><td style="color:#2f855a;font-weight:700;">P3</td><td>Consolidated + Head-wise Fee Reports</td><td>Daily need for accountant</td><td>2 days</td></tr>
+      <tr><td style="color:#2f855a;font-weight:700;">P3</td><td>Demographic Masters UI</td><td>Required for student admission forms</td><td>1 day</td></tr>
+      <tr><td style="color:#4a5568;font-weight:700;">P4</td><td>HPC Module (CBSE schools)</td><td>Needed for CBSE board schools specifically</td><td>5+ days</td></tr>
+      <tr><td style="color:#4a5568;font-weight:700;">P4</td><td>Hostel Module</td><td>Residential schools only</td><td>3–4 days</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="background:#1a3a5c;color:#fff;text-align:center;padding:14px;font-size:8.5px;margin-top:0;">
+  Chalo Schools ERP — Navigation Gap Analysis &nbsp;|&nbsp; Our Platform: React 18 + Express + PostgreSQL + Claude AI &nbsp;|&nbsp; Generated May 2026
+</div>
+
+</body>
+</html>

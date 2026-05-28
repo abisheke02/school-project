@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-School ERP Comparison: Chalo testv3 | PLG | DAV</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; font-size: 13px; }
+
+  .header { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #3182ce 100%); color: white; padding: 32px 40px; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .header p { opacity: 0.85; font-size: 14px; }
+  .header .meta { display: flex; gap: 32px; margin-top: 16px; flex-wrap: wrap; }
+  .header .meta-item { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px; }
+  .header .meta-item strong { display: block; font-size: 20px; }
+  .header .meta-item span { font-size: 11px; opacity: 0.8; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 20px; }
+
+  .school-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .school-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid; }
+  .school-card.chalo { border-color: #3182ce; }
+  .school-card.plg { border-color: #38a169; }
+  .school-card.dav { border-color: #d69e2e; }
+  .school-card h3 { font-size: 16px; margin-bottom: 4px; }
+  .school-card .url { color: #718096; font-size: 11px; margin-bottom: 12px; word-break: break-all; }
+  .school-card .stat-row { display: flex; justify-content: space-between; margin: 4px 0; }
+  .school-card .stat-label { color: #718096; font-size: 11px; }
+  .school-card .stat-val { font-weight: 600; font-size: 12px; }
+  .school-card .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; margin: 2px; }
+  .tag-blue { background: #ebf8ff; color: #2b6cb0; }
+  .tag-green { background: #f0fff4; color: #276749; }
+  .tag-yellow { background: #fffff0; color: #744210; }
+  .tag-red { background: #fff5f5; color: #c53030; }
+  .tag-purple { background: #faf5ff; color: #553c9a; }
+
+  .section { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px; }
+  .section h2 { font-size: 18px; color: #1a365d; margin-bottom: 4px; }
+  .section .subtitle { color: #718096; font-size: 12px; margin-bottom: 20px; }
+
+  /* Comparison table */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table thead { background: #1a365d; color: white; }
+  .comp-table thead th { padding: 12px 10px; text-align: left; font-weight: 600; }
+  .comp-table thead th.school-col { text-align: center; min-width: 90px; }
+  .comp-table thead th.feature-col { min-width: 220px; }
+  .comp-table thead th.module-col { min-width: 130px; }
+
+  .comp-table tr:nth-child(even) { background: #f7fafc; }
+  .comp-table tr:hover { background: #ebf8ff; }
+  .comp-table td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+
+  .module-group td { background: #2d3748 !important; color: white; font-weight: 700; font-size: 13px; padding: 10px; }
+
+  .mod-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+
+  .status-yes { text-align: center; }
+  .status-yes .badge { background: #c6f6d5; color: #22543d; display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .status-no { text-align: center; }
+  .status-no .badge { background: #fed7d7; color: #742a2a; display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .status-partial { text-align: center; }
+  .status-partial .badge { background: #fefcbf; color: #744210; display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .status-exclusive { text-align: center; }
+  .status-exclusive .badge { background: #e9d8fd; color: #44337a; display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+
+  .feature-name { font-weight: 600; color: #2d3748; }
+  .feature-desc { color: #718096; font-size: 11px; margin-top: 2px; }
+  .route-name { font-family: monospace; font-size: 10px; color: #a0aec0; display: block; margin-top: 2px; }
+
+  .diff-section { margin-bottom: 20px; }
+  .diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .diff-card { border-radius: 10px; padding: 16px; }
+  .diff-card.plg-card { background: #f0fff4; border: 1px solid #9ae6b4; }
+  .diff-card.dav-card { background: #fffff0; border: 1px solid #f6e05e; }
+  .diff-card.tv3-card { background: #ebf8ff; border: 1px solid #90cdf4; }
+  .diff-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .diff-card .plg-h { color: #276749; }
+  .diff-card .dav-h { color: #744210; }
+  .diff-card .tv3-h { color: #2b6cb0; }
+  .diff-card ul { list-style: none; padding: 0; }
+  .diff-card ul li { padding: 4px 0; font-size: 11px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .diff-card ul li:last-child { border-bottom: none; }
+  .diff-card ul li::before { content: '▶ '; font-size: 8px; opacity: 0.6; }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .sum-card { background: white; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .sum-card .num { font-size: 28px; font-weight: 700; }
+  .sum-card .lbl { font-size: 11px; color: #718096; margin-top: 4px; }
+  .sum-card.blue .num { color: #3182ce; }
+  .sum-card.green .num { color: #38a169; }
+  .sum-card.yellow .num { color: #d69e2e; }
+  .sum-card.purple .num { color: #805ad5; }
+
+  .footnote { background: #2d3748; color: #a0aec0; padding: 16px 24px; border-radius: 8px; font-size: 11px; line-height: 1.6; }
+  .footnote strong { color: white; }
+
+  @media print {
+    * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
+
+    @page { size: A4 landscape; margin: 10mm 8mm; }
+
+    body { font-size: 9.5px; background: white; }
+
+    .container { max-width: 100%; padding: 0; }
+
+    /* Header compresses to one tight block */
+    .header { padding: 12px 16px; }
+    .header h1 { font-size: 16px; }
+    .header p { font-size: 10px; }
+    .header .meta { gap: 10px; margin-top: 8px; }
+    .header .meta-item { padding: 4px 10px; }
+    .header .meta-item strong { font-size: 14px; }
+    .header .meta-item span { font-size: 9px; }
+
+    /* School cards — fit 3 on one row */
+    .school-cards { margin-bottom: 10px; gap: 8px; page-break-inside: avoid; break-inside: avoid; }
+    .school-card { padding: 10px; }
+    .school-card h3 { font-size: 11px; }
+    .school-card .url { font-size: 9px; margin-bottom: 6px; }
+    .school-card .stat-row { margin: 2px 0; }
+    .school-card .stat-label { font-size: 9px; }
+    .school-card .stat-val { font-size: 10px; }
+    .school-card .tag { font-size: 8px; padding: 1px 5px; }
+
+    /* Summary stat cards */
+    .summary-grid { gap: 8px; margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid; }
+    .sum-card { padding: 8px; }
+    .sum-card .num { font-size: 20px; }
+    .sum-card .lbl { font-size: 9px; }
+
+    /* Section wrappers */
+    .section { padding: 10px 12px; margin-bottom: 0; box-shadow: none; border: 1px solid #e2e8f0; border-radius: 6px; }
+    .section h2 { font-size: 13px; margin-bottom: 2px; }
+    .section .subtitle { font-size: 9px; margin-bottom: 8px; }
+
+    /* Exclusive features diff cards */
+    .diff-grid { gap: 8px; page-break-inside: avoid; break-inside: avoid; }
+    .diff-card { padding: 10px; }
+    .diff-card h4 { font-size: 10px; margin-bottom: 6px; }
+    .diff-card ul li { padding: 2px 0; font-size: 9px; }
+
+    /* Legend */
+    .legend { gap: 10px; margin-bottom: 8px; }
+    .legend-item { font-size: 9px; }
+
+    /* ===== COMPARISON TABLE ===== */
+    .comp-table { font-size: 8.5px; }
+    .comp-table thead th { padding: 6px 6px; font-size: 9px; }
+    .comp-table thead th.school-col { min-width: 55px; }
+    .comp-table thead th.feature-col { min-width: 160px; }
+    .comp-table thead th.module-col { min-width: 70px; }
+    .comp-table td { padding: 4px 6px; }
+
+    .feature-name { font-size: 8.5px; }
+    .feature-desc { font-size: 8px; margin-top: 1px; }
+    .status-yes .badge,
+    .status-no .badge,
+    .status-partial .badge,
+    .status-exclusive .badge { padding: 2px 5px; font-size: 8px; border-radius: 3px; }
+    .mod-badge { padding: 2px 6px; font-size: 8px; }
+
+    /* Each module header ALWAYS starts on a new page */
+    .module-group { page-break-before: always; break-before: page; }
+    /* First module group — don't break before it (it follows the table header) */
+    .module-group.first-module { page-break-before: avoid; break-before: avoid; }
+
+    /* Never break INSIDE a data row */
+    .comp-table tr { page-break-inside: avoid; break-inside: avoid; }
+
+    /* Keep thead visible — repeat on each page */
+    .comp-table thead { display: table-header-group; }
+
+    /* Comparison table section starts fresh */
+    .section.page-start { page-break-before: always; break-before: page; }
+
+    /* Footnote */
+    .footnote { font-size: 8px; padding: 10px 12px; }
+
+    /* Key insights inner table */
+    .section table { font-size: 8px; }
+    .section table td { padding: 3px 6px; }
+
+    /* Technology stack grid */
+    .section > div[style*="grid-template-columns: repeat(3"] ul li { font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>3-School ERP Platform Comparison</h1>
+  <p>Deep analysis of Chalo Schools platform across 3 school instances — extracted directly from live JS source code</p>
+  <div class="meta">
+    <div class="meta-item"><strong>248</strong><span>Total Unique Screens</span></div>
+    <div class="meta-item"><strong>150</strong><span>Common to All 3</span></div>
+    <div class="meta-item"><strong>17</strong><span>Modules Mapped</span></div>
+    <div class="meta-item"><strong>6 JS Files</strong><span>Analyzed per School</span></div>
+    <div class="meta-item"><strong>May 2026</strong><span>Analysis Date</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- School Cards -->
+  <div class="school-cards">
+    <div class="school-card chalo">
+      <h3 style="color:#2b6cb0">Chalo testv3 (Base Demo)</h3>
+      <div class="url">chaloschools.in/testv3 | jenifa@inspace</div>
+      <div class="stat-row"><span class="stat-label">Total Screens</span><span class="stat-val">190</span></div>
+      <div class="stat-row"><span class="stat-label">Service Path</span><span class="stat-val">testv3service/</span></div>
+      <div class="stat-row"><span class="stat-label">BlockEnabled</span><span class="stat-val">false</span></div>
+      <div class="stat-row"><span class="stat-label">AI Path</span><span class="stat-val">eduthalamus.ai</span></div>
+      <div style="margin-top:10px">
+        <span class="tag tag-blue">Standard Demo</span>
+        <span class="tag tag-blue">Gate Pass</span>
+        <span class="tag tag-blue">Day Closure</span>
+        <span class="tag tag-blue">Refund Workflow</span>
+        <span class="tag tag-blue">Transport Dashboard</span>
+        <span class="tag tag-blue">35 Unique Screens</span>
+      </div>
+    </div>
+    <div class="school-card plg">
+      <h3 style="color:#276749">PLG School (Custom)</h3>
+      <div class="url">chaloschools.in/plgtest | Admin@plgdemo</div>
+      <div class="stat-row"><span class="stat-label">Total Screens</span><span class="stat-val">205</span></div>
+      <div class="stat-row"><span class="stat-label">Service Path</span><span class="stat-val">testservice/</span></div>
+      <div class="stat-row"><span class="stat-label">BlockEnabled</span><span class="stat-val">false</span></div>
+      <div class="stat-row"><span class="stat-label">GST State Code</span><span class="stat-val">33 (Tamil Nadu)</span></div>
+      <div style="margin-top:10px">
+        <span class="tag tag-green">HPC Module</span>
+        <span class="tag tag-green">NEET/JEE</span>
+        <span class="tag tag-green">TOS System</span>
+        <span class="tag tag-green">Hostel + Bus</span>
+        <span class="tag tag-green">Tally Export</span>
+        <span class="tag tag-green">6 Unique Screens</span>
+      </div>
+    </div>
+    <div class="school-card dav">
+      <h3 style="color:#744210">DAV School (Custom)</h3>
+      <div class="url">davtest.chaloschools.in | demoadmin@davdemo</div>
+      <div class="stat-row"><span class="stat-label">Total Screens</span><span class="stat-val">202</span></div>
+      <div class="stat-row"><span class="stat-label">Service Path</span><span class="stat-val">davtestservice/</span></div>
+      <div class="stat-row"><span class="stat-label">BlockEnabled</span><span class="stat-val">true</span></div>
+      <div class="stat-row"><span class="stat-label">Sub-domain</span><span class="stat-val">davtest.chaloschools.in</span></div>
+      <div style="margin-top:10px">
+        <span class="tag tag-yellow">Online Admissions</span>
+        <span class="tag tag-yellow">Donation Fee</span>
+        <span class="tag tag-yellow">Branch-wise Reports</span>
+        <span class="tag tag-yellow">Portal Access Control</span>
+        <span class="tag tag-yellow">BlockEnabled=true</span>
+        <span class="tag tag-yellow">8 Unique Screens</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="summary-grid">
+    <div class="sum-card blue"><div class="num">150</div><div class="lbl">All 3 schools share</div></div>
+    <div class="sum-card green"><div class="num">6</div><div class="lbl">PLG exclusive screens</div></div>
+    <div class="sum-card yellow"><div class="num">8</div><div class="lbl">DAV exclusive screens</div></div>
+    <div class="sum-card purple"><div class="num">35</div><div class="lbl">testv3 exclusive screens</div></div>
+  </div>
+
+  <!-- Exclusive Features -->
+  <div class="section">
+    <h2>School-Exclusive Features</h2>
+    <p class="subtitle">Features unique to each school — what they have that the others don't</p>
+    <div class="diff-grid">
+      <div class="diff-card plg-card">
+        <h4 class="plg-h">PLG School — 6 Exclusive Screens</h4>
+        <ul>
+          <li><strong>HPC Assessment Approval</strong> — Multi-tier approval for holistic assessment marks</li>
+          <li><strong>Fee Master Approval</strong> — Principal/admin approval before fee structure goes live</li>
+          <li><strong>New Concession Approval</strong> — Concession category change needs approval</li>
+          <li><strong>Student Fee Category Approval</strong> — Fee category changes go through approval</li>
+          <li><strong>Interview Students</strong> — Interview scheduling &amp; management for admissions</li>
+          <li><strong>Application Status Count Report</strong> — Count-wise admission status summary</li>
+        </ul>
+        <div style="margin-top:12px;font-size:11px;color:#276749;font-weight:600">Why PLG has these: PLG has a formal approval workflow structure — no fee or category changes without authorization. Also a competitive-exam focused school (NEET/JEE + HPC suggests CBSE CBE board).</div>
+      </div>
+      <div class="diff-card dav-card">
+        <h4 class="dav-h">DAV School — 8 Exclusive Screens</h4>
+        <ul>
+          <li><strong>Online Enquiries</strong> — Parents submit enquiries from a public web portal</li>
+          <li><strong>Send Bulk Application Link</strong> — Mass-email admission application links to enquiries</li>
+          <li><strong>Online Application Status</strong> — Track applications submitted via online portal</li>
+          <li><strong>Portal Login Access</strong> — Control which parents can access the student portal</li>
+          <li><strong>Donation Collection</strong> — Separate module for development/donation fee collection</li>
+          <li><strong>Collection Report (Class-wise)</strong> — Fee collection drilled down by class</li>
+          <li><strong>Collection Report (Branch-wise)</strong> — Fee collection across branches</li>
+          <li><strong>Projection Collection Report</strong> — Fee collection projection vs actual</li>
+        </ul>
+        <div style="margin-top:12px;font-size:11px;color:#744210;font-weight:600">Why DAV has these: DAV runs online admissions — parents apply from home. Also collects donation/development fees separately (common in DAV Trust schools). BlockEnabled=true means they use block-level academic grouping.</div>
+      </div>
+      <div class="diff-card tv3-card">
+        <h4 class="tv3-h">Chalo testv3 — 35 Exclusive Screens</h4>
+        <ul>
+          <li><strong>Day Closure</strong> — End-of-day cash denomination counting &amp; closure</li>
+          <li><strong>Student Gate Pass</strong> + Report — Student exit tracking with parent notification</li>
+          <li><strong>Refund Approval + Receipt + Report</strong> — Full fee refund workflow</li>
+          <li><strong>Attendance Reason Master</strong> — Configurable absence reason codes</li>
+          <li><strong>TM Boarding Point Master</strong> — Transport boarding stop management</li>
+          <li><strong>Vehicle Document Master</strong> — Track vehicle insurance, permits, fitness</li>
+          <li><strong>Transportation Dashboard</strong> — Live transport operations view</li>
+          <li><strong>WorkFlow Approval</strong> — Generic workflow approval engine</li>
+          <li><strong>Centum Report</strong> — Students scoring 100% in subjects</li>
+          <li><strong>Class/Staff/Subject/Teacher-Wise Result Analysis</strong> — 5 analysis reports</li>
+          <li><strong>Fee Collection Priority</strong> + Term Fees Summary</li>
+          <li><strong>Auto Number Config</strong> — Configure receipt/admission number formats</li>
+          <li><strong>Storage Extension</strong> — File storage management</li>
+          <li>+ 20 more screens</li>
+        </ul>
+        <div style="margin-top:12px;font-size:11px;color:#2b6cb0;font-weight:600">Note: testv3 is the standard Chalo demo — it has features being tested/showcased. Schools may not have all of these enabled in production.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Comparison Table -->
+  <div class="section page-start">
+    <h2>Module-by-Module Comparison Table</h2>
+    <p class="subtitle">All 248 unique screens across 17 modules — columns show which school has each feature</p>
+
+    <div class="legend">
+      <strong style="font-size:12px">Legend:</strong>
+      <div class="legend-item"><span class="badge" style="background:#c6f6d5;color:#22543d;padding:2px 8px;border-radius:4px;font-size:11px">YES</span> Fully present</div>
+      <div class="legend-item"><span class="badge" style="background:#fed7d7;color:#742a2a;padding:2px 8px;border-radius:4px;font-size:11px">NO</span> Not present</div>
+      <div class="legend-item"><span class="badge" style="background:#fefcbf;color:#744210;padding:2px 8px;border-radius:4px;font-size:11px">PART</span> Partial / basic version</div>
+      <div class="legend-item"><span class="badge" style="background:#e9d8fd;color:#44337a;padding:2px 8px;border-radius:4px;font-size:11px">EXCL</span> School-exclusive feature</div>
+    </div>
+
+    <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="module-col">Module</th>
+          <th class="feature-col">Feature / Screen</th>
+          <th class="school-col" style="background:#2b6cb0">Chalo testv3</th>
+          <th class="school-col" style="background:#276749">PLG School</th>
+          <th class="school-col" style="background:#744210">DAV School</th>
+          <th>Notes / Difference</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ==================== ADMISSION ==================== -->
+        <tr class="module-group first-module"><td colspan="6">1. ADMISSION MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#ebf8ff;color:#2b6cb0">Admission</span></td><td><span class="feature-name">Admission Dashboard</span><span class="feature-desc">Total enquiries, converted, pipeline stats</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>Same across all</td></tr>
+        <tr><td></td><td><span class="feature-name">Application Entry (Full Form)</span><span class="feature-desc">40+ fields: DOB, Aadhar, EMIS, PEN, UDISE, APAAR ID, parents, siblings, health</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>All have full form</td></tr>
+        <tr><td></td><td><span class="feature-name">Enquiry List</span><span class="feature-desc">View and manage all admission enquiries</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Call Follow-up</span><span class="feature-desc">Log and track calls to enquiry leads</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Interview Students</span><span class="feature-desc">Schedule and manage student interviews before admission</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only — uses formal interview screening process</td></tr>
+        <tr><td></td><td><span class="feature-name">Online Enquiries</span><span class="feature-desc">Enquiries submitted via public admission portal</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — parents apply online from home</td></tr>
+        <tr><td></td><td><span class="feature-name">Send Bulk Application Link</span><span class="feature-desc">Email admission form link to multiple enquiries at once</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — mass outreach to prospective parents</td></tr>
+        <tr><td></td><td><span class="feature-name">Online Application Status</span><span class="feature-desc">Track real-time status of online applications</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — online admission tracking</td></tr>
+        <tr><td></td><td><span class="feature-name">Application Status Count Report</span><span class="feature-desc">Summary counts by application status stage</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only</td></tr>
+        <tr><td></td><td><span class="feature-name">Admission Type / Category / Priority Masters</span><span class="feature-desc">Configure admission categories and priority rules</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Health Form</span><span class="feature-desc">Vaccination, medical history at admission</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV have it; testv3 doesn't</td></tr>
+        <tr><td></td><td><span class="feature-name">Student Admission Details Report</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== STUDENT ==================== -->
+        <tr class="module-group"><td colspan="6">2. STUDENT MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#f0fff4;color:#276749">Student</span></td><td><span class="feature-name">Student Dashboard</span><span class="feature-desc">Total enrolled, gender ratio, class-wise strength</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Master (Full Profile)</span><span class="feature-desc">Name, Aadhar, EMIS, PEN, UDISE, APAAR ID, 40+ fields</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Class/Section Allocation</span><span class="feature-desc">Assign students to classes and sections</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Roll Number Allocation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Promotion + Promotion Cancellation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Promotion Cancellation Approval</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">TC Request + TC Checklist</span><span class="feature-desc">Transfer certificate with document checklist</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student TC Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV have approval workflow for TC</td></tr>
+        <tr><td></td><td><span class="feature-name">Gate Pass</span><span class="feature-desc">Student exit tracking — parent SMS notification</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only — PLG/DAV haven't enabled this yet</td></tr>
+        <tr><td></td><td><span class="feature-name">Bonafide Certificate</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Conduct Certificate</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Study / Course Completion / Attendance / Competition Certificates</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>6 certificate types in all</td></tr>
+        <tr><td></td><td><span class="feature-name">Student Mark Certificate</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV have it</td></tr>
+        <tr><td></td><td><span class="feature-name">Fee Category Change + Approval</span><span class="feature-desc">Move student between fee slabs with approval</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Fee Category Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only — separate approval screen</td></tr>
+        <tr><td></td><td><span class="feature-name">Bulk Update (Students)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Student History</span><span class="feature-desc">View all historical changes to student record</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Profile Verification</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Health Evaluation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Leave Approval</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Participation Report</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Student ID Card Generation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Sibling Details Report</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== STAFF ==================== -->
+        <tr class="module-group"><td colspan="6">3. STAFF MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#faf5ff;color:#553c9a">Staff</span></td><td><span class="feature-name">Staff Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Master (Full Profile)</span><span class="feature-desc">Name, Designation, Department, Qualification, PF, Bank</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Attendance</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Subject Allocation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Syllabus Master + Lesson Plan + Daily Updation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Evaluation + Observation</span><span class="feature-desc">Observe and rate teacher performance</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Appraisal + Self Appraisal</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Homework Assignment + Approval + Request</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Circular Entry</span><span class="feature-desc">Write and send school circulars</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Leave Entry + Approval</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff History</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 + PLG have it; DAV doesn't</td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Transfer + Relieving</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Bulk Update</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Teacher Performance Reports</span><span class="feature-desc">Teacher-wise result analysis, subject analysis</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Things Did (Weekly Activities)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Event Master + Event Category</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Digital Secretary Dashboard</span><span class="feature-desc">Real-time absent staff + substitute suggestions</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== FEES ==================== -->
+        <tr class="module-group"><td colspan="6">4. FEE / FINANCE MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#fffff0;color:#744210">Fees</span></td><td><span class="feature-name">Fee Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Fees Collection</span><span class="feature-desc">Counter collection with receipt printing</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG has GST (TN State Code 33)</td></tr>
+        <tr><td></td><td><span class="feature-name">Fees Cancellation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Fixed Fee Structure</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Fixed Fee Structure Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV require approval before fee goes live</td></tr>
+        <tr><td></td><td><span class="feature-name">Fee Master Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only — extra approval layer</td></tr>
+        <tr><td></td><td><span class="feature-name">Concession Category + Approval</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">New Concession Category Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only</td></tr>
+        <tr><td></td><td><span class="feature-name">Cash Denomination (Day Closure)</span><span class="feature-desc">Count cash by note denomination at end of day</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Day Closure (Full)</span><span class="feature-desc">Complete EOD process with denomination + reports</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only — PLG/DAV use CashDenomination instead</td></tr>
+        <tr><td></td><td><span class="feature-name">Refund Entry</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Refund Approval + Receipt</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Payment Scheduler (EMI)</span><span class="feature-desc">Split fee into installments</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Donation Fee Collection</span><span class="feature-desc">Separate module for development/trust fees</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV has separate DonationCollection screen; PLG uses DonationFeeCollection</td></tr>
+        <tr><td></td><td><span class="feature-name">GST Master + GST Reports</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV; PLG has GSTIN (Tamil Nadu)</td></tr>
+        <tr><td></td><td><span class="feature-name">Hostel Fee Structure + Student-wise</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Bus Fee Structure + Student-wise</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Lump Sum Fee + Student Mapping</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Online Payment Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Fee Pendency SMS</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Collection Report (Class-wise)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Collection Report (Branch-wise)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — multi-branch tracking</td></tr>
+        <tr><td></td><td><span class="feature-name">Fee Projection Collection Report</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — projected vs actual fee tracking</td></tr>
+        <tr><td></td><td><span class="feature-name">Fee Collection Priority</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Term Fees Summary Report</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">60+ Fee Reports</span><span class="feature-desc">Outstanding, paid, concession, abstract, invoice, Tally export, etc.</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>Tally Export = PLG only; Rizvi Export = PLG custom</td></tr>
+
+        <!-- ==================== EXAMINATION ==================== -->
+        <tr class="module-group"><td colspan="6">5. EXAMINATION MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#fff5f5;color:#c53030">Exam</span></td><td><span class="feature-name">Examination Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Exam Type + Term + Settings Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Examination Planning + Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Mark Entry</span><span class="feature-desc">Grid entry of marks per class, subject, student</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Exam Marks Entry Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV have marks approval workflow</td></tr>
+        <tr><td></td><td><span class="feature-name">Rank Generation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Grade Master + Evaluation Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Progress Card (Report Card) Generation</span><span class="feature-desc">Standard + Consolidated + Exam-wise formats</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Progress Card Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">HPC — Holistic Progress Card</span><span class="feature-desc">Curriculum master, skill-based assessment, self-assessment (CBSE CBE)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td>DAV doesn't have HPC — uses standard report card</td></tr>
+        <tr><td></td><td><span class="feature-name">HPC Assessment Entry Approval</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td class="status-no"><span class="badge">NO</span></td><td>PLG only — approval workflow for HPC marks</td></tr>
+        <tr><td></td><td><span class="feature-name">Other Exam (Internal Assessments)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">NEET / JEE Student Tracking + Marks</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV cater to competitive exam preparation</td></tr>
+        <tr><td></td><td><span class="feature-name">Student Subject Grouping</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Term Remarks</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Mark Analysis Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Result Analysis Report</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Centum Report (100% scorers)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Class-wise / Staff-wise / Subject-wise Result Analysis</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Overall Average / Single Digit Marks Reports</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">ASL Report Generation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== TOS ==================== -->
+        <tr class="module-group"><td colspan="6">6. TOS — TEACHING OBSERVATION SYSTEM (Question Paper + Observation)</td></tr>
+        <tr><td><span class="mod-badge" style="background:#ebf8ff;color:#2c5282">TOS</span></td><td><span class="feature-name">TOS Master (Question Paper Creation)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only — full QP management</td></tr>
+        <tr><td></td><td><span class="feature-name">TOS Topic Master + Paper Configuration</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">TOS Mark Entry + Effort Mark Entry</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">TOS Question Review + Principal Review</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>6-stage review workflow</td></tr>
+        <tr><td></td><td><span class="feature-name">TOS Subject Coordinator</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">TOS Report Card + Configuration</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Students Comments Entry + Attainment Entry</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Comment Category Master + Evaluation Area</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== TIMETABLE ==================== -->
+        <tr class="module-group"><td colspan="6">7. TIMETABLE MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#f0fff4;color:#22543d">TimeTable</span></td><td><span class="feature-name">Timetable Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Automatic Timetable Generation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Semi-Auto Timetable</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Online Timetable (Portal View)</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Substitution Timetable + Rule Creation</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Substitution Priority</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Rule Creation Master + Staff Rule</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">TT Backup + Restore</span><span class="feature-desc">Save/restore timetable snapshots</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 + PLG; DAV doesn't have it</td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Free Periods + Workload</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== ATTENDANCE ==================== -->
+        <tr class="module-group"><td colspan="6">8. ATTENDANCE MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#faf5ff;color:#44337a">Attend</span></td><td><span class="feature-name">Attendance Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Attendance</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Staff Attendance</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Attendance Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Attendance Reason Master</span><span class="feature-desc">Configure absence reason codes (medical, festival, etc.)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Block-wise Attendance</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Student Attendance Quiz Details</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">10+ Attendance Reports</span><span class="feature-desc">Daily, weekly, monthly, yearly, gender-wise, long absent</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== TRANSPORT ==================== -->
+        <tr class="module-group"><td colspan="6">9. TRANSPORT MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#ebf8ff;color:#2b6cb0">Transport</span></td><td><span class="feature-name">Transportation Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Vehicle Master + Vehicle Type</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Driver Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Boarding Point Master (Route Stops)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Vehicle Document Master</span><span class="feature-desc">Insurance, permit, fitness certificates</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">Bus Fee Structure + Student-wise</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Transport SMS</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Transport Fee Reports</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== HOSTEL ==================== -->
+        <tr class="module-group"><td colspan="6">10. HOSTEL MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#fffff0;color:#744210">Hostel</span></td><td><span class="feature-name">Hostel Fee Structure + Student-wise</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Hostel Reports + Hostel SMS</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== INVENTORY ==================== -->
+        <tr class="module-group"><td colspan="6">11. INVENTORY MANAGEMENT</td></tr>
+        <tr><td><span class="mod-badge" style="background:#f0fff4;color:#276749">Inventory</span></td><td><span class="feature-name">Inventory Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Item Master + Category + Supplier</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Purchase Request + Goods Receipt</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Issue Entry + Item Issue + Pending Request</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Item Fees Assignment</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Forecast Reports (Matrix, Item, Class-wise)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+        <!-- ==================== COMMUNICATION ==================== -->
+        <tr class="module-group"><td colspan="6">12. COMMUNICATION / SMS / EMAIL</td></tr>
+        <tr><td><span class="mod-badge" style="background:#fff5f5;color:#c53030">Comms</span></td><td><span class="feature-name">Communication Dashboard</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">SMS/Email Settings</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Scheduled SMS/Email</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Group SMS + Bulk SMS</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Automated Email Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Content Sharing</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Fee / Hostel / Transport / Exam SMS</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Portal Login Access Control</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-exclusive"><span class="badge">EXCL</span></td><td>DAV only — control which parents can log into parent portal</td></tr>
+
+        <!-- ==================== SCHOOL CONFIG ==================== -->
+        <tr class="module-group"><td colspan="6">13. SCHOOL CONFIGURATION / ADMIN</td></tr>
+        <tr><td><span class="mod-badge" style="background:#f7fafc;color:#4a5568">Config</span></td><td><span class="feature-name">School Master + Academic Detail</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Class + Section + Subject Masters</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Subject Combination</span><span class="feature-desc">Elective / optional subject combinations</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Stream Master</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only — Science/Commerce/Arts streams</td></tr>
+        <tr><td></td><td><span class="feature-name">Holiday Master + Special Event</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Academic Year + Weekly Off Config</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">User Master + Role Master + Role Authorization</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Branch Master + Configuration</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>DAV has dedicated sub-domain; PLG multi-branch</td></tr>
+        <tr><td></td><td><span class="feature-name">Block Configuration</span><span class="feature-desc">Academic block grouping (Primary / Middle / Senior)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>DAV BlockEnabled=true (uses blocks); PLG/testv3=false</td></tr>
+        <tr><td></td><td><span class="feature-name">Visitor Entry + Type + Status Masters</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">Gallery Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Company Master</span><span class="feature-desc">Multi-company fee heads for group institutions</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">WorkFlow Approval (Generic)</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only — generic workflow engine</td></tr>
+        <tr><td></td><td><span class="feature-name">User Activity + Audit Trail</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Portal Menu Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Auto Number Config</span><span class="feature-desc">Configure admission/receipt number formats</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-no"><span class="badge">NO</span></td><td>testv3 only</td></tr>
+        <tr><td></td><td><span class="feature-name">GST Master</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV are GST registered; testv3 isn't</td></tr>
+
+        <!-- ==================== REFERENCE DATA ==================== -->
+        <tr class="module-group"><td colspan="6">14. REFERENCE / MASTER DATA</td></tr>
+        <tr><td><span class="mod-badge" style="background:#f7fafc;color:#718096">Masters</span></td><td><span class="feature-name">Country / State / City / District Masters</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Community / Caste / Religion / Nationality</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Mother Tongue Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Region Master</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only</td></tr>
+        <tr><td></td><td><span class="feature-name">House Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+        <tr><td></td><td><span class="feature-name">Food Habits Master</span></td><td class="status-no"><span class="badge">NO</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td>PLG + DAV only — hostel dietary tracking</td></tr>
+        <tr><td></td><td><span class="feature-name">Board Master</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td class="status-yes"><span class="badge">YES</span></td><td></td></tr>
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Key Insight Section -->
+  <div class="section page-start">
+    <h2>Key Insights: What Makes Each School Different</h2>
+    <p class="subtitle">Summary of architectural and functional differences</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <h4 style="color:#2b6cb0;margin-bottom:12px;font-size:14px">PLG School Profile</h4>
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Type</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">South Indian School (Tamil Nadu, GST Code 33), likely CBSE</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Focus</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Competitive exam preparation (NEET/JEE), CBSE CBE compliance (HPC)</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Governance</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Strict approval workflows — fees, concessions, marks all need approval</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Special Features</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">HPC (skill assessment), TOS (question paper system), Tally Export, Hostel+Boarding</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Admissions</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Walk-in with interview — no online portal, but formal interview process</td></tr>
+          <tr><td style="padding:6px;color:#718096">AI</td><td style="padding:6px;font-weight:600">eduthalamus.ai (same as others — Chalo's standard AI)</td></tr>
+        </table>
+      </div>
+      <div>
+        <h4 style="color:#744210;margin-bottom:12px;font-size:14px">DAV School Profile</h4>
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Type</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">DAV Trust School — CBSE, own sub-domain (davtest.chaloschools.in)</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Focus</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Online admissions, multi-branch operations, donation fee management</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">BlockEnabled</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">TRUE — uses Primary/Middle/Senior block structure for academics</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Special Features</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Online admission portal, donation fee, branch-wise/class-wise fee reports, portal access control</td></tr>
+          <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;color:#718096">Admissions</td><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Fully online — parents enquire and apply via web portal, school tracks status</td></tr>
+          <tr><td style="padding:6px;color:#718096">No HPC</td><td style="padding:6px;font-weight:600">DAV uses traditional report cards — no HPC/CBE assessment module</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding:16px;background:#f7fafc;border-radius:8px;border-left:4px solid #3182ce">
+      <h4 style="font-size:13px;margin-bottom:8px;color:#2b6cb0">Shared Premium Features (PLG + DAV, not in testv3)</h4>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px">
+        <div><strong>TOS System</strong> — Full question paper creation, coordinator review, principal review workflow</div>
+        <div><strong>Event Management</strong> — School event master with categories and reports</div>
+        <div><strong>Visitor Management</strong> — Front gate visitor entry and reports</div>
+        <div><strong>Online Timetable</strong> — Student/parent portal timetable view</div>
+        <div><strong>Stream Master</strong> — Science/Commerce/Arts stream tracking (11th/12th)</div>
+        <div><strong>Subject Combinations</strong> — Elective subject configuration</div>
+        <div><strong>GST Module</strong> — Full GST with CGST/SGST, HSN/SAC codes, credit notes</div>
+        <div><strong>Bulk Updates</strong> — Staff and student bulk data update tools</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technology Stack -->
+  <div class="section page-start">
+    <h2>Platform Architecture (Common to All 3)</h2>
+    <p class="subtitle">Technical foundation shared across all Chalo Schools instances</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:12px">
+      <div style="padding:14px;background:#f7fafc;border-radius:8px">
+        <strong style="color:#2d3748">Frontend</strong>
+        <ul style="list-style:none;margin-top:8px">
+          <li>AngularJS 1.x SPA (blankonApp)</li>
+          <li>KendoUI commercial components</li>
+          <li>ocLazyLoad for module loading</li>
+          <li>Handsontable (mark entry grids)</li>
+          <li>Multi-language support (EN/HI/TM/MR)</li>
+        </ul>
+      </div>
+      <div style="padding:14px;background:#f7fafc;border-radius:8px">
+        <strong style="color:#2d3748">Backend</strong>
+        <ul style="list-style:none;margin-top:8px">
+          <li>.NET ASMX Web Services</li>
+          <li>Each school = separate service instance</li>
+          <li>testv3: testv3service.chaloschools.in</li>
+          <li>PLG: testservice.chaloschools.in</li>
+          <li>DAV: davtestservice.chaloschools.in</li>
+        </ul>
+      </div>
+      <div style="padding:14px;background:#f7fafc;border-radius:8px">
+        <strong style="color:#2d3748">AI / Integrations</strong>
+        <ul style="list-style:none;margin-top:8px">
+          <li>AI: eduthalamus.ai/schoolapi/chalo_v4</li>
+          <li>Function: Text rephrasing (circulars)</li>
+          <li>Tally ERP export (PLG)</li>
+          <li>Focus ERP export (PLG)</li>
+          <li>Online payment gateway</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <strong>Data Source:</strong> All data extracted directly from live JS source files (KPS.js, Siva.js, Prabhakaran.js, Eswar.js, Vaishu.js, archana.js) from each school instance. State names extracted via <code>.state('app.XXX')</code> pattern matching. Template URLs extracted via <code>templateUrl:</code> pattern. Total screens analyzed: PLG=205, DAV=202, testv3=190. Common to all 3=150. Total unique across all=248.
+    <br><br><strong>Login APIs:</strong> ASMX service endpoints returned runtime errors for remote curl requests (server-side restriction). Feature data derived purely from JS routing files, not from live API calls to PLG or DAV.
+    <br><br><strong>Analyzed by:</strong> School Platform development team | <strong>Date:</strong> May 2026
+  </div>
+
+</div>
+</body>
+</html>

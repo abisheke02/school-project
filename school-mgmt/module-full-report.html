@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Platform — Full Module Report</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f8;color:#1a202c}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,#0f172a,#1e3a5f,#1a56db);color:#fff;padding:70px 40px;text-align:center}
+.cover h1{font-size:38px;font-weight:900;letter-spacing:-1px}
+.cover p{font-size:16px;opacity:.65;margin-top:8px}
+.cover-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.c-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:7px 18px;font-size:12px;font-weight:600}
+
+/* LEGEND */
+.legend{max-width:1000px;margin:32px auto;background:#fff;border-radius:16px;padding:24px 28px;box-shadow:0 2px 16px rgba(0,0,0,.05)}
+.legend h3{font-size:15px;font-weight:800;margin-bottom:14px}
+.legend-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.l-box{border-radius:10px;padding:14px 16px}
+
+/* WRAPPER */
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 60px}
+
+/* MODULE CARD */
+.mc{background:#fff;border-radius:18px;margin-bottom:36px;box-shadow:0 2px 18px rgba(0,0,0,.06);overflow:hidden}
+.mc-head{display:flex;align-items:center;gap:16px;padding:22px 28px}
+.mc-icon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.mc-title h2{font-size:18px;font-weight:800}
+.mc-title p{font-size:12px;color:#64748b;margin-top:2px}
+
+/* STATUS PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:6px;padding:0 28px 16px}
+.pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.p-done{background:#dcfce7;color:#15803d}
+.p-warn{background:#fef9c3;color:#92400e}
+.p-no{background:#fee2e2;color:#b91c1c}
+.p-ai{background:#ede9fe;color:#6d28d9}
+
+/* TWO COLUMNS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid #f1f5f9}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-simple{padding:20px 28px;border-right:1px solid #f1f5f9}
+.col-tech{padding:20px 28px;background:#fafbff}
+.col-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding:4px 10px;border-radius:6px;display:inline-block}
+.lbl-s{background:#dbeafe;color:#1e40af}
+.lbl-t{background:#e0e7ff;color:#3730a3}
+
+/* SIMPLE SECTIONS */
+.s-section{margin-bottom:14px}
+.s-section h4{font-size:13px;font-weight:700;margin-bottom:6px;color:#374151}
+.s-list{list-style:none;padding:0}
+.s-list li{font-size:13px;padding:4px 0;border-bottom:1px solid #f8fafc;line-height:1.4;color:#4b5563}
+.s-list li:last-child{border:none}
+.s-list li.good::before{content:'✅ '}
+.s-list li.bad::before{content:'❌ '}
+.s-list li.fix::before{content:'🔧 '}
+.s-list li.add::before{content:'➕ '}
+.s-list li.warn::before{content:'⚠️ '}
+
+/* TECH SECTIONS */
+.t-section{margin-bottom:14px}
+.t-section h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#6366f1;margin-bottom:6px}
+.api-line{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+.api-line:last-child{border:none}
+.m{padding:2px 6px;border-radius:4px;font-size:9px;font-weight:900;font-family:monospace;flex-shrink:0}
+.get{background:#dbeafe;color:#1d4ed8}
+.post{background:#dcfce7;color:#15803d}
+.put{background:#fef3c7;color:#b45309}
+.patch{background:#ede9fe;color:#7c3aed}
+.del{background:#fee2e2;color:#dc2626}
+.api-path{font-family:monospace;color:#1e293b;font-size:11.5px}
+.api-note{color:#94a3b8;font-size:11px;margin-left:auto}
+.db-tag{display:inline-block;background:#f1f5f9;color:#475569;padding:2px 7px;border-radius:4px;font-size:10.5px;font-family:monospace;margin:2px}
+
+/* IMPROVE BOX */
+.improve-box{border-top:1px solid #f1f5f9;padding:16px 28px;background:#fffbeb;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.improve-box{grid-template-columns:1fr}}
+.improve-box h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.i-simple h4{color:#b45309}
+.i-tech h4{color:#6d28d9}
+.improve-list{list-style:none;padding:0}
+.improve-list li{font-size:12.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.05);color:#374151;line-height:1.4}
+.improve-list li:last-child{border:none}
+.improve-list li::before{content:'→ ';color:#f59e0b;font-weight:700}
+.i-tech .improve-list li::before{color:#7c3aed}
+
+/* MISSING ALERT */
+.missing-banner{background:#fff1f2;border-left:4px solid #dc2626;padding:14px 20px;margin:0 28px 20px;border-radius:0 8px 8px 0;font-size:13px;color:#9f1239}
+.missing-banner strong{display:block;font-size:14px;margin-bottom:3px}
+
+/* PRIORITY TABLE */
+.ptable-wrap{background:#fff;border-radius:18px;padding:28px;margin-bottom:36px;box-shadow:0 2px 18px rgba(0,0,0,.06)}
+.ptable-wrap h2{font-size:20px;font-weight:900;margin-bottom:18px}
+table{width:100%;border-collapse:collapse}
+th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#64748b;border-bottom:2px solid #e2e8f0}
+td{padding:10px 12px;font-size:13px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+tr:last-child td{border:none}
+tr:hover td{background:#fafbff}
+.pri{display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.pr1{background:#fee2e2;color:#b91c1c}
+.pr2{background:#fef3c7;color:#b45309}
+.pr3{background:#ede9fe;color:#6d28d9}
+
+footer{background:#1e293b;color:#94a3b8;text-align:center;padding:28px;font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>School Platform — Full Module Report</h1>
+  <p>Each module: Simple explanation + Technical details + What to improve</p>
+  <div class="cover-row">
+    <div class="c-chip">14 Modules</div>
+    <div class="c-chip">10 Pages Built</div>
+    <div class="c-chip">4 Pages Missing</div>
+    <div class="c-chip">5 AI Features Live</div>
+    <div class="c-chip">May 2026</div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="wrap">
+<div class="legend">
+  <h3>How to read this document</h3>
+  <div class="legend-row">
+    <div class="l-box" style="background:#eff6ff;border:1px solid #bfdbfe">
+      <strong style="font-size:13px;color:#1d4ed8">🟦 Simple Side</strong>
+      <p style="font-size:12px;color:#3b82f6;margin-top:4px">Plain English — what the module does, what's working, what's missing. No tech jargon. Anyone can read this.</p>
+    </div>
+    <div class="l-box" style="background:#eef2ff;border:1px solid #c7d2fe">
+      <strong style="font-size:13px;color:#4338ca">🟣 Tech Side</strong>
+      <p style="font-size:12px;color:#6366f1;margin-top:4px">API routes, database tables, backend logic — for developers building or reviewing the code.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 1: LOGIN ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">🔐</div>
+    <div class="mc-title"><h2>01 — Login & Authentication</h2><p>How users sign in — admin password or OTP on phone</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">Admin Login Working</span>
+    <span class="pill p-done">Phone OTP Working</span>
+    <span class="pill p-done">6 User Roles</span>
+    <span class="pill p-done">Auto Logout (token expiry)</span>
+    <span class="pill p-no">No Forgot Password</span>
+    <span class="pill p-no">No School Logo on Login Page</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Admin can log in with username and password</li>
+          <li class="good">Parents and teachers can log in with their phone number + OTP</li>
+          <li class="good">System knows who is a principal, teacher, parent, student — and shows them the right pages</li>
+          <li class="good">When you logout, your old login token is deactivated — can't reuse it</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">No "Forgot Password" option for admin</li>
+          <li class="bad">Login page shows "School Mgmt" — not the actual school's name or logo</li>
+          <li class="bad">No eye icon to show/hide password while typing</li>
+          <li class="bad">Error message only shows as a small toast — not visible enough</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/auth/login/admin</span><span class="api-note">bcrypt verify</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/auth/otp/request</span><span class="api-note">Supabase OTP</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/auth/otp/verify</span><span class="api-note">returns JWT</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/auth/refresh</span><span class="api-note">token rotation</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/auth/logout</span><span class="api-note">Redis blacklist</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">users</span><span class="db-tag">refresh_tokens</span>
+      </div>
+      <div class="t-section">
+        <h4>Stack</h4>
+        <p style="font-size:12px;color:#64748b">JWT (access 15min) + Refresh tokens (7d) · Redis blacklist on logout · bcryptjs for password · Supabase Phone OTP · 6 roles: super_admin, school_admin, principal, teacher, parent, student</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add school name and logo on the login page</li>
+        <li>Add "Forgot Password" — admin gets reset link on email</li>
+        <li>Show/hide password button (eye icon)</li>
+        <li>Show error message clearly below the field, not just a small popup</li>
+        <li>Add "Remember me" checkbox to stay logged in longer</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>POST /auth/forgot-password → email OTP reset flow</li>
+        <li>School logo from DB on login page (GET /schools/branding)</li>
+        <li>Persist role in JWT payload for frontend routing</li>
+        <li>Rate-limit OTP requests (max 3 per 10 min)</li>
+        <li>Login audit log table (ip, user_agent, timestamp)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 2: DASHBOARD ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#22c55e,#15803d)">📊</div>
+    <div class="mc-title"><h2>02 — Dashboard</h2><p>The first screen after login — shows school health at a glance</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">4 Summary Cards (Students, Fees, Outstanding, Staff)</span>
+    <span class="pill p-done">Fee Collection Progress Bar</span>
+    <span class="pill p-done">Class-wise Attendance Bar Chart</span>
+    <span class="pill p-no">No Quick Action Buttons</span>
+    <span class="pill p-no">No Alerts / Reminders</span>
+    <span class="pill p-no">Same view for all roles</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Shows total students, today's staff attendance, fees collected and pending</li>
+          <li class="good">Green progress bar showing how much of the year's fees are collected</li>
+          <li class="good">Bar chart showing which class has good attendance and which needs attention</li>
+          <li class="good">Chart bars turn red/yellow/green based on attendance percentage</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">No shortcuts — you can't quickly mark attendance or send a circular from here</li>
+          <li class="bad">No alerts — doesn't tell you "5 students have less than 75% attendance"</li>
+          <li class="bad">Principal and teacher see the same screen — should be different</li>
+          <li class="bad">No "last updated" time shown</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/analytics/dashboard</span><span class="api-note">single parallel query</span></div>
+      </div>
+      <div class="t-section">
+        <h4>Response Shape</h4>
+        <p style="font-size:11.5px;font-family:monospace;color:#475569;line-height:1.8">students.total, students.new_this_term<br>fees.collected, fees.outstanding, fees.collection_pct<br>staff.present, staff.total, staff.attendance_pct<br>class_attendance[] → {class_name, pct, present, total}</p>
+      </div>
+      <div class="t-section">
+        <h4>Scheduled Jobs</h4>
+        <p style="font-size:12px;color:#64748b">Cron: daily stats email at 18:30 · Weekly fee reminder Monday 08:00</p>
+      </div>
+      <div class="t-section">
+        <h4>Frontend</h4>
+        <p style="font-size:12px;color:#64748b">Recharts BarChart · Cell color by threshold (≥90 green, ≥75 blue, else amber) · ResponsiveContainer</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add 3 quick buttons: "Mark Attendance", "Collect Fee", "Send Circular"</li>
+        <li>Show alert: "8 students below 75% attendance — click to view"</li>
+        <li>Show "₹X pending from 23 students this week"</li>
+        <li>Teacher should see only their class, not the whole school</li>
+        <li>Add "Refresh" button with last updated time</li>
+        <li>Show next school event (PTM, exam) at the top</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Add role param to /analytics/dashboard → filter by user's class_id if teacher</li>
+        <li>New endpoint: GET /analytics/alerts → low attendance, overdue fees, pending follow-ups</li>
+        <li>Add as_of timestamp in response, frontend shows "Updated X mins ago"</li>
+        <li>Add monthly fee trend array for line chart</li>
+        <li>Skeleton loader component while data loads</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 3: ADMISSIONS ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fdf4ff,#ede9fe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">📋</div>
+    <div class="mc-title"><h2>03 — Admissions</h2><p>Tracks new students from first enquiry to final enrollment</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">5-Stage Funnel (Enquiry → Enrolled)</span>
+    <span class="pill p-done">Click to filter list by stage</span>
+    <span class="pill p-done">Move student to next stage</span>
+    <span class="pill p-no">Can't add new enquiry from frontend</span>
+    <span class="pill p-no">No notes per enquiry</span>
+    <span class="pill p-no">No follow-up date reminder</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Shows 5 stages: Enquiry, Application, Interview, Admitted, Rejected</li>
+          <li class="good">Each stage card shows count — click it to filter the list below</li>
+          <li class="good">Each row has a "Move to..." dropdown to advance the student's stage</li>
+          <li class="good">Table shows student name, parent phone, applying class, current status</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">No "Add New Enquiry" button — you can't enter a walk-in student from this screen</li>
+          <li class="bad">Can't write notes like "Father called, interested in Nursery"</li>
+          <li class="bad">No follow-up date — can't set "call back on Monday"</li>
+          <li class="bad">No search by student name or parent number</li>
+          <li class="bad">Doesn't show how many days a student has been in each stage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/admissions</span><span class="api-note">?status= filter</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/admissions/funnel</span><span class="api-note">count per stage</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/admissions</span><span class="api-note">public, no auth</span></div>
+        <div class="api-line"><span class="m patch">PATCH</span><span class="api-path">/admissions/:id/status</span><span class="api-note">advance stage</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">admission_enquiries</span>
+        <p style="font-size:11.5px;color:#64748b;margin-top:6px">Fields: student_name, applying_for_class, parent_name, parent_phone, status, quota, source, enquiry_date</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add "New Enquiry" button that opens a form to fill walk-in student details</li>
+        <li>Add a notes box per enquiry — internal staff comments</li>
+        <li>Add "Follow-up by" date field — highlight overdue ones in red</li>
+        <li>Add search bar to find by name or phone number</li>
+        <li>Show how many days since enquiry was submitted</li>
+        <li>When status becomes "Admitted" — auto-create the student record</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Add follow_up_date + notes columns to admission_enquiries table</li>
+        <li>POST /admissions/:id/convert → creates student + parent records</li>
+        <li>Add ?search= param to GET /admissions</li>
+        <li>Add source analytics: GROUP BY source in funnel endpoint</li>
+        <li>Frontend: "New Enquiry" modal form POSTing to /admissions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 4: STUDENTS ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">🎓</div>
+    <div class="mc-title"><h2>04 — Students</h2><p>All student records — profiles, parent info, documents</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">Student list with search</span>
+    <span class="pill p-done">Backend: create, update, fetch students</span>
+    <span class="pill p-done">DB: students + parents + documents</span>
+    <span class="pill p-no">No "Add Student" button on screen</span>
+    <span class="pill p-no">Can't click a student to see their full details</span>
+    <span class="pill p-no">No class/section filter</span>
+    <span class="pill p-no">No Excel import or export</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Search students by name or admission number</li>
+          <li class="good">Table shows: Admission No, Name, Class, Section, Gender, Category, Active/Inactive</li>
+          <li class="good">Backend can store full student profile (blood group, Aadhaar, caste, religion)</li>
+          <li class="good">Backend links each student to their father and mother record</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">No button to add a new student — you can't register anyone from this screen</li>
+          <li class="bad">Clicking a student does nothing — no detail page</li>
+          <li class="bad">Can't filter by class or section — you see all students at once</li>
+          <li class="bad">No photo shown in the list</li>
+          <li class="bad">Can't export the list to Excel</li>
+          <li class="bad">No way to upload documents (birth certificate, Aadhaar)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/students</span><span class="api-note">?search=</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/students/:id</span><span class="api-note">full profile</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/students</span><span class="api-note">creates student + parent</span></div>
+        <div class="api-line"><span class="m put">PUT</span><span class="api-path">/students/:id</span><span class="api-note">update profile</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">students</span><span class="db-tag">parents</span><span class="db-tag">student_documents</span><span class="db-tag">class_students</span>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add "New Student" button — opens a form to fill name, class, parent details</li>
+        <li>Click any student row — opens their full profile with all details</li>
+        <li>Add class and section filter dropdowns at the top</li>
+        <li>Add "Export to Excel" button for the filtered list</li>
+        <li>Show student photo in the list table</li>
+        <li>Allow uploading documents on the student profile page</li>
+        <li>Add year-end "Promote All Students" button</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Add ?class_id= and ?section= filters to GET /students</li>
+        <li>Student detail page (route: /students/:id) using GET /students/:id</li>
+        <li>POST /students/import → Excel (xlsx) file upload with Papa Parse</li>
+        <li>GET /students/export → xlsx response with ExcelJS</li>
+        <li>POST /students/promote → bulk update class_students for academic year</li>
+        <li>Student photo: Multer upload to /students/:id/photo</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 5: STAFF ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fff7ed,#fed7aa)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#f97316,#c2410c)">👥</div>
+    <div class="mc-title"><h2>05 — Staff Management</h2><p>All teaching and non-teaching staff — attendance, leave, assignments</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">Staff list with type filter</span>
+    <span class="pill p-done">Today's attendance summary by staff type</span>
+    <span class="pill p-done">Backend: create staff, mark attendance</span>
+    <span class="pill p-no">No "Add Staff" button on screen</span>
+    <span class="pill p-no">No attendance marking form on screen</span>
+    <span class="pill p-no">No leave management</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Filter staff by type: Teaching, Non-Teaching, Admin, Outsource</li>
+          <li class="good">Summary table at top: how many teaching staff are present, absent, late today</li>
+          <li class="good">Staff list: name, phone, type badge, department, employee code</li>
+          <li class="good">Backend can mark attendance for multiple staff at once</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">No way to actually mark staff attendance from this page — the form doesn't exist</li>
+          <li class="bad">No "Add Staff" button — can't register a new teacher from here</li>
+          <li class="bad">Clicking a staff member does nothing</li>
+          <li class="bad">No leave apply or approve feature</li>
+          <li class="bad">No subject assignment view for teachers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/staff</span><span class="api-note">?staff_type=</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/staff</span><span class="api-note">create staff</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/staff/attendance/bulk</span><span class="api-note">[{staff_id, status}]</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/staff/attendance/today</span><span class="api-note">summary by type</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">staff</span><span class="db-tag">staff_attendance</span><span class="db-tag">staff_subjects</span><span class="db-tag">departments</span>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add "Mark Attendance" button → shows all staff with Present/Absent/Late buttons</li>
+        <li>Add "Add Staff" button → form to fill name, phone, type, department</li>
+        <li>Click staff row → open detail with their subjects and monthly attendance</li>
+        <li>Add leave request form: staff selects type (CL/SL/EL) and dates</li>
+        <li>Principal can approve or reject leave from their view</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Staff attendance page same pattern as student attendance (P/A/L toggles + save)</li>
+        <li>Add leave_requests table: staff_id, type, from_date, to_date, status, approved_by</li>
+        <li>POST /staff/leave-request · PATCH /staff/leave-request/:id/approve</li>
+        <li>GET /staff/:id → full profile + subject assignments + leave balance</li>
+        <li>Staff detail page route: /staff/:id</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 6: ATTENDANCE ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#14b8a6,#0f766e)">✅</div>
+    <div class="mc-title"><h2>06 — Student Attendance</h2><p>Mark who came to school today, class by class</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">Class overview grid (% per class)</span>
+    <span class="pill p-done">Mark Present / Absent / Late per student</span>
+    <span class="pill p-done">Save attendance to database</span>
+    <span class="pill p-warn">Must type UUID to select class — very unfriendly</span>
+    <span class="pill p-no">No monthly calendar view</span>
+    <span class="pill p-no">No WhatsApp alert to parents</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Top grid shows all classes with today's attendance percentage</li>
+          <li class="good">Can load a class, see all students, and mark each one Present/Absent/Late</li>
+          <li class="good">Active status button turns colored + highlighted when selected</li>
+          <li class="good">Save button saves everything at once</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">To load a class, you must type a long code (UUID like "abc-123-xyz...") — normal users can't do this</li>
+          <li class="bad">No "Mark All Present" quick button</li>
+          <li class="bad">When you mark a student absent, no WhatsApp is sent to parent automatically</li>
+          <li class="bad">Can't see a student's past month attendance in a calendar view</li>
+          <li class="bad">No alert for students with less than 75% attendance</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/attendance/overview</span><span class="api-note">all classes today %</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/attendance/class/:id</span><span class="api-note">?date= roster + status</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/attendance/mark</span><span class="api-note">[{student_id, status}]</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/attendance/student/:id/monthly</span><span class="api-note">calendar data</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">student_attendance</span><span class="db-tag">academic_years</span>
+        <p style="font-size:11.5px;color:#64748b;margin-top:6px">Status enum: present, absent, late, on_leave · marked_by (staff UUID)</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Replace the UUID text box with a dropdown showing class names (Grade 1A, Grade 1B...)</li>
+        <li>Add "Mark All Present" button at the top — then only change the few absent ones</li>
+        <li>Show live count: "Present: 28 | Absent: 3 | Late: 1" as you mark</li>
+        <li>Add date arrow buttons (← previous day | Today | Next day →)</li>
+        <li>Show "Already saved" if attendance was already marked for this date</li>
+        <li>Send WhatsApp to parent when child is marked absent</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Add GET /schools/:id/classes → populate class dropdown on frontend</li>
+        <li>After POST /attendance/mark, trigger WhatsApp webhook for absent students</li>
+        <li>Monthly calendar component using GET /attendance/student/:id/monthly</li>
+        <li>Low attendance alert: GET /attendance/low?threshold=75 endpoint</li>
+        <li>Check existing attendance on load — show "already marked" state</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 7: TIMETABLE ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#6366f1,#4338ca)">🤖</div>
+    <div class="mc-title"><h2>07 — Timetable (AI-Powered)</h2><p>Auto-creates the weekly class schedule using AI — no manual work</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">AI generates conflict-free timetable</span>
+    <span class="pill p-done">5-day × 8-period grid view</span>
+    <span class="pill p-done">Substitution finder when teacher is absent</span>
+    <span class="pill p-ai">Uses Claude AI (claude-sonnet-4-6)</span>
+    <span class="pill p-warn">Must type UUID to select class</span>
+    <span class="pill p-no">No drag-drop editing</span>
+    <span class="pill p-no">No substitution UI on screen</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Click "AI Auto-Generate" — AI creates the full week schedule in seconds</li>
+          <li class="good">AI makes sure no teacher is in two classes at the same time</li>
+          <li class="good">Grid shows Monday to Friday with 8 periods — each cell shows subject + teacher</li>
+          <li class="good">Backend can find a substitute teacher when someone is absent</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">Must type a long code (UUID) to select which class to view — confusing for users</li>
+          <li class="bad">Can't drag a period to a different slot — no editing after generation</li>
+          <li class="bad">The substitution feature exists in backend but there's no button to use it</li>
+          <li class="bad">Can't print or export the timetable as PDF</li>
+          <li class="bad">Doesn't show the time for each period (8:00–8:45 etc.)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/timetable/:classId</span><span class="api-note">all slots for class</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/timetable/generate</span><span class="api-note">Claude AI → slots</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/timetable/substitution</span><span class="api-note">find available teacher</span></div>
+      </div>
+      <div class="t-section">
+        <h4>AI Config</h4>
+        <p style="font-size:12px;color:#64748b">Model: claude-sonnet-4-6 · max_tokens: 4096 · Input: teacher-subject map, class structure, rules · Output: JSON slot array</p>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">timetable_slots</span><span class="db-tag">timetable_rules</span><span class="db-tag">timetable_substitutions</span>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Replace UUID input with a class name dropdown (Grade 1A, Grade 2B...)</li>
+        <li>Show period times on the column headers (Period 1: 8:00–8:45)</li>
+        <li>Show a different color for each subject across the grid</li>
+        <li>Add "Mark Absent & Find Sub" button — shows substitute teacher suggestions</li>
+        <li>Add "Print Timetable" / "Download PDF" button</li>
+        <li>Show teacher's workload summary (how many periods per week)</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Class dropdown: GET /schools/:id/classes for selector</li>
+        <li>Per-subject color map: deterministic color from subject UUID hash</li>
+        <li>Substitution UI: modal — select absent teacher + date → shows available teachers with free period overlay</li>
+        <li>Print CSS: @media print styles for timetable table</li>
+        <li>Add period_start_time, period_end_time to timetable_rules table</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 8: EXAMINATIONS ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#ef4444,#b91c1c)">📝</div>
+    <div class="mc-title"><h2>08 — Examinations & Report Cards</h2><p>Enter marks, calculate grades, generate report cards with AI remarks</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">AI rephrase tool for teacher remarks</span>
+    <span class="pill p-done">CBSE grade scale reference (A1–E)</span>
+    <span class="pill p-done">Backend: exams, marks entry, report card PDF</span>
+    <span class="pill p-no">No exam creation on screen</span>
+    <span class="pill p-no">No marks entry form on screen</span>
+    <span class="pill p-no">No report card view or download</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">AI Remark Tool: type a rough comment, AI makes it professional and CBSE-style</li>
+          <li class="good">CBSE grade chart: shows A1 (91-100%) to E (below 33%) for reference</li>
+          <li class="good">Backend can save marks, calculate grades, and generate PDF report cards</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">This page is basically a placeholder — there's no real exam management here</li>
+          <li class="bad">No way to create a new exam (FA1, SA1 etc.) from this screen</li>
+          <li class="bad">Teachers can't enter marks on screen — no form exists</li>
+          <li class="bad">No list of report cards — can't see, download or share any</li>
+          <li class="bad">No class rank or topper view</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/examinations/marks</span><span class="api-note">bulk + AI rephrase</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/examinations/marksheet/:examId/:classId</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/examinations/report-cards/publish/:examId/:classId</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">exams</span><span class="db-tag">exam_schedules</span><span class="db-tag">marks</span><span class="db-tag">report_cards</span><span class="db-tag">grade_config</span>
+        <p style="font-size:11.5px;color:#64748b;margin-top:6px">grade_config seeded with CBSE A1–E scale · PDFKit for report card PDF</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add "Create Exam" button: set name (FA1/SA1), class, subjects, date, max marks</li>
+        <li>Teacher opens exam → sees student list → types marks in each row → grade shown instantly</li>
+        <li>AI remark button next to each student's remark field (not a separate screen)</li>
+        <li>Principal publishes results → parents get WhatsApp link to download PDF</li>
+        <li>Show class topper and rank for each student</li>
+        <li>View consolidated marksheet: all students + all subjects in one table</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Exam tab: GET /examinations list page + POST exam creation form</li>
+        <li>Marks entry: GET /examinations/:examId/students?class_id= → grid with input[number] per student</li>
+        <li>Auto grade: calculate on blur, show grade badge next to input</li>
+        <li>Publish flow: POST /examinations/report-cards/publish → returns PDF URL → WhatsApp</li>
+        <li>GET /examinations/marksheet/:examId/:classId for consolidated view</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 9: FEES ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#fefce8,#fef9c3)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#eab308,#a16207)">💰</div>
+    <div class="mc-title"><h2>09 — Fee Management</h2><p>3 ways to collect fees: bank challan, counter cash, online Razorpay — with AI bank matching</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">Outstanding fees table with totals</span>
+    <span class="pill p-done">Concessions table</span>
+    <span class="pill p-done">EOD collection report by method</span>
+    <span class="pill p-done">Backend: all 3 collection methods</span>
+    <span class="pill p-ai">AI bank statement reconciliation</span>
+    <span class="pill p-no">No counter collection form on screen</span>
+    <span class="pill p-no">No challan generation button</span>
+    <span class="pill p-no">No bank statement upload</span>
+    <span class="pill p-no">No Razorpay payment UI</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">Outstanding tab: see all students with how much they owe, how much paid, and balance</li>
+          <li class="good">Header shows total fees, total collected, total outstanding in dark blue bar</li>
+          <li class="good">Concessions tab: see which students got fee discount and how much</li>
+          <li class="good">EOD Report: pick a date, see how much was collected by each method (challan/counter/online)</li>
+          <li class="good">Backend: accountant can collect cash, print receipt, generate challan, reconcile bank statement</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">Accountant can't actually collect cash from this screen — there's no collection form</li>
+          <li class="bad">Can't generate a bank challan for a student from this screen</li>
+          <li class="bad">Can't upload the bank statement CSV for AI to match payments</li>
+          <li class="bad">No online payment button for parent portal</li>
+          <li class="bad">Can't filter outstanding by class — sees all students at once</li>
+          <li class="bad">No "Send Reminder" button to WhatsApp parents with overdue fees</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/fees/outstanding</span><span class="api-note">with totals header</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/fees/concessions</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/fees/counter</span><span class="api-note">cash + receipt</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/fees/challan</span><span class="api-note">PDF generation</span></div>
+        <div class="api-line"><span class="m post">POST</span><span class="api-path">/fees/bank-reconciliation</span><span class="api-note">AI matching</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/reports/eod</span><span class="api-note">by method + count</span></div>
+      </div>
+      <div class="t-section">
+        <h4>DB Tables</h4>
+        <span class="db-tag">fee_heads</span><span class="db-tag">fee_structures</span><span class="db-tag">challans</span><span class="db-tag">fee_transactions</span><span class="db-tag">fee_receipts</span><span class="db-tag">bank_statements</span><span class="db-tag">fee_outstanding</span><span class="db-tag">duplicate_payment_alerts</span>
+        <p style="font-size:11.5px;color:#64748b;margin-top:4px">fee_outstanding uses GENERATED ALWAYS computed column</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Add "Collect Fee" button on each outstanding row → pop-up to select which fee heads are being paid → print receipt</li>
+        <li>Add "Generate Challan" button → student lookup → print/download challan</li>
+        <li>Add "Upload Bank Statement" button → CSV upload → show AI matches</li>
+        <li>Add filter by class on outstanding tab</li>
+        <li>Show "overdue since X days" column with color coding</li>
+        <li>"Send Reminder" button → WhatsApp all overdue parents at once</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>Counter collection modal: student search → fee heads checklist → POST /fees/counter → receipt PDF</li>
+        <li>Bank statement: CSV Multer upload → POST /fees/bank-reconciliation → results table (matched/unmatched)</li>
+        <li>Add ?class_id= filter to GET /fees/outstanding</li>
+        <li>Add days_overdue computed field to outstanding query</li>
+        <li>Razorpay: POST /fees/payment-link → returns Razorpay checkout URL for parent</li>
+        <li>Fee structure setup page: GET/POST /fees/structure/:classId</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 10: REPORTS ═══════════════ -->
+<div class="mc">
+  <div class="mc-head" style="background:linear-gradient(135deg,#f8fafc,#f1f5f9)">
+    <div class="mc-icon" style="background:linear-gradient(135deg,#64748b,#334155)">📈</div>
+    <div class="mc-title"><h2>10 — Reports</h2><p>Generate and download reports for management, accounts, and government</p></div>
+  </div>
+  <div class="pills">
+    <span class="pill p-done">3 report types (Fee Outstanding, Attendance, EOD)</span>
+    <span class="pill p-done">Dynamic table — auto-renders any API response</span>
+    <span class="pill p-warn">Filter fields use raw UUIDs — not user-friendly</span>
+    <span class="pill p-no">No PDF or Excel export button</span>
+    <span class="pill p-no">Marksheet report missing</span>
+  </div>
+  <div class="two-col">
+    <div class="col-simple">
+      <span class="col-label lbl-s">Simple View</span>
+      <div class="s-section">
+        <h4>What Works Now</h4>
+        <ul class="s-list">
+          <li class="good">3 report cards — click one to run that report</li>
+          <li class="good">Fee Outstanding: see who owes what</li>
+          <li class="good">Attendance: monthly attendance per student</li>
+          <li class="good">EOD: end-of-day fee collection summary</li>
+        </ul>
+      </div>
+      <div class="s-section">
+        <h4>What's Missing</h4>
+        <ul class="s-list">
+          <li class="bad">Filter inputs ask for "Class ID" and "Term ID" — these are long codes no one knows by memory</li>
+          <li class="bad">No way to download the report — you can only see it on screen</li>
+          <li class="bad">No marksheet report (student marks across subjects)</li>
+          <li class="bad">No payroll report, no staff strength report</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-tech">
+      <span class="col-label lbl-t">Technical View</span>
+      <div class="t-section">
+        <h4>API Endpoints</h4>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/reports/fee-outstanding</span><span class="api-note">?class_id= term_id=</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/reports/attendance</span><span class="api-note">?class_id= month= year=</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/reports/eod</span><span class="api-note">?date=</span></div>
+        <div class="api-line"><span class="m get">GET</span><span class="api-path">/reports/marksheet/:examId/:classId</span><span class="api-note">PDFKit PDF</span></div>
+      </div>
+      <div class="t-section">
+        <h4>Scheduled</h4>
+        <p style="font-size:12px;color:#64748b">Cron: daily stats 18:30 · weekly fee reminders Mon 08:00</p>
+      </div>
+    </div>
+  </div>
+  <div class="improve-box">
+    <div class="i-simple">
+      <h4>Simple Improvements</h4>
+      <ul class="improve-list">
+        <li>Replace "Class ID" text box with a dropdown showing class names</li>
+        <li>Replace "Term ID" text box with a dropdown showing term names</li>
+        <li>Add "Download Excel" and "Download PDF" buttons on every report result</li>
+        <li>Add marksheet report: pick exam + class → see all students with marks</li>
+        <li>Show totals row at the bottom of every table</li>
+      </ul>
+    </div>
+    <div class="i-tech">
+      <h4>Technical Improvements</h4>
+      <ul class="improve-list">
+        <li>GET /schools/:id/classes and GET /schools/:id/terms → dropdowns on reports page</li>
+        <li>Add ?format=xlsx to report endpoints → ExcelJS response with Content-Disposition header</li>
+        <li>Marksheet report card: add to reports page using GET /reports/marksheet</li>
+        <li>Add summary row aggregation on frontend for total/avg columns</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MISSING MODULES ═══════════════ -->
+<div style="background:#fff;border-radius:18px;padding:28px;margin-bottom:36px;box-shadow:0 2px 18px rgba(0,0,0,.06)">
+  <h2 style="font-size:20px;font-weight:900;color:#dc2626;margin-bottom:6px">⚠️ 4 Modules: Backend Done, No Screen Yet</h2>
+  <p style="font-size:13px;color:#64748b;margin-bottom:20px">These are fully working on the server side. We just need to build the screen for each one.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+
+    <!-- COMMUNICATIONS -->
+    <div class="mc" style="margin-bottom:0">
+      <div class="mc-head" style="background:linear-gradient(135deg,#fdf2f8,#fce7f3)">
+        <div class="mc-icon" style="background:linear-gradient(135deg,#ec4899,#be185d)">📢</div>
+        <div class="mc-title"><h2 style="font-size:16px">11 — Communications</h2><p>Circulars, notices, WhatsApp — with AI writing help</p></div>
+      </div>
+      <div class="two-col" style="grid-template-columns:1fr">
+        <div class="col-simple">
+          <span class="col-label lbl-s">Simple</span>
+          <ul class="s-list">
+            <li class="good">Backend can create, publish circulars</li>
+            <li class="good">AI rewrites your rough text into formal school language</li>
+            <li class="good">Can target: all parents, one class, only staff</li>
+            <li class="bad">No screen to compose or send a circular</li>
+            <li class="bad">Not in the sidebar navigation at all</li>
+          </ul>
+          <div style="margin-top:10px">
+            <span class="col-label lbl-t" style="font-size:9px">Tech</span>
+            <div style="margin-top:6px">
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/communications/circulars</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/communications/circulars</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/communications/circulars/:id/publish</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/communications/ai/rephrase</span><span class="api-note">Claude AI</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="improve-box" style="grid-template-columns:1fr;display:block;padding:14px 20px">
+        <h4 style="color:#be185d;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:8px">What to Build</h4>
+        <ul class="improve-list">
+          <li>New page /communications + sidebar link</li>
+          <li>Compose tab: title + body + AI Rephrase + audience selector</li>
+          <li>List tab: all published circulars with date, audience, status</li>
+          <li>Notice Board: read-only archive for parents</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="mc" style="margin-bottom:0">
+      <div class="mc-head" style="background:linear-gradient(135deg,#f8fafc,#e2e8f0)">
+        <div class="mc-icon" style="background:linear-gradient(135deg,#475569,#1e293b)">📚</div>
+        <div class="mc-title"><h2 style="font-size:16px">12 — Library</h2><p>Book lending, returns, and fine tracking</p></div>
+      </div>
+      <div class="two-col" style="grid-template-columns:1fr">
+        <div class="col-simple">
+          <span class="col-label lbl-s">Simple</span>
+          <ul class="s-list">
+            <li class="good">Backend tracks all books (title, author, copies)</li>
+            <li class="good">Can issue book to student for 14 days</li>
+            <li class="good">Calculates ₹2/day fine automatically on late return</li>
+            <li class="good">Prevents issuing last copy twice (safe stock lock)</li>
+            <li class="bad">No screen to search books or issue/return them</li>
+          </ul>
+          <div style="margin-top:10px">
+            <span class="col-label lbl-t" style="font-size:9px">Tech</span>
+            <div style="margin-top:6px">
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/library/books</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/library/books</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/library/issue</span><span class="api-note">FOR UPDATE lock</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/library/return</span><span class="api-note">₹2/day fine</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="improve-box" style="grid-template-columns:1fr;display:block;padding:14px 20px">
+        <h4 style="color:#475569;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:8px">What to Build</h4>
+        <ul class="improve-list">
+          <li>New page /library + sidebar link</li>
+          <li>Catalog tab: searchable book list with available copies</li>
+          <li>Issue tab: student search + book search + issue</li>
+          <li>Return tab: search issued book → show fine → confirm</li>
+          <li>Overdue tab: list all late returns with fine amount</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TRANSPORT -->
+    <div class="mc" style="margin-bottom:0">
+      <div class="mc-head" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">
+        <div class="mc-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">🚌</div>
+        <div class="mc-title"><h2 style="font-size:16px">13 — Transport</h2><p>Bus routes, stops, vehicles, student assignments</p></div>
+      </div>
+      <div class="two-col" style="grid-template-columns:1fr">
+        <div class="col-simple">
+          <span class="col-label lbl-s">Simple</span>
+          <ul class="s-list">
+            <li class="good">Backend stores routes, stops with GPS coordinates and pickup times</li>
+            <li class="good">Vehicles with driver name and phone</li>
+            <li class="good">Can assign a student to a route + stop</li>
+            <li class="bad">No screen to manage any of this</li>
+            <li class="bad">No live GPS tracking yet</li>
+          </ul>
+          <div style="margin-top:10px">
+            <span class="col-label lbl-t" style="font-size:9px">Tech</span>
+            <div style="margin-top:6px">
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/transport/routes</span></div>
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/transport/stops/:routeId</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/transport/routes</span><span class="api-note">+ stops array</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/transport/assign</span><span class="api-note">student to stop</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="improve-box" style="grid-template-columns:1fr;display:block;padding:14px 20px">
+        <h4 style="color:#1d4ed8;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:8px">What to Build</h4>
+        <ul class="improve-list">
+          <li>New page /transport + sidebar link</li>
+          <li>Routes tab: list + add route + stops with times</li>
+          <li>Students tab: search student → assign route/stop</li>
+          <li>Vehicles tab: add/edit bus + driver details</li>
+          <li>Future: Google Maps route preview</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PAYROLL -->
+    <div class="mc" style="margin-bottom:0">
+      <div class="mc-head" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+        <div class="mc-icon" style="background:linear-gradient(135deg,#22c55e,#15803d)">💵</div>
+        <div class="mc-title"><h2 style="font-size:16px">14 — Payroll</h2><p>Monthly salary, deductions, payslip for all staff</p></div>
+      </div>
+      <div class="two-col" style="grid-template-columns:1fr">
+        <div class="col-simple">
+          <span class="col-label lbl-s">Simple</span>
+          <ul class="s-list">
+            <li class="good">Admin can run payroll for a month — backend calculates salary for every staff</li>
+            <li class="good">Absent days are auto-deducted from salary (LOP)</li>
+            <li class="good">Generates payslip with basic, HRA, TA, deductions, net pay</li>
+            <li class="bad">No screen to run payroll, view or download payslips</li>
+            <li class="bad">No salary structure editor on screen</li>
+          </ul>
+          <div style="margin-top:10px">
+            <span class="col-label lbl-t" style="font-size:9px">Tech</span>
+            <div style="margin-top:6px">
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/payroll/salary-structure/:staffId</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/payroll/salary-structure/:staffId</span></div>
+              <div class="api-line"><span class="m post">POST</span><span class="api-path">/payroll/run</span><span class="api-note">{month, year}</span></div>
+              <div class="api-line"><span class="m get">GET</span><span class="api-path">/payroll/payslips/:staffId</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="improve-box" style="grid-template-columns:1fr;display:block;padding:14px 20px">
+        <h4 style="color:#15803d;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:8px">What to Build</h4>
+        <ul class="improve-list">
+          <li>New page /payroll + sidebar link</li>
+          <li>Run tab: month picker → "Run Payroll" button + summary result</li>
+          <li>Payslips tab: staff search → list of payslips → PDF download</li>
+          <li>Salary Structure tab: per-staff edit (basic, HRA, PF etc.)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ PRIORITY TABLE ═══════════════ -->
+<div class="ptable-wrap">
+  <h2>What to Build — Priority Order</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>What to Do</th><th>Why Simple</th><th>Effort</th><th>Priority</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Replace UUID inputs with dropdowns (Attendance + Timetable + Reports)</td><td>Right now users have to paste long codes — nobody can use these features</td><td>Half day</td><td><span class="pri pr1">Critical</span></td></tr>
+      <tr><td>2</td><td>Examinations: build exam list + marks entry form</td><td>The page currently shows nothing useful — it's a placeholder</td><td>1 day</td><td><span class="pri pr1">Critical</span></td></tr>
+      <tr><td>3</td><td>Fees: add counter collection modal</td><td>Accountants can't collect cash from screen — core daily workflow missing</td><td>1 day</td><td><span class="pri pr1">Critical</span></td></tr>
+      <tr><td>4</td><td>Communications page (new)</td><td>Backend fully done — school needs to send notices, zero UI exists</td><td>1 day</td><td><span class="pri pr1">Critical</span></td></tr>
+      <tr><td>5</td><td>Students: add "New Student" form + detail view</td><td>Can't add any student from the screen — basic data entry missing</td><td>1 day</td><td><span class="pri pr2">High</span></td></tr>
+      <tr><td>6</td><td>Staff: add attendance marking UI + "Add Staff" form</td><td>Staff attendance summary shows but you can't mark it from this page</td><td>1 day</td><td><span class="pri pr2">High</span></td></tr>
+      <tr><td>7</td><td>Library page (new)</td><td>Backend fully done — frequently used by school clerk daily</td><td>1 day</td><td><span class="pri pr2">High</span></td></tr>
+      <tr><td>8</td><td>Payroll page (new)</td><td>Backend fully done — needed every month end for salary</td><td>1 day</td><td><span class="pri pr2">High</span></td></tr>
+      <tr><td>9</td><td>Reports: dropdown filters + Export to Excel/PDF</td><td>UUID filter boxes are unusable — export needed for school records</td><td>Half day</td><td><span class="pri pr2">High</span></td></tr>
+      <tr><td>10</td><td>Dashboard: quick action buttons + alerts</td><td>Upgrades dashboard from "read-only stats" to "command center"</td><td>Half day</td><td><span class="pri pr3">Enhancement</span></td></tr>
+      <tr><td>11</td><td>Transport page (new)</td><td>Backend done — needed for schools with bus service</td><td>1 day</td><td><span class="pri pr3">Enhancement</span></td></tr>
+      <tr><td>12</td><td>Fees: bank statement upload + AI reconciliation UI</td><td>Unique AI feature — backend ready, needs upload screen</td><td>Half day</td><td><span class="pri pr3">Enhancement</span></td></tr>
+      <tr><td>13</td><td>Login: school logo + forgot password</td><td>Branding and basic recovery — professional touch</td><td>2 hrs</td><td><span class="pri pr3">Enhancement</span></td></tr>
+      <tr><td>14</td><td>Attendance: WhatsApp alert on absence + monthly calendar</td><td>Parents need to know when child is absent — key communication feature</td><td>1 day</td><td><span class="pri pr3">Enhancement</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- end wrap -->
+
+<footer>
+  <p>School Platform — Full Module Report — May 2026</p>
+  <p style="margin-top:6px">14 Modules · Simple + Technical view for each · 14 prioritized action items</p>
+</footer>
+</body>
+</html>

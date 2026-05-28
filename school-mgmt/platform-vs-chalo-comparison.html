@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Our Platform vs Chalo PLG vs Chalo DAV — Full Comparison</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:9px;color:#1a202c;background:#f0f4f8;}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%);color:#fff;padding:50px 40px;text-align:center;page-break-after:always;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+.cover h1{font-size:30px;letter-spacing:2px;margin-bottom:8px;}
+.cover h2{font-size:14px;font-weight:400;opacity:.75;margin-bottom:36px;}
+.platform-cards{display:flex;justify-content:center;gap:24px;margin-bottom:30px;}
+.pcard{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px 28px;text-align:center;min-width:160px;}
+.pcard .pname{font-size:13px;font-weight:700;margin-bottom:6px;}
+.pcard .ptag{font-size:9px;opacity:.7;margin-bottom:10px;}
+.pcard .pcount{font-size:26px;font-weight:700;}
+.pcard .pcountlbl{font-size:9px;opacity:.65;}
+.pcard.ours{background:rgba(102,126,234,.35);border-color:rgba(102,126,234,.6);}
+.pcard.plg{background:rgba(72,187,120,.25);border-color:rgba(72,187,120,.5);}
+.pcard.dav{background:rgba(246,173,85,.25);border-color:rgba(246,173,85,.5);}
+
+/* SUMMARY */
+.summary-page{background:#fff;padding:24px 30px;page-break-after:always;}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0;}
+.sum-card{background:#f7fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;text-align:center;}
+.sum-card .num{font-size:22px;font-weight:700;color:#1a3a5c;}
+.sum-card .lbl{font-size:8.5px;color:#718096;margin-top:3px;}
+
+/* SECTION */
+.section{background:#fff;padding:18px 24px;page-break-before:always;}
+.sec-header{background:linear-gradient(90deg,#1a3a5c,#2575a8);color:#fff;padding:10px 16px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center;}
+.sec-header h2{font-size:13px;font-weight:700;letter-spacing:.5px;}
+.sec-header .sec-stats{font-size:8.5px;opacity:.8;}
+.sec-body{border:1px solid #cbd5e0;border-top:none;border-radius:0 0 6px 6px;padding:0;}
+
+/* MODULE BLOCK */
+.mod-header{background:#2d3748;color:#fff;padding:6px 14px;font-size:10px;font-weight:700;letter-spacing:.3px;display:flex;justify-content:space-between;}
+.mod-header .mod-counts{font-size:8px;opacity:.7;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:8.5px;}
+thead tr th{background:#4a5568;color:#fff;padding:5px 8px;text-align:left;font-size:8px;font-weight:600;position:sticky;top:0;}
+th.ctr,td.ctr{text-align:center;}
+tbody tr td{padding:4px 8px;border-bottom:1px solid #edf2f7;vertical-align:middle;}
+tbody tr:nth-child(even) td{background:#f8fafc;}
+tbody tr:hover td{background:#ebf4ff;}
+td.feat{font-size:8.5px;padding-left:14px;}
+td.feat .sub{font-size:7.5px;color:#718096;display:block;}
+
+/* BADGES — OUR PLATFORM */
+.hv{background:#c6f6d5;color:#22543d;padding:2px 6px;border-radius:8px;font-size:7.5px;font-weight:700;white-space:nowrap;}
+.pt{background:#fefcbf;color:#744210;padding:2px 6px;border-radius:8px;font-size:7.5px;font-weight:700;white-space:nowrap;}
+.ms{background:#fed7d7;color:#742a2a;padding:2px 6px;border-radius:8px;font-size:7.5px;font-weight:700;white-space:nowrap;}
+.na{background:#e2e8f0;color:#4a5568;padding:2px 6px;border-radius:8px;font-size:7.5px;font-weight:700;white-space:nowrap;}
+.ai{background:#d6bcfa;color:#44337a;padding:2px 6px;border-radius:8px;font-size:7.5px;font-weight:700;white-space:nowrap;}
+
+/* BADGES — PLG / DAV */
+.y{background:#c6f6d5;color:#22543d;padding:2px 7px;border-radius:8px;font-size:7.5px;font-weight:700;}
+.n{background:#e2e8f0;color:#718096;padding:2px 7px;border-radius:8px;font-size:7.5px;font-weight:700;}
+
+/* HIGHLIGHT ROWS */
+.row-ours-only td{background:#faf5ff !important;}
+.row-all-have td{background:#f0fff4 !important;}
+.row-none td{background:#fff5f5 !important;}
+
+/* SCHOOL TAG */
+.tag{display:inline-block;font-size:6.5px;padding:1px 3px;border-radius:3px;margin-left:3px;font-weight:700;}
+.tag-p{background:#c6f6d5;color:#22543d;}
+.tag-d{background:#feebc8;color:#7b341e;}
+.tag-pd{background:#e9d8fd;color:#44337a;}
+.tag-tv{background:#fed7d7;color:#742a2a;}
+
+h3{font-size:11px;color:#1a3a5c;margin:14px 0 8px;padding-left:8px;border-left:3px solid #2575a8;}
+.legend{display:flex;gap:10px;flex-wrap:wrap;padding:8px 12px;background:#f7fafc;border-radius:5px;margin:8px 0;}
+.legend span{font-size:8px;display:flex;align-items:center;gap:4px;}
+.insight-box{background:#ebf8ff;border-left:4px solid #2575a8;padding:9px 12px;margin:8px 0;font-size:8.5px;border-radius:0 5px 5px 0;}
+.warn-box{background:#fffbeb;border-left:4px solid #d69e2e;padding:9px 12px;margin:8px 0;font-size:8.5px;border-radius:0 5px 5px 0;}
+.star-box{background:#faf5ff;border-left:4px solid #805ad5;padding:9px 12px;margin:8px 0;font-size:8.5px;border-radius:0 5px 5px 0;}
+
+.unique-table td,.unique-table th{padding:5px 10px;font-size:8.5px;}
+
+@media print{
+  @page{size:A4 landscape;margin:10mm 8mm;}
+  body{font-size:8.5px;background:#fff;}
+  .cover{min-height:auto;padding:40px 30px;}
+  .section{padding:12px 16px;}
+  table{font-size:8px;}
+  th,td{padding:3px 6px;}
+  .page-break{page-break-before:always;}
+  .no-break{page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div style="font-size:10px;letter-spacing:4px;opacity:.5;margin-bottom:14px;">SCHOOL ERP · FULL COMPARISON</div>
+  <h1>Our Platform vs Chalo PLG vs Chalo DAV</h1>
+  <h2>Every navigation item · Module-by-module · Feature-by-feature</h2>
+
+  <div class="platform-cards">
+    <div class="pcard ours">
+      <div class="pname">Our Platform</div>
+      <div class="ptag">school-mgmt · React + Express + Claude AI</div>
+      <div class="pcount">~35</div>
+      <div class="pcountlbl">Implemented screens</div>
+    </div>
+    <div class="pcard plg">
+      <div class="pname">Chalo PLG</div>
+      <div class="ptag">chaloschools.in/plgtest · AngularJS + .NET</div>
+      <div class="pcount">205</div>
+      <div class="pcountlbl">Screens available</div>
+    </div>
+    <div class="pcard dav">
+      <div class="pname">Chalo DAV</div>
+      <div class="ptag">davtest.chaloschools.in · AngularJS + .NET</div>
+      <div class="pcount">202</div>
+      <div class="pcountlbl">Screens available</div>
+    </div>
+  </div>
+
+  <div style="font-size:8.5px;opacity:.5;margin-top:10px;">248 unique screens · 17 modules · 3-way comparison · May 2026</div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-page">
+  <h3 style="font-size:15px;margin-bottom:12px;">3-Platform Comparison Overview</h3>
+
+  <div class="legend">
+    <span><span class="hv">HAVE</span> Full UI + API</span>
+    <span><span class="pt">PARTIAL</span> Backend only or basic UI</span>
+    <span><span class="ms">MISSING</span> Not implemented</span>
+    <span><span class="ai">AI EXTRA</span> Claude AI — unique to us</span>
+    <span><span class="y">Y</span> PLG/DAV has it</span>
+    <span><span class="n">—</span> PLG/DAV doesn't have it</span>
+  </div>
+
+  <table style="border:1px solid #e2e8f0;margin-bottom:16px;">
+    <thead>
+      <tr>
+        <th style="width:20%">Module</th>
+        <th style="width:12%;text-align:center">Chalo PLG</th>
+        <th style="width:12%;text-align:center">Chalo DAV</th>
+        <th style="width:12%;text-align:center">Our Platform</th>
+        <th>Our Platform — Key Gaps</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>01 Admission</strong></td><td class="ctr"><span class="y">11</span></td><td class="ctr"><span class="y">12</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>No category master, no call followup, no online portal</td></tr>
+      <tr><td><strong>02 Student</strong></td><td class="ctr"><span class="y">25</span></td><td class="ctr"><span class="y">25</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>No promotion, no TC workflow, no certificates</td></tr>
+      <tr><td><strong>03 Staff</strong></td><td class="ctr"><span class="y">12</span></td><td class="ctr"><span class="y">12</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>No evaluation, no syllabus update, no events</td></tr>
+      <tr><td><strong>04 Fees</strong></td><td class="ctr"><span class="y">26</span></td><td class="ctr"><span class="y">28</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>No Razorpay, no bus/hostel fee, no refund workflow</td></tr>
+      <tr><td><strong>05 Examination</strong></td><td class="ctr"><span class="y">27</span></td><td class="ctr"><span class="y">27</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Progress card PDF not wired, no result analysis</td></tr>
+      <tr><td><strong>06 HPC</strong></td><td class="ctr"><span class="y">5</span></td><td class="ctr"><span class="n">0</span></td><td class="ctr"><span class="ms">MISSING</span></td><td>Entire module absent</td></tr>
+      <tr><td><strong>07 TOS</strong></td><td class="ctr"><span class="y">8</span></td><td class="ctr"><span class="y">8</span></td><td class="ctr"><span class="ms">MISSING</span></td><td>Entire module absent</td></tr>
+      <tr><td><strong>08 Timetable</strong></td><td class="ctr"><span class="y">9</span></td><td class="ctr"><span class="y">8</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>No substitution, no staff rules, AI not wired to UI</td></tr>
+      <tr><td><strong>09 Attendance</strong></td><td class="ctr"><span class="y">1</span></td><td class="ctr"><span class="y">1</span></td><td class="ctr"><span class="hv">HAVE</span></td><td>No config screen, no auto-SMS</td></tr>
+      <tr><td><strong>11 Transport</strong></td><td class="ctr"><span class="y">3</span></td><td class="ctr"><span class="y">3</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Backend routes only — no UI, no vehicle master</td></tr>
+      <tr><td><strong>12 Hostel</strong></td><td class="ctr"><span class="y">3</span></td><td class="ctr"><span class="y">3</span></td><td class="ctr"><span class="ms">MISSING</span></td><td>Entire module absent</td></tr>
+      <tr><td><strong>13 Digital Secretary</strong></td><td class="ctr"><span class="y">1</span></td><td class="ctr"><span class="y">1</span></td><td class="ctr"><span class="ai">AI+</span></td><td>We have MORE — Claude AI in 4 modules</td></tr>
+      <tr><td><strong>14 Communication</strong></td><td class="ctr"><span class="y">6</span></td><td class="ctr"><span class="y">6</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Circulars with AI — no SMS/WhatsApp config UI</td></tr>
+      <tr><td><strong>15+16 School Info / Admin</strong></td><td class="ctr"><span class="y">42</span></td><td class="ctr"><span class="y">42</span></td><td class="ctr"><span class="ms">MISSING</span></td><td>All master data UIs missing</td></tr>
+      <tr><td><strong>18 Fee Reports</strong></td><td class="ctr"><span class="y">26</span></td><td class="ctr"><span class="y">26</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Only fee outstanding + EOD report wired to UI</td></tr>
+      <tr style="background:#faf5ff;"><td><strong>Library</strong> ⭐ Our Extra</td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Backend complete — no UI page yet</td></tr>
+      <tr style="background:#faf5ff;"><td><strong>Payroll</strong> ⭐ Our Extra</td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="pt">PARTIAL</span></td><td>Backend complete — no UI page yet</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sum-grid">
+    <div class="sum-card"><div class="num">6</div><div class="lbl">Screens Our Platform Leads (AI features)</div></div>
+    <div class="sum-card"><div class="num">44</div><div class="lbl">PLG+DAV screens we don't have yet</div></div>
+    <div class="sum-card"><div class="num">150</div><div class="lbl">Common screens — all 3 have or plan</div></div>
+    <div class="sum-card"><div class="num">2</div><div class="lbl">Entire modules only we have (Library, Payroll)</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ADMISSION                                                     -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>01 — ADMISSION MODULE</h2><span class="sec-stats">PLG: 11 screens &nbsp;|&nbsp; DAV: 12 screens &nbsp;|&nbsp; Our: 3 partial</span></div>
+  <div class="sec-body">
+    <table>
+      <thead><tr><th style="width:36%">Menu Item / Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="no-break"><td class="feat">Admission Category Master<span class="sub">General, Management, NRI, Sports quota</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Admission Priority Master<span class="sub">Sibling/staff child priority rules</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Enquiry List<span class="sub">View & manage all enquiries with status</span></td><td><span class="pt">PARTIAL</span> <small>admissions.js funnel, basic UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Call Followup<span class="sub">Telecalling log — date, response, next call</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Shortlisted Student<span class="sub">Move enquiry → shortlisted → admitted</span></td><td><span class="pt">PARTIAL</span> <small>status PATCH exists</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Health Form <span class="tag tag-pd">PLG+DAV</span><span class="sub">Health declaration at admission</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Application Status Count Report <span class="tag tag-p">PLG</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="no-break"><td class="feat">Interview Students <span class="tag tag-p">PLG</span><span class="sub">Schedule & record admission interviews</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="no-break"><td class="feat">Visitor Information Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Online Enquiry Portal <span class="tag tag-d">DAV</span><span class="sub">Public online enquiry form</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Online Application Status <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Send Bulk Application Link <span class="tag tag-d">DAV</span><span class="sub">SMS with admission link to prospects</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Call Register Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Enquiry List Report</td><td><span class="pt">PARTIAL</span> <small>data available, no print</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="no-break"><td class="feat">Applicant Siblings Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+    <div class="warn-box"><strong>DAV advantage:</strong> Online admission portal (enquiry, application status, bulk link SMS) — DAV has a complete public-facing admission funnel. PLG has interview scheduling. Both far ahead of our current implementation.</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- STUDENT                                                       -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>02 — STUDENT MANAGEMENT</h2><span class="sec-stats">PLG: 25 screens &nbsp;|&nbsp; DAV: 25 screens &nbsp;|&nbsp; Our: ~5 partial</span></div>
+  <div class="sec-body">
+    <div class="mod-header"><span>Student Operations</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item / Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Student List (active, class/section filter)<span class="sub">All enrolled students</span></td><td><span class="hv">HAVE</span> <small>StudentsPage + students.js</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Profile / Detail<span class="sub">Full record with parent, address, photo</span></td><td><span class="hv">HAVE</span> <small>GET /students/:id</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Category Assignment / Change<span class="sub">Assign fee category, change with reason</span></td><td><span class="pt">PARTIAL</span> <small>no change workflow</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Fee Category Approval <span class="tag tag-p">PLG</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Promotion Screen<span class="sub">Year-end promote all to next class</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Promotion Cancellation / Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Non-Promoted Student List</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Bulk Update <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">TC Checklist / TC Student Checklist</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student TC Approval <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">TC Bulk Update <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Attendance Quiz Details <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Portal Login Access <span class="tag tag-d">DAV</span><span class="sub">Enable/disable parent portal per student</span></td><td><span class="na">N/A</span> <small>no parent portal</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+    <div class="mod-header"><span>Student Reports &amp; Certificates</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Report / Certificate</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Student Admission Report</td><td><span class="pt">PARTIAL</span> <small>data via API, no print</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Birthday Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Bonafide Certificate (PDF)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Mark Certificate <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Fee Income Tax Certificate</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Absent Summary / Block Wise</td><td><span class="pt">PARTIAL</span> <small>attendance.js data</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Promotion Status <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Rizvi Fee Export</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- STAFF + FEES                                                  -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>03 — STAFF &nbsp;&amp;&nbsp; 04 — FEES</h2><span class="sec-stats">Staff: PLG 12, DAV 12 &nbsp;|&nbsp; Fees: PLG 26, DAV 28</span></div>
+  <div class="sec-body">
+    <div class="mod-header"><span>03 — STAFF MANAGEMENT</span><span class="mod-counts">PLG: 12 &nbsp;|&nbsp; DAV: 12 &nbsp;|&nbsp; Our: 2 have + 2 partial</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Staff List &amp; Profile</td><td><span class="hv">HAVE</span> <small>StaffPage + staff.js</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Absent Summary / Summary Absent</td><td><span class="pt">PARTIAL</span> <small>DB data, no report UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Evaluation Criteria</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">New Syllabus Daily Updation</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Special Event Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Event Master / Category / Details Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">District Master <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Bulk Update <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Birthday Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Usage Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:12px;"><span>04 — FEES MANAGEMENT — Setup &amp; Masters</span><span class="mod-counts">PLG: 26 &nbsp;|&nbsp; DAV: 28 &nbsp;|&nbsp; Our: 1 have + 3 partial</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Fee Structure (class + term based)</td><td><span class="pt">PARTIAL</span> <small>fees.js structure endpoint, no UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Collection (Student-wise)</td><td><span class="pt">PARTIAL</span> <small>FeesPage + collect API, no receipt PDF</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Online Payment / Razorpay Config</td><td><span class="ms">MISSING</span> <small>TODO in code</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Lump Sum Fees Configuration &amp; Student Mapping</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Bus Fee Structure Main + Studentwise</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Hostel Fee Structure Main + Studentwise</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Late Fee Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Payment Scheduler (due dates)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Configure Fees Receipt <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">GST Master <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Cash Denomination (entry at collection)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Concession Master Request + Approval</td><td><span class="pt">PARTIAL</span> <small>table in DB, no approval UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Master Approval <span class="tag tag-p">PLG</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Refund Entry / Approval / Receipt</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Donation Fee Collection / Cancellation</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Donation Collection (separate screen) <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Pre-Admission Fee Collection</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Collection Report Branchwise / Classwise <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Projection Collection Report <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight-box"><strong>DAV fee advantage:</strong> Branch-wise/class-wise collection reports + projection report + standalone donation collection screen — DAV has more granular fee reporting than PLG. Both have Razorpay integration which we lack.</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- EXAMINATION                                                   -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>05 — EXAMINATION MODULE</h2><span class="sec-stats">PLG: 27 screens &nbsp;|&nbsp; DAV: 27 screens &nbsp;|&nbsp; Our: 5 partial</span></div>
+  <div class="sec-body">
+    <div class="mod-header"><span>Exam Setup &amp; Mark Entry</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Examination Planning Master<span class="sub">Schedule exam dates per class/subject</span></td><td><span class="pt">PARTIAL</span> <small>ExaminationsPage + examinations.js</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Exam Settings Master (max marks, pass %, grades)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Exam Type Order Configuration</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Consolidated Exam Configuration</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Progress Card Setting Master + Portal Config</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Examination Mark Entry (PT, notebook, enrichment, half-yearly)</td><td><span class="pt">PARTIAL</span> <small>POST /:exam_id/marks, no bulk UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Exam Marks Entry Approval <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Other Exam Master / Config / Mark Entry / Rank</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">NEET/JEE Students + NEET JEE Exam Report Card</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Individual Assessment Report &amp; Card</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">ASL Report Generation (CBSE)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+    <div class="mod-header"><span>Progress Cards &amp; Analysis Reports</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Report</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Progress Card Report Generation (print PDF)</td><td><span class="pt">PARTIAL</span> <small>PDFKit endpoint exists, not wired to UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Exam Wise Progress Card Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Examination Consolidated Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Result Analysis Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Teacherwise Analysis Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Other Exam Report Card</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">AI Exam Analysis (weak areas, suggestions) <span style="color:#44337a;font-size:7px;font-weight:700;">OUR EXTRA ⭐</span></td><td><span class="ai">AI EXTRA</span> <small>examinations.js POST /analyze</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+    <div class="star-box"><strong>Our AI advantage:</strong> examinations.js uses Claude claude-sonnet-4-6 to analyze results and identify weak areas per student. Neither PLG nor DAV have any AI in their examination module. This endpoint exists and just needs to be connected to the frontend.</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- HPC + TOS + TIMETABLE + ATTENDANCE                           -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>06 HPC &nbsp;|&nbsp; 07 TOS &nbsp;|&nbsp; 08 Timetable &nbsp;|&nbsp; 09 Attendance</h2><span class="sec-stats">Our platform is PARTIAL on Timetable + Attendance · HPC/TOS entirely missing</span></div>
+  <div class="sec-body">
+
+    <div class="mod-header"><span>06 — HPC (Holistic Progress Card) — PLG only (DAV = 0 screens)</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">HPC Rating Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Curriculum Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Assessment Entry</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Assessment Entry Approval <span class="tag tag-p">PLG only</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">HPC Report Card (print)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>07 — TOS (Table of Specifications) — Both PLG and DAV</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">TOS Topic Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">TOS Paper Configuration (blueprint)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">TOS Subject Coordinator</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">TOS Effort Master / Effort Mark Entry</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Evaluation Area Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Comment Category Master / New Comment Category</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>08 — TIMETABLE — PLG: 9 &nbsp;|&nbsp; DAV: 8 &nbsp;|&nbsp; Our: 2 partial + AI</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">View Timetable (class-wise)</td><td><span class="pt">PARTIAL</span> <small>TimetablePage + GET /:class_id</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Auto Timetable Generation (AI-powered) <span style="color:#44337a;font-size:7px;font-weight:700;">OUR EXTRA ⭐</span></td><td><span class="ai">AI EXTRA</span> <small>timetable.js POST /generate (Claude)</small></td><td class="ctr"><span class="y">Y</span> <small style="color:#718096">rule-based</small></td><td class="ctr"><span class="y">Y</span> <small style="color:#718096">rule-based</small></td></tr>
+        <tr><td class="feat">Combine Subject</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Rule Creation Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Substitution Timetable</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Substitution Priority <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Online Timetable (portal) <span class="tag tag-pd">PLG+DAV</span></td><td><span class="na">N/A</span> <small>no portal</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Time Table Backup / Restore</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr><td class="feat">Lab Timetable Report + TT Details Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>09 — ATTENDANCE — PLG: 1 &nbsp;|&nbsp; DAV: 1 &nbsp;|&nbsp; Our: HAVE + Partial</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-all-have"><td class="feat">Mark Student Attendance (class-wise)</td><td><span class="hv">HAVE</span> <small>AttendancePage + POST /mark</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Attendance</td><td><span class="pt">PARTIAL</span> <small>DB + analytics, no dedicated page</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Attendance Configuration (SMS trigger, late rules)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Auto-SMS/WhatsApp on absent<span class="sub">Parents notified when student marked absent</span></td><td><span class="ms">MISSING</span> <small>TODO in code</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TRANSPORT + HOSTEL + COMMUNICATION + DIGITAL SECRETARY       -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>11 Transport &nbsp;|&nbsp; 12 Hostel &nbsp;|&nbsp; 13 Digital Secretary &nbsp;|&nbsp; 14 Communication</h2></div>
+  <div class="sec-body">
+
+    <div class="mod-header"><span>11 — TRANSPORT — PLG: 3 &nbsp;|&nbsp; DAV: 3 &nbsp;|&nbsp; Our: backend only</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Vehicle Master (reg no, capacity, type)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Vehicle Type (Bus, Van, Auto)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Driver Master (license, phone, profile)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Routes &amp; Stops Management</td><td><span class="pt">PARTIAL</span> <small>transport.js GET/POST /routes — backend only</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Student Route Assignment</td><td><span class="pt">PARTIAL</span> <small>student_transport table, backend only</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Transport Fee Paid/Non-Paid/Student Reports</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>12 — HOSTEL — PLG: 3 &nbsp;|&nbsp; DAV: 3 &nbsp;|&nbsp; Our: MISSING</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Hostel Student Enrollment &amp; List</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Hostel Fee Paid Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Hostel Fee Non Paid Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>13 — DIGITAL SECRETARY — PLG: 1 &nbsp;|&nbsp; DAV: 1 &nbsp;|&nbsp; Our: MORE via Claude AI</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-ours-only"><td class="feat">Digital Secretary Dashboard<span class="sub">AI-powered school command center</span></td><td><span class="pt">PARTIAL</span> <small>analytics.js + Claude AI in 4 routes</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Timetable Generation ⭐<span class="sub">Conflict-free TT via Claude</span></td><td><span class="ai">AI EXTRA</span> <small>timetable.js POST /generate</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Circular / Communication Drafting ⭐<span class="sub">Claude rephrases content professionally</span></td><td><span class="ai">AI EXTRA</span> <small>communications.js POST /</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Exam Analysis &amp; Weak Area Detection ⭐<span class="sub">Claude identifies struggling students</span></td><td><span class="ai">AI EXTRA</span> <small>examinations.js POST /analyze</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Real-time AI Dashboard Metrics ⭐<span class="sub">Live student, fee, attendance, staff stats</span></td><td><span class="ai">AI EXTRA</span> <small>analytics.js GET /dashboard</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>14 — COMMUNICATION (SMS / Email / WhatsApp) — PLG: 6 &nbsp;|&nbsp; DAV: 6 &nbsp;|&nbsp; Our: backend partial</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">SMS / Email Setting (gateway + SMTP config)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Automated Email Configuration (trigger rules)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Pendency SMS (bulk SMS to fee defaulters)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Examination SMS (schedule + result alerts)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Scheduled SMS / Email (future bulk messages)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">SMS Details Report (sent/failed log)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Circular with Professional Rephrase ⭐<span class="sub">Claude improves tone &amp; language automatically</span></td><td><span class="ai">AI EXTRA</span> <small>communications.js POST /</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ADMIN / SCHOOL INFO                                          -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>15+16 — School Info / Admin / Masters</h2><span class="sec-stats">PLG: 42 screens &nbsp;|&nbsp; DAV: 42 screens &nbsp;|&nbsp; Our: mostly missing</span></div>
+  <div class="sec-body">
+
+    <div class="mod-header"><span>School Configuration (from Chalo sidebar)</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">School Master (profile, affiliation, logo)</td><td><span class="pt">PARTIAL</span> <small>schools.js GET/POST, no UI page</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Company Master (parent employers)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Holiday Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Block Configuration (time periods)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Event Management</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Branch Master + Configuration</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">WhatsApp Configuration</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>Authentication &amp; Authorization</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Role Master + Role Authorization (RBAC)</td><td><span class="pt">PARTIAL</span> <small>roles in JWT, no screen permission matrix</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">User Master (create/edit users)</td><td><span class="pt">PARTIAL</span> <small>auth.js register/login, no user-list UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Portal User (parent/student accounts)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Portal UserLogin History + Activity Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Log And Audit Trail</td><td><span class="pt">PARTIAL</span> <small>audit_logs table in DB, no UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Staff Activity Tracking Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>Academic Masters</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Academic Year Creation + Week Off</td><td><span class="ms">MISSING</span> <small>academic_years in DB, no UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Class Master + Class Section Master</td><td><span class="ms">MISSING</span> <small>classes table in DB, no UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Subject Master + Subject Type Master</td><td><span class="ms">MISSING</span> <small>subjects table in DB, no UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Class Subject Mapping</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Stream Master + Subject Combination <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Board Master + Level Master + Term Master</td><td><span class="ms">MISSING</span> <small>hardcoded in DB</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">House Master + Nationality + Religion + NationalityMaster</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="margin-top:10px;"><span>Demographic Masters (from Chalo sidebar)</span></div>
+    <table>
+      <thead><tr><th style="width:36%">Menu Item</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr><td class="feat">Country / State / City Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Mother Tongue / Community / Caste Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Nationality / Religion / Region Master</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+    <div class="warn-box">All master data management UIs are missing from our platform. These are the foundation — without them, dropdowns in student admission forms, fee structures, and other modules can't be populated. This is the single biggest blocker for usability.</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FEE REPORTS                                                  -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header"><h2>18 — FEE REPORTS &amp; OTHER</h2><span class="sec-stats">PLG: 26 screens &nbsp;|&nbsp; DAV: 26 screens &nbsp;|&nbsp; Our: 2 implemented</span></div>
+  <div class="sec-body">
+    <table>
+      <thead><tr><th style="width:36%">Report</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-all-have"><td class="feat">Fee Outstanding / Overall Non Paid Report</td><td><span class="hv">HAVE</span> <small>reports.js + ReportsPage.jsx</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Daily Collection Statement (EOD)</td><td><span class="pt">PARTIAL</span> <small>GET /eod-collection exists, not in UI</small></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Consolidated Collection Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Consolidated Collection Receipt Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fee Head Wise Paid / Non-Paid Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Overall Paid Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Fees Summary Report (class/section-wise)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Abstract Report / Invoice Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Admission Fee Report / Fee Academic</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Concession Summary / Datewise Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Partially Fees Collection Summary Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Company Wise Consolidated Collection Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Credit Note Report / Status Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Donation Fee Reports (collection + cancellation)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Excuse Fee / Extra Fee Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Transport Fee Paid / Student Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Bus Fee Non Paid Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">NEET/JEE Non Paid / Student Report</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Sales Count Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Unpaid Fees Summary Report <span class="tag tag-pd">PLG+DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Collection Report Branchwise / Classwise <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Projection Collection Report <span class="tag tag-d">DAV</span></td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Data Import Main Page (bulk import)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+        <tr><td class="feat">Pre-Admission Fee Collection</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="y">Y</span></td><td class="ctr"><span class="y">Y</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- OUR UNIQUE MODULES                                           -->
+<!-- ============================================================ -->
+<div class="section page-break">
+  <div class="sec-header" style="background:linear-gradient(90deg,#44337a,#805ad5);"><h2>⭐ OUR UNIQUE MODULES — Not in PLG or DAV</h2><span class="sec-stats">Library · Payroll · Claude AI across 4 modules</span></div>
+  <div class="sec-body" style="padding:16px;">
+
+    <div class="insight-box" style="margin-bottom:14px;font-size:9.5px;"><strong>These are our competitive advantages.</strong> Neither Chalo PLG nor Chalo DAV have Library management, Payroll processing, or any AI integration. These 3 differentiators can be key selling points for schools choosing our platform over Chalo.</div>
+
+    <div class="mod-header" style="background:#553c9a;"><span>Library Management ⭐</span><span class="mod-counts">Our: Backend complete · No UI yet · Neither PLG nor DAV have this</span></div>
+    <table class="unique-table">
+      <thead><tr><th style="width:36%">Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-ours-only"><td class="feat">Book Catalog (ISBN, title, author, subject, copies)</td><td><span class="pt">PARTIAL</span> <small>library.js GET/POST /books — full CRUD</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Book Issue (to student/staff with due date)</td><td><span class="pt">PARTIAL</span> <small>POST /issue, updates available_copies</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Book Return with fine calculation</td><td><span class="pt">PARTIAL</span> <small>POST /return, fine auto-calculated</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Fine Collection / Fine Management</td><td><span class="ms">MISSING</span> <small>fine calculated but no payment flow</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Library Reports (issued, overdue, stock)</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Library Frontend Page (UI)</td><td><span class="ms">MISSING</span> <small>pages/library/ needs to be created</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="background:#553c9a;margin-top:14px;"><span>Payroll Management ⭐</span><span class="mod-counts">Our: Backend complete · No UI yet · Neither PLG nor DAV have this</span></div>
+    <table class="unique-table">
+      <thead><tr><th style="width:36%">Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-ours-only"><td class="feat">Salary Structure (Basic, HRA, DA, PF, ESI, TDS)</td><td><span class="pt">PARTIAL</span> <small>payroll.js GET/POST /structure — full components</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Monthly Payroll Run (all staff in one month)</td><td><span class="pt">PARTIAL</span> <small>POST /run — net pay with deductions</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Payslip Generation (PDF per staff)</td><td><span class="pt">PARTIAL</span> <small>GET /payslip endpoint exists</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">PF / ESI / TDS statutory reporting</td><td><span class="ms">MISSING</span></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">Payroll Frontend Page</td><td><span class="ms">MISSING</span> <small>pages/payroll/ needs to be created</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mod-header" style="background:#553c9a;margin-top:14px;"><span>Claude AI Integration ⭐ — 4 Modules Use AI</span><span class="mod-counts">Neither PLG nor DAV have any AI anywhere</span></div>
+    <table class="unique-table">
+      <thead><tr><th style="width:36%">AI Feature</th><th style="width:22%">Our Platform</th><th style="width:21%">Chalo PLG</th><th style="width:21%">Chalo DAV</th></tr></thead>
+      <tbody>
+        <tr class="row-ours-only"><td class="feat">AI Timetable Generator<span class="sub">Claude generates conflict-free timetable from teacher rules</span></td><td><span class="ai">AI EXTRA</span> <small>timetable.js POST /generate</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Exam Result Analyzer<span class="sub">Identifies weak areas, struggling students</span></td><td><span class="ai">AI EXTRA</span> <small>examinations.js POST /analyze</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Circular Writer<span class="sub">Professional rephrasing of school communications</span></td><td><span class="ai">AI EXTRA</span> <small>communications.js POST /</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+        <tr class="row-ours-only"><td class="feat">AI Dashboard Analytics<span class="sub">Real-time school metrics &amp; trend insights</span></td><td><span class="ai">AI EXTRA</span> <small>analytics.js GET /dashboard</small></td><td class="ctr"><span class="n">—</span></td><td class="ctr"><span class="n">—</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:16px;">Key Insights — Our Platform vs PLG vs DAV</h3>
+    <table style="border:1px solid #e2e8f0;">
+      <thead><tr><th style="width:30%">Area</th><th style="width:35%">Where PLG/DAV Lead Us</th><th style="width:35%">Where We Lead PLG/DAV</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Admission</strong></td><td>DAV has full online admission portal. PLG has interview scheduling. Both have call follow-up CRM.</td><td>Nothing yet — we need to build online admission funnel</td></tr>
+        <tr><td><strong>Examination</strong></td><td>PLG+DAV have full progress card system, result analysis, TOS module</td><td>We have Claude AI exam analysis — unique capability</td></tr>
+        <tr><td><strong>Timetable</strong></td><td>Both have substitution management, staff rules, lab TT</td><td>We use Claude AI to generate timetables — more intelligent than rule-based</td></tr>
+        <tr><td><strong>Communication</strong></td><td>Both have SMS gateway, bulk SMS, fee pendency alerts</td><td>We use Claude AI to improve circular quality — no SMS yet though</td></tr>
+        <tr><td><strong>Reports</strong></td><td>Both have 26 fee reports, result analysis, staff reports</td><td>We have only 2 reports live — biggest gap area</td></tr>
+        <tr><td><strong>Master Data</strong></td><td>Both have full academic masters, demographics, configuration UI</td><td>We have the DB tables but no management UI — blocker</td></tr>
+        <tr><td><strong>Library</strong></td><td>Neither PLG nor DAV have library management</td><td>We have complete library backend — unique differentiator</td></tr>
+        <tr><td><strong>Payroll</strong></td><td>Neither PLG nor DAV have payroll processing</td><td>We have salary structure + payroll run backend — unique differentiator</td></tr>
+        <tr><td><strong>HPC (CBSE)</strong></td><td>PLG has full HPC module (5 screens)</td><td>We are missing this entirely — needed for CBSE schools</td></tr>
+        <tr><td><strong>Online Portal</strong></td><td>DAV has parent/student portal with portal login, online admission, activity tracking</td><td>We have no parent/student portal — future roadmap item</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div style="background:#1a1a2e;color:#fff;text-align:center;padding:14px;font-size:8.5px;">
+  Our Platform vs Chalo PLG vs Chalo DAV &nbsp;·&nbsp; 248 unique screens · 17 modules · A4 Landscape &nbsp;·&nbsp; Generated May 2026
+</div>
+
+</body>
+</html>

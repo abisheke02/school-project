@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>testv3 ERP – Navigation Gap Analysis</title>
+<style>
+  @page { size: A4 portrait; margin: 13mm 11mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 8.5pt; color: #1c1c2e; background: #fff; }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #0f3057 0%, #1a5276 100%);
+    color: #fff;
+    padding: 16px 18px 14px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .cover h1 { font-size: 15pt; font-weight: 700; letter-spacing: -0.2px; }
+  .cover p  { font-size: 7.5pt; margin-top: 3px; opacity: 0.82; }
+  .cover-meta { text-align: right; font-size: 7.5pt; opacity: 0.8; line-height: 1.7; }
+
+  /* ── Summary cards ── */
+  .cards { display: flex; gap: 7px; margin-bottom: 10px; }
+  .card {
+    flex: 1; border: 1.5px solid #dde; border-radius: 4px;
+    padding: 7px 8px; text-align: center;
+  }
+  .card .num { font-size: 17pt; font-weight: 700; line-height: 1.1; }
+  .card .lbl { font-size: 7pt; color: #555; margin-top: 1px; }
+  .c-all .num  { color: #1a3c5e; }
+  .c-ok  .num  { color: #1e6b44; }
+  .c-pt  .num  { color: #9a5c00; }
+  .c-ms  .num  { color: #9b1c1c; }
+
+  /* ── Section header ── */
+  .sec {
+    background: #0f3057;
+    color: #fff;
+    padding: 5px 9px;
+    margin-top: 9px;
+    border-radius: 3px 3px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    page-break-after: avoid;
+  }
+  .sec span { font-size: 8.5pt; font-weight: 700; letter-spacing: 0.1px; }
+  .sec small { font-size: 7pt; background: rgba(255,255,255,0.18); padding: 1px 7px; border-radius: 10px; }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; }
+  table + .sec { margin-top: 9px; }
+
+  thead th {
+    background: #eef2f7;
+    padding: 4px 8px;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #3a4a6b;
+    border-bottom: 1.5px solid #c8d0e0;
+    white-space: nowrap;
+  }
+  td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #eff1f5;
+    vertical-align: middle;
+    font-size: 8pt;
+  }
+  tr:nth-child(even) td { background: #fafbfd; }
+  tr:last-child td { border-bottom: 2px solid #c8d0e0; }
+
+  .col-item  { width: 40%; }
+  .col-st    { width: 13%; text-align: center; }
+  .col-notes { width: 47%; }
+
+  .item-name { font-weight: 500; color: #1c1c2e; padding-left: 10px; }
+  .notes     { font-size: 7.5pt; color: #3d3d55; line-height: 1.45; }
+
+  /* ── Status badges ── */
+  .st {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 7pt;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+  .ok { background: #d1f0e0; color: #145a32; }
+  .pt { background: #fef3c7; color: #78350f; }
+  .ms { background: #fee2e2; color: #7f1d1d; }
+
+  /* ── Priority roadmap ── */
+  .rdmap {
+    margin-top: 12px;
+    page-break-inside: avoid;
+  }
+  .rdmap-hdr {
+    background: #0f3057;
+    color: #fff;
+    padding: 5px 9px;
+    border-radius: 3px 3px 0 0;
+    font-size: 8.5pt;
+    font-weight: 700;
+  }
+  .p-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 7pt;
+    font-weight: 700;
+  }
+  .p1 { background: #fee2e2; color: #7f1d1d; }
+  .p2 { background: #fef3c7; color: #78350f; }
+  .p3 { background: #d1fae5; color: #064e3b; }
+  .p4 { background: #e0e7ff; color: #1e40af; }
+
+  /* ── Footer note ── */
+  .footer {
+    margin-top: 10px;
+    font-size: 7pt;
+    color: #888;
+    text-align: center;
+    border-top: 1px solid #dde;
+    padding-top: 5px;
+  }
+
+  @media print {
+    .cover, .sec, .rdmap-hdr, thead th,
+    .ok, .pt, .ms, .p1, .p2, .p3, .p4,
+    .card, tr:nth-child(even) td {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ COVER ══════════════ -->
+<div class="cover">
+  <div>
+    <h1>Chalo testv3 ERP — Navigation Gap Analysis</h1>
+    <p>Chalo testv3 Administration Menu &nbsp;vs&nbsp; Our School Management Platform</p>
+  </div>
+  <div class="cover-meta">
+    Date: 28 May 2026<br>
+    Prepared for: CEO Review<br>
+    Version: 1.0
+  </div>
+</div>
+
+<!-- ══════════════ SUMMARY CARDS ══════════════ -->
+<div class="cards">
+  <div class="card c-all"><div class="num">64</div><div class="lbl">Total Menu Items<br>(7 sections)</div></div>
+  <div class="card c-ok" ><div class="num">0</div> <div class="lbl">Complete<br>on Our Platform</div></div>
+  <div class="card c-pt" ><div class="num">11</div><div class="lbl">Partial<br>on Our Platform</div></div>
+  <div class="card c-ms" ><div class="num">53</div><div class="lbl">Missing<br>on Our Platform</div></div>
+</div>
+
+<!-- ══════════════ 1. SCHOOL CONFIGURATION ══════════════ -->
+<div class="sec">
+  <span>1 &nbsp; School Configuration</span>
+  <small>9 sub-items &nbsp;|&nbsp; 2 Partial · 7 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">School Master</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">schools.js has GET/POST /schools/:id — no full school-profile admin UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">Company Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No company / trust entity management module</td>
+    </tr>
+    <tr>
+      <td class="item-name">Holiday Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No holiday calendar or leave configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Block Configuration</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No block / wing grouping configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Event</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No school events or academic calendar module</td>
+    </tr>
+    <tr>
+      <td class="item-name">Branch Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Single-school architecture; multi-branch not yet supported</td>
+    </tr>
+    <tr>
+      <td class="item-name">Branch Master Configuration</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No per-branch settings panel</td>
+    </tr>
+    <tr>
+      <td class="item-name">Online Payment Configuration</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Razorpay keys integrated in fees.js — no admin configuration UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">Student Profile Verification</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No document upload or profile verification workflow</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 2. FEEDBACK & SUPPORT ══════════════ -->
+<div class="sec">
+  <span>2 &nbsp; Feedback &amp; Support</span>
+  <small>4 sub-items &nbsp;|&nbsp; 0 Partial · 4 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">Submit Feedback</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No in-app feedback submission channel</td>
+    </tr>
+    <tr>
+      <td class="item-name">View Feedback / Tickets</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No support ticket tracking or dashboard</td>
+    </tr>
+    <tr>
+      <td class="item-name">Help &amp; FAQ</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No help documentation or FAQ section</td>
+    </tr>
+    <tr>
+      <td class="item-name">Contact Support</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No support contact or escalation module</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 3. AUTHENTICATION & AUTHORIZATION ══════════════ -->
+<div class="sec">
+  <span>3 &nbsp; Authentication &amp; Authorization</span>
+  <small>9 sub-items &nbsp;|&nbsp; 1 Partial · 8 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">Role Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Roles defined in DB schema; no admin UI to create/manage roles</td>
+    </tr>
+    <tr>
+      <td class="item-name">Role Authorization</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No permission-assignment or access-control screen</td>
+    </tr>
+    <tr>
+      <td class="item-name">User Master</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">auth.js handles register/login/JWT; no admin user-listing panel</td>
+    </tr>
+    <tr>
+      <td class="item-name">User Role Class Mapping</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No user-to-role or role-to-class assignment page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Portal User</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No parent / portal user management screen</td>
+    </tr>
+    <tr>
+      <td class="item-name">Portal User Login History</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No login audit trail or session history</td>
+    </tr>
+    <tr>
+      <td class="item-name">Non-Logged Portal User Details</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No inactive/non-logged user identification</td>
+    </tr>
+    <tr>
+      <td class="item-name">Staff Usage Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No staff system-usage or activity analytics</td>
+    </tr>
+    <tr>
+      <td class="item-name">Portal Activity Tracking Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No portal activity log or user behaviour report</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 4. PRELIMINARY MASTERS ══════════════ -->
+<div class="sec">
+  <span>4 &nbsp; Preliminary Masters</span>
+  <small>11 sub-items &nbsp;|&nbsp; 3 Partial · 8 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">Call Category</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No CRM call management module</td>
+    </tr>
+    <tr>
+      <td class="item-name">Call Purpose</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No call purpose master or tracking</td>
+    </tr>
+    <tr>
+      <td class="item-name">Call Status</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No call lifecycle / status tracking</td>
+    </tr>
+    <tr>
+      <td class="item-name">Enquiry Mode</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">admissions.js captures enquiry source field; no standalone master UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">Enquiry Status</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Admission workflow tracks status; no configurable status master page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Enquiry Source</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Source field stored in admissions; no source lookup master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Staff Type</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Staff type field stored in DB; no master configuration page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Staff Designation Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Designation stored as free text; no designation master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Admission Type</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No admission type categorisation or master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Admission Priority</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No priority-based admission workflow</td>
+    </tr>
+    <tr>
+      <td class="item-name">Admission Category</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No admission category master (e.g. Management / NRI / RTE)</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 5. ACADEMIC MASTERS ══════════════ -->
+<div class="sec">
+  <span>5 &nbsp; Academic Masters</span>
+  <small>15 sub-items &nbsp;|&nbsp; 4 Partial · 11 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">Term Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No academic term / semester creation UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">Level Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No grade level / band configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Class Master</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Classes referenced in students.js and timetable.js; no CRUD master page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Section Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No class section / division master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Class Section Mapping</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No class-to-section assignment page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Subject Type</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Subject type field in schema; no subject type master UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">Subject Master</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Subjects used in timetable.js routes; no standalone subject CRUD screen</td>
+    </tr>
+    <tr>
+      <td class="item-name">Class Subject Mapping</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Mapping implied in timetable generation; no explicit admin mapping page</td>
+    </tr>
+    <tr>
+      <td class="item-name">Checklist Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No admission / onboarding checklist feature</td>
+    </tr>
+    <tr>
+      <td class="item-name">Student Fee Category</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">Fee categories defined in fees.js; no student-to-category mapping UI</td>
+    </tr>
+    <tr>
+      <td class="item-name">House Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No house / sports team configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Stream Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No academic stream configuration (e.g. Science / Arts / Commerce)</td>
+    </tr>
+    <tr>
+      <td class="item-name">Subject Combination</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No subject-combination sets for stream selection</td>
+    </tr>
+    <tr>
+      <td class="item-name">Attendance Reason Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Absence reasons not configurable; attendance.js uses fixed values</td>
+    </tr>
+    <tr>
+      <td class="item-name">Academic Year Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Academic year hard-coded; no year-creation or rollover master</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 6. DEMOGRAPHIC MASTERS ══════════════ -->
+<div class="sec">
+  <span>6 &nbsp; Demographic Masters</span>
+  <small>8 sub-items &nbsp;|&nbsp; 0 Partial · 8 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">Country Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">Country values hard-coded in forms; no configurable master</td>
+    </tr>
+    <tr>
+      <td class="item-name">State Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No state master configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">City Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No city master configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Mother Tongue Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No language / mother tongue lookup master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Community Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No community category master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Caste Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No caste master configuration</td>
+    </tr>
+    <tr>
+      <td class="item-name">Nationality Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No nationality master</td>
+    </tr>
+    <tr>
+      <td class="item-name">Religion Master</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No religion master configuration</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ 7. REPORTS & LISTS ══════════════ -->
+<div class="sec">
+  <span>7 &nbsp; Reports &amp; Lists</span>
+  <small>8 sub-items &nbsp;|&nbsp; 1 Partial · 7 Missing</small>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th class="col-item">Menu Item (Chalo testv3)</th>
+      <th class="col-st">Status</th>
+      <th class="col-notes">Our Platform — Current State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="item-name">User Master Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No user listing or exportable user report</td>
+    </tr>
+    <tr>
+      <td class="item-name">Portal User Master Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No portal user summary report</td>
+    </tr>
+    <tr>
+      <td class="item-name">Branch-Wise Portal Login Status Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No branch login analytics (single-school currently)</td>
+    </tr>
+    <tr>
+      <td class="item-name">Homework Posting Status</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No homework module on our platform</td>
+    </tr>
+    <tr>
+      <td class="item-name">Homework Posting Deviation Status</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No homework deviation tracking</td>
+    </tr>
+    <tr>
+      <td class="item-name">Branch Level Wise Non-Logged Report</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No login activity or non-logged user report</td>
+    </tr>
+    <tr>
+      <td class="item-name">Students/Staff Attendance Posting Status</td>
+      <td style="text-align:center"><span class="st pt">Partial</span></td>
+      <td class="notes">attendance.js tracks daily attendance; no posting-status compliance report</td>
+    </tr>
+    <tr>
+      <td class="item-name">Progress Card Establishment Status</td>
+      <td style="text-align:center"><span class="st ms">Missing</span></td>
+      <td class="notes">No progress card / report card generation workflow</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ PRIORITY ROADMAP ══════════════ -->
+<div class="rdmap">
+  <div class="rdmap-hdr">Development Priority Roadmap</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:9%">Priority</th>
+        <th style="width:32%">Feature Area</th>
+        <th style="width:40%">Covers Chalo testv3 Menu Items</th>
+        <th style="width:19%">Est. Effort</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p1">P1 — Critical</span></td>
+        <td class="item-name">Academic Masters Admin UI</td>
+        <td class="notes">Class Master, Section Master, Subject Master, Class-Section &amp; Class-Subject Mapping, Term Master, Fee Category, Attendance Reason</td>
+        <td class="notes">3 – 4 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p1">P1 — Critical</span></td>
+        <td class="item-name">Role-Based Access Control (RBAC)</td>
+        <td class="notes">Role Master, Role Authorization, User Master (admin panel), User Role Class Mapping</td>
+        <td class="notes">2 – 3 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p1">P1 — Critical</span></td>
+        <td class="item-name">School Configuration UI</td>
+        <td class="notes">School Master (profile), Holiday Master, Online Payment Configuration, Student Profile Verification</td>
+        <td class="notes">2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p2">P2 — High</span></td>
+        <td class="item-name">Demographic Masters UI</td>
+        <td class="notes">All 8 Demographic Masters (Country, State, City, Mother Tongue, Community, Caste, Nationality, Religion)</td>
+        <td class="notes">1 – 2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p2">P2 — High</span></td>
+        <td class="item-name">Preliminary / CRM Masters</td>
+        <td class="notes">Call Category / Purpose / Status, Enquiry masters, Staff Type, Staff Designation, Admission Type / Priority / Category</td>
+        <td class="notes">2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p2">P2 — High</span></td>
+        <td class="item-name">Portal User Management</td>
+        <td class="notes">Portal User, Login History, Non-Logged User Details, Staff Usage Report, Portal Activity Tracking</td>
+        <td class="notes">2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p3">P3 — Medium</span></td>
+        <td class="item-name">Admin Reports Suite</td>
+        <td class="notes">User Master Report, Portal User Report, Attendance Posting Status, Progress Card Establishment Status</td>
+        <td class="notes">1 – 2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p3">P3 — Medium</span></td>
+        <td class="item-name">Academic Masters (Secondary)</td>
+        <td class="notes">Stream Master, Subject Combination, House Master, Academic Year Master, Checklist Master, Level Master</td>
+        <td class="notes">2 weeks</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p4">P4 — Low</span></td>
+        <td class="item-name">Feedback &amp; Support Module</td>
+        <td class="notes">Ticket submission, View Tickets, Help &amp; FAQ, Contact Support</td>
+        <td class="notes">1 week</td>
+      </tr>
+      <tr>
+        <td style="text-align:center"><span class="p-badge p4">P4 — Low</span></td>
+        <td class="item-name">Multi-Branch Architecture</td>
+        <td class="notes">Branch Master, Branch Master Configuration, Company Master, Block Configuration, Event</td>
+        <td class="notes">4 – 6 weeks</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div class="footer">
+  This report is based on the Chalo testv3 Administration menu (chaloschools.in/testv3) compared against the current state of our school management platform backend routes and frontend pages as of 28 May 2026.
+  &nbsp;|&nbsp; Total implementation gap: 53 of 64 Admin Configuration screens remain to be built.
+</div>
+
+</body>
+</html>
