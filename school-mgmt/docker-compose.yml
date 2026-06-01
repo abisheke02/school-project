@@ -1,61 +1,110 @@
 version: '3.8'
 
 services:
+  # ─── PostgreSQL ────────────────────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: school_mgmt
-      POSTGRES_USER: school_user
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-school_password}
+      POSTGRES_DB:       ${DB_NAME:-school_mgmt}
+      POSTGRES_USER:     ${DB_USER:-school_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-school_password_dev}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Expose on 5433 to avoid conflict with any local PostgreSQL on 5432
+    ports:
+      - "5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U school_user -d school_mgmt"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-school_user} -d ${DB_NAME:-school_mgmt}"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
+  # ─── Redis ─────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 300M
 
+  # ─── Backend API ───────────────────────────────────────────────────────────
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: school_mgmt
-      DB_USER: school_user
-      DB_PASSWORD: ${DB_PASSWORD:-school_password}
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET}
-      NODE_ENV: production
-      PORT: 3001
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost}
-      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
-      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+      NODE_ENV:           ${NODE_ENV:-production}
+      PORT:               3001
+      # Database
+      DB_HOST:            postgres
+      DB_PORT:            5432
+      DB_NAME:            ${DB_NAME:-school_mgmt}
+      DB_USER:            ${DB_USER:-school_user}
+      DB_PASSWORD:        ${DB_PASSWORD:-school_password_dev}
+      # Redis
+      REDIS_URL:          redis://redis:6379
+      # Auth — CHANGE THIS before production!
+      JWT_SECRET:         ${JWT_SECRET:-school_mgmt_jwt_secret_change_in_production_2024}
+      # App
+      ALLOWED_ORIGINS:    ${ALLOWED_ORIGINS:-http://localhost:8080,http://localhost}
+      ADMIN_USERNAME:     ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD:     ${ADMIN_PASSWORD:-admin123}
+      # Optional integrations (safe to leave empty — server won't crash)
+      ANTHROPIC_API_KEY:  ${ANTHROPIC_API_KEY:-}
+      RAZORPAY_KEY_ID:    ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET:${RAZORPAY_KEY_SECRET:-}
+      FIREBASE_PROJECT_ID:${FIREBASE_PROJECT_ID:-}
+      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL:-}
+      FIREBASE_PRIVATE_KEY:  ${FIREBASE_PRIVATE_KEY:-}
+      SUPABASE_URL:       ${SUPABASE_URL:-}
+      SUPABASE_ANON_KEY:  ${SUPABASE_ANON_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
+  # ─── Web Frontend (Nginx) ──────────────────────────────────────────────────
   web:
-    build: ./web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
-      - "80:80"
+      # Changed from 80 to 8080 — avoids conflict with IIS / other local services
+      - "${WEB_PORT:-8080}:80"
     depends_on:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 128M
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  default:
+    name: school_mgmt_network
